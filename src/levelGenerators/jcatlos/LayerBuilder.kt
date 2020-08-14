@@ -1,8 +1,7 @@
 package levelGenerators.jcatlos
 
-class LayerBuilder(){
-    val designer = BasicLayerDesigner
-    val generator = RandomRoomGenerator
+class LayerBuilder(private val designer: LevelDesigner = BasicLayerDesigner,
+                   private val generator: RoomGenerator = RandomRoomGenerator ){
 
     fun next(): Layer{
         var out = Layer()

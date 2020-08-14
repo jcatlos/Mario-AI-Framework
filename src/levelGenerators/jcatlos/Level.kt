@@ -21,7 +21,7 @@ const val LEVEL_H2_HEIGHT = 16
 const val LEVEL_H1_HEIGHT = 8
 
 
-class Level(length: Int){
+class Level(length: Int, layerBuilder: LayerBuilder){
 
     /*class RoomChooser(){
         private val BONUS_PROB = 0.10
@@ -67,8 +67,6 @@ class Level(length: Int){
     }*/
 
     //val chooser : RoomChooser = RoomChooser();
-
-    val layerBuilder = LayerBuilder()
 
     var layers: ArrayList<Layer> = ArrayList()
 
