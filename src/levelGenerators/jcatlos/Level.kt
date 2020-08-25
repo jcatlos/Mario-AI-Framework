@@ -21,7 +21,7 @@ const val LEVEL_H2_HEIGHT = 16
 const val LEVEL_H1_HEIGHT = 8
 
 
-class Level(length: Int, layerBuilder: LayerBuilder){
+class Level(length: Int, state: State, layerBuilder: LayerBuilder){
 
     /*class RoomChooser(){
         private val BONUS_PROB = 0.10
@@ -75,7 +75,7 @@ class Level(length: Int, layerBuilder: LayerBuilder){
 
 
     init {
-        //println("starting initialization")
+        println("starting initialization")
 
         /*var layer1: ArrayList<Room> = ArrayList()
         var layer2: ArrayList<Room> = ArrayList()
@@ -117,14 +117,22 @@ class Level(length: Int, layerBuilder: LayerBuilder){
         return levelStr.toString()
         */
 
-        layers.add(Layer(arrayListOf(StartRoom())))
+        layers.add(Layer(arrayListOf(layerBuilder.createStart())))
 
-        for (i in 0 until length){
-            layers.add(layerBuilder.next())
+        while(!state.shouldEnd()){
+            println("add layer")
+            var layer = layerBuilder.next()
+            layers.add(layer)
+            state.updateByLayer(layer)
         }
+        /*for (i in 0 until length){
+            layers.add(layerBuilder.next())
+        }*/
 
-        layers.add(Layer(arrayListOf(FinishRoom())))
-        //println("finishing initialization")
+        var lastRoom = Layer(arrayListOf(layerBuilder.createFinish()))
+        layers.add(lastRoom)
+        state.updateByLayer(lastRoom)
+        println("finishing initialization")
     }
 
 
@@ -174,7 +182,7 @@ class Level(length: Int, layerBuilder: LayerBuilder){
             maxHeight = max(maxHeight, layer.height)
         }
 
-        var emptyRoomString = EmptyRoomH1().file.toString()
+        //var emptyRoomString = EmptyRoomH1().file.toString()
 
         var layersRows: ArrayList<ArrayList<String>> = ArrayList()
         for(layer in layers){
@@ -183,7 +191,7 @@ class Level(length: Int, layerBuilder: LayerBuilder){
                 layerStringBuilder.append(emptyRoomString)
             }*/
             for(room in layer.getRooms().reversed()){
-                for(row in room.file.lines().reversed()){
+                for(row in room.room.lines().reversed()){
                     layerRows.add(row)
                 }
             }
@@ -203,7 +211,8 @@ class Level(length: Int, layerBuilder: LayerBuilder){
                     allFinished = false
                 }
                 else{
-                    row.append("CCCCCCCCCCCCCCCCCCCCCCCCC")
+                    row.append("CCCCCCCCCCCCCCCCCCCCCCCCC") //for debugging
+                    //row.append("-------------------------")
                 }
             }
             if(!allFinished){

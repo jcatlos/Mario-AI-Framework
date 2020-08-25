@@ -8,7 +8,9 @@ import engine.core.MarioTimer
 
 
 class LevelGenerator : MarioLevelGenerator{
+    var state = State(100, 8)
     var layerBuilder = LayerBuilder(BasicLayerDesigner, RandomRoomGenerator)
+
 
     override fun getGeneratorName(): String {
         return("jcatlosGenerator")
@@ -16,7 +18,7 @@ class LevelGenerator : MarioLevelGenerator{
 
     override fun getGeneratedLevel(model: MarioLevelModel?, timer: MarioTimer?): String {
 
-        var level: Level = Level(6, layerBuilder)
+        var level: Level = Level(10, state, layerBuilder)
         return(level.generateMap())
     }
 }

@@ -14,11 +14,14 @@ class Layer(rooms: ArrayList<Room> = arrayListOf()){
 
     fun add(room: Room) : Unit{
         rooms.add(room)
-        height++
-        if(room is RoomH2) height++
+        height += room.height()
     }
 
     fun getRooms(): ArrayList<Room>{
         return rooms
+    }
+
+    operator fun iterator(): Iterator<Room>{
+        return rooms.listIterator()
     }
 }
