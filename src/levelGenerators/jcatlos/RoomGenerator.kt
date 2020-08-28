@@ -40,7 +40,7 @@ object RandomRoomGenerator: RoomGenerator{
         }
     }
 
-    private fun generateRoomH1(difficulty: Int): Room{
+    private fun generateRoomH1(): Room{
         val randomNumber = Random.nextFloat()
         return if(randomNumber <= BONUS_PROB){
             getRandomTemplate(ROOM_TYPE.BONUS_H1).generate()
@@ -50,7 +50,7 @@ object RandomRoomGenerator: RoomGenerator{
         }
     }
 
-    private fun generateRoomH2(difficulty: Int): Room{
+    private fun generateRoomH2(): Room{
         val randomNumber = Random.nextFloat()
         return when{
             randomNumber <= BONUS_PROB -> getRandomTemplate(ROOM_TYPE.BONUS_H2).generate()
@@ -59,11 +59,11 @@ object RandomRoomGenerator: RoomGenerator{
         }
     }
 
-    override fun generate(size: Int, difficulty: Int): Room{
+    override fun generate(size: Int): Room{
         return when(size){
             0 -> getRandomTemplate(ROOM_TYPE.EMPTY_H1).generate()
-            1 -> generateRoomH1(difficulty)
-            2 -> generateRoomH2(difficulty)
+            1 -> generateRoomH1()
+            2 -> generateRoomH2()
             else -> getRandomTemplate(ROOM_TYPE.EMPTY_H2).generate()
         }
     }

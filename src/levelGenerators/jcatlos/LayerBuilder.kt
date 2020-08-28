@@ -5,27 +5,34 @@ class LayerBuilder(private val designer: LevelDesigner = BasicLayerDesigner,
                    private val state: State = State()
                    ){
 
+    var difficulty: Int = 0
+
     fun next(): Layer{
         var out = Layer()
         for(i in designer.next()){
-            var room = generator.generate(i, (state.currentDifficulty + state.difficultyIncrease).toInt())
+            var room = generator.generate(i)
             if(room.type == ROOM_TYPE.DIVIDE) designer.divide(0)
             out.add(room)
+            difficulty += room.difficulty
         }
-        out.getRooms().last().applySafety()
+        difficulty /= out.getRooms().count()
+        state.updateByLayer(out)
+        println("layer difficulty = $difficulty")
+        //println("safe = ${state.layerSafety()}")
+        out.getRooms().last().applySafety(state.layerSafety())
         return out
     }
 
     fun createStart(): Room{
         //println("in layerbuilder")
         var start = generator.generate(ROOM_TYPE.START)
-        start.applySafety()
+        start.applySafety(true)
         return start
     }
 
     fun createFinish(): Room{
         var finish = generator.generate(ROOM_TYPE.FINISH)
-        finish.applySafety()
+        finish.applySafety(true)
         return finish
     }
 }

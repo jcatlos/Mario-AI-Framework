@@ -13,6 +13,8 @@ val DROP_PROB = 0.50
 
 val DEFAULT_ROOM_HEIGHT = 8
 
+val UNSAFE_DIFFICULTY_INCREASE = 30
+
 val fileToType: Map<File, ROOM_TYPE> = mapOf(
         File("src/levelGenerators/jcatlos/blocks/start") to ROOM_TYPE.START,
         File("src/levelGenerators/jcatlos/blocks/finish") to ROOM_TYPE.FINISH,
@@ -47,7 +49,7 @@ enum class ROOM_TYPE {
 
 class Room(
     val room : StringBuilder,
-    val difficulty: Int,
+    var difficulty: Int,
     val safety: SAFETY,
     val type: ROOM_TYPE)
 {
@@ -58,21 +60,13 @@ class Room(
         }
     }
 
-    fun applySafety(): Unit{
-        var s = safety
-        if(s == SAFETY.CHOOSE){
-            if(Random.nextBoolean()){
-                s = SAFETY.SAFE
-            }
-            else{
-                s = SAFETY.UNSAFE
-            }
-        }
-        if(s == SAFETY.SAFE){
+    fun applySafety(safe: Boolean): Unit{
+        if(safety == SAFETY.SAFE || (safe && safety != SAFETY.UNSAFE)){
             room.append("\n${"X".repeat(room.lines().last().length)}")
         }
         else{
             room.append("\n${room.lines().last()}")
+            difficulty += UNSAFE_DIFFICULTY_INCREASE
         }
     }
 

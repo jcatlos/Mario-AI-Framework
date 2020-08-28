@@ -10,11 +10,15 @@ package levelGenerators.jcatlos
 
 class Layer(rooms: ArrayList<Room> = arrayListOf()){
     private var rooms: ArrayList<Room> = rooms
+    private var difficultySum: Int = 0
+    var difficulty: Int = 0
     var height = 0
 
     fun add(room: Room) : Unit{
         rooms.add(room)
         height += room.height()
+        difficultySum += room.difficulty
+        difficulty = difficultySum / rooms.count()
     }
 
     fun getRooms(): ArrayList<Room>{

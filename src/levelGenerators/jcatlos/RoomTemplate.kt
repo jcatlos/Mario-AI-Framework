@@ -51,18 +51,22 @@ class RoomTemplate(
         var macros: Map<Coords, Macro>)
 {
     fun generate(): Room{
-        println("Before")
+        //println("Before")
         var newRoom = StringBuilder(room)
-        println(newRoom.toString())
-        println(macros.toString())
+        //println(newRoom.toString())
+        //println(macros.toString())
+        var newDiff = diff
         for((coords, macro) in macros){
-            newRoom.insert(coords.y * width + coords.x, macro.execute())
+            var macroResult = macro.execute()
+            newRoom.insert(coords.y * width + coords.x, macroResult)
             //newRoom[coords.y * width + coords.x] = macro.execute()
+            var enemyCount = macroResult.count { c -> c == 'k' || c == 'g'}
+            newDiff += enemyCount * 10
         }
-        println("After")
-        println(newRoom.toString())
+        //println("After")
+        //println(newRoom.toString())
 
-        return Room(newRoom, diff, safety, type)
+        return Room(newRoom, newDiff, safety, type)
     }
 }
 

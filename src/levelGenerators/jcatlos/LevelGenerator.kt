@@ -8,8 +8,8 @@ import engine.core.MarioTimer
 
 
 class LevelGenerator : MarioLevelGenerator{
-    var state = State(100, 8)
-    var layerBuilder = LayerBuilder(BasicLayerDesigner, RandomRoomGenerator)
+    var state = State(15, 100, 8)
+    var layerBuilder = LayerBuilder(BasicLayerDesigner, RandomRoomGenerator, state)
 
 
     override fun getGeneratorName(): String {

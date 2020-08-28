@@ -11,8 +11,9 @@ data class State(
         var targetLength: Int = 10
 ){
     var lastLayer: Layer = Layer()
-    var currentDifficulty: Float = 0F
+    var expectedDifficulty: Int = 10
     var layerCount: Int = 1
+
     init {
         // Here we are modifiing the length so it's little bit varied (little bit of magic involved)
         val deviation = floor(java.util.Random().nextGaussian() * targetLength / 4).toInt()
@@ -24,12 +25,11 @@ data class State(
 
     fun updateByLayer(layer: Layer){
         var sum: Float = 0F
-        for(room in layer){
-            sum += room.difficulty
-        }
-        currentDifficulty += sum/layer.getRooms().size
+        //currentDifficulty += layer.difficulty
         lastLayer = layer
         layerCount ++
+        expectedDifficulty += difficultyIncrease
+        //println("lenghth = $layerCount")
     }
 
     fun shouldEnd(): Boolean{
@@ -37,5 +37,10 @@ data class State(
         println("$rnd <= ${(layerCount).toFloat() / (avgLength*2)}")
         return rnd <= (layerCount).toFloat() / (avgLength*2)*/
         return layerCount > targetLength
+    }
+
+    fun layerSafety(): Boolean{
+        println("expected diff = $expectedDifficulty, layer diff = ${lastLayer.difficulty}")
+        return lastLayer.difficulty > expectedDifficulty
     }
 }

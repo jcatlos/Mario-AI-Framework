@@ -120,10 +120,9 @@ class Level(length: Int, state: State, layerBuilder: LayerBuilder){
         layers.add(Layer(arrayListOf(layerBuilder.createStart())))
 
         while(!state.shouldEnd()){
-            println("add layer")
-            var layer = layerBuilder.next()
-            layers.add(layer)
-            state.updateByLayer(layer)
+            //println("add layer")
+            //println("lenghth = ${state.layerCount}")
+            layers.add(layerBuilder.next())
         }
         /*for (i in 0 until length){
             layers.add(layerBuilder.next())
