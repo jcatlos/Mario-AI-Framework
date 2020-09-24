@@ -13,22 +13,22 @@ import kotlin.random.Random
                     (represented by LAYER_STATE.JOINING)
  */
 
-object BasicLayerDesigner: LevelDesigner{
+object BasicLayerDesigner: LayerDesigner{
     enum class LAYER_STATE {
         JOINED,
         DIVIDED,
         JOINING
     }
 
-    private var currentState = LAYER_STATE.JOINED
+    private var currentLayerState = LAYER_STATE.JOINED
     private val JOIN_PROB = 0.5
 
     override fun next(): Array<Int>{
-        return when(currentState){
+        return when(currentLayerState){
             LAYER_STATE.JOINED -> arrayOf(2)
             LAYER_STATE.JOINING -> {
                 // Since the rooms are joining in this layer, they will be joined in the next one
-                currentState = LAYER_STATE.JOINED
+                currentLayerState = LAYER_STATE.JOINED
                 arrayOf(0,1)
             }
             LAYER_STATE.DIVIDED ->{
@@ -41,14 +41,14 @@ object BasicLayerDesigner: LevelDesigner{
     }
 
     override fun join(index: Int){
-        currentState = LAYER_STATE.JOINING
+        currentLayerState = LAYER_STATE.JOINING
     }
 
     override fun divide(index: Int){
-        currentState = LAYER_STATE.DIVIDED
+        currentLayerState = LAYER_STATE.DIVIDED
     }
 
     fun getState(): LAYER_STATE{
-        return currentState
+        return currentLayerState
     }
 }

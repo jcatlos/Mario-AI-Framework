@@ -5,9 +5,19 @@ import java.lang.Integer.max
 import kotlin.random.Random
 import kotlin.text.StringBuilder
 
-val emptyRoomTemplate = RoomTemplate(StringBuilder(), 0, ROOM_TYPE.NULL, 0, SAFETY.SAFE, mutableMapOf())
+val emptyRoomTemplate = RoomTemplate(StringBuilder(), 0, ROOM_TYPE.NULL, 0, arrayListOf("safe", "empty"), mutableMapOf(), Coords(0, 0), arrayListOf())
 
-data class Coords(var x: Int, var y:Int) {}
+data class Coords(var x: Int, var y:Int) : Comparable<Coords> {
+    override fun compareTo(other: Coords): Int{
+        return when{
+            x > other.x -> 1
+            x < other.x -> -1
+            y > other.y -> 1
+            y < other.y -> -1
+            else -> 0
+        }
+    }
+}
 
 data class MacroPair(var string: String, var prob: Int) {}
 
@@ -47,9 +57,20 @@ class RoomTemplate(
         var width: Int = room.split('\n')[0].length,
         var type: ROOM_TYPE,
         var diff: Int,
-        var safety: SAFETY,
-        var macros: Map<Coords, Macro>)
+        var tags: ArrayList<String>,
+        var macros: Map<Coords, Macro>,
+        var start: Coords,
+        var finish: ArrayList<Coords>)
 {
+    var height: Int = room.lines().size
+
+    init{
+        println("Room Template start = $start")
+        for(f in finish){
+            println("Room Template finish = $f")
+        }
+    }
+
     fun generate(): Room{
         //println("Before")
         var newRoom = StringBuilder(room)
@@ -66,7 +87,7 @@ class RoomTemplate(
         //println("After")
         //println(newRoom.toString())
 
-        return Room(newRoom, newDiff, safety, type)
+        return Room(newRoom, newDiff, tags, type, start, finish)
     }
 }
 

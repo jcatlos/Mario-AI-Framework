@@ -50,8 +50,10 @@ enum class ROOM_TYPE {
 class Room(
     val room : StringBuilder,
     var difficulty: Int,
-    val safety: SAFETY,
-    val type: ROOM_TYPE)
+    val tags: ArrayList<String>,
+    val type: ROOM_TYPE,
+    var start: Coords,
+    var finish: ArrayList<Coords>)
 {
     fun height(): Int{
         return when(type){
@@ -61,7 +63,7 @@ class Room(
     }
 
     fun applySafety(safe: Boolean): Unit{
-        if(safety == SAFETY.SAFE || (safe && safety != SAFETY.UNSAFE)){
+        if("safe" in tags || (safe && "unsafe" !in tags)){
             room.append("\n${"X".repeat(room.lines().last().length)}")
         }
         else{

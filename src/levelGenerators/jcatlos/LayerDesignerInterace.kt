@@ -9,7 +9,7 @@ package levelGenerators.jcatlos
     The default LayerDesigner object is BasicLayerDesigner
  */
 
-interface LevelDesigner {
+interface LayerDesigner {
     fun next(): Array<Int>
 
     // Function to join RoomH1 at given index with following room (must be RoomH1) into a RoomH2

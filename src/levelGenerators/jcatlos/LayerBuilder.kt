@@ -1,6 +1,6 @@
 package levelGenerators.jcatlos
 
-class LayerBuilder(private val designer: LevelDesigner = BasicLayerDesigner,
+class LayerBuilder(private val designer: LayerDesigner = BasicLayerDesigner,
                    private val generator: RoomGenerator = RandomRoomGenerator,
                    private val state: State = State()
                    ){

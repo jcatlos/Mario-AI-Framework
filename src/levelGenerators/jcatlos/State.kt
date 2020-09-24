@@ -13,9 +13,15 @@ data class State(
     var lastLayer: Layer = Layer()
     var expectedDifficulty: Int = 10
     var layerCount: Int = 1
+    var maxHeight: Int = 100
+    var maxLength: Int = 1000
+
+    var sectionCount = 5
+
+    var roomGenerator: RoomGenerator = RandomRoomGenerator
 
     init {
-        // Here we are modifiing the length so it's little bit varied (little bit of magic involved)
+        // Here we are modifying the length so it's little bit varied (little bit of magic involved)
         val deviation = floor(java.util.Random().nextGaussian() * targetLength / 4).toInt()
         if(deviation.absoluteValue <= targetLength/3){
             targetLength += deviation

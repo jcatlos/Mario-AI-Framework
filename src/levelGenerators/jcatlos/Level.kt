@@ -10,6 +10,7 @@ package levelGenerators.jcatlos
  */
 
 import com.sun.jdi.ArrayReference
+import java.nio.channels.NotYetConnectedException
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.max
@@ -21,101 +22,64 @@ const val LEVEL_H2_HEIGHT = 16
 const val LEVEL_H1_HEIGHT = 8
 
 
-class Level(length: Int, state: State, layerBuilder: LayerBuilder){
-
-    /*class RoomChooser(){
-        private val BONUS_PROB = 0.10
-        private val DIVIDE_PROB = 0.20
-        private val DROP_PROB = 0.50
-        //val CHALLENGE_PROB = 0.90
-
-        fun nextRoom(prevRoom: Room) : Room?{
-            val v = Random.nextFloat()
-            var room: Room?
-            if (prevRoom is DivideHub){
-
-            }
-            else if(prevRoom.height == LEVEL_H2_HEIGHT && prevRoom){
-                if(v <= BONUS_PROB){
-                    room = BonusRoomH2(LEVEL_H2_HEIGHT)
-                }
-                else if(v <= DIVIDE_PROB){
-                    println("divide")
-                    room = DivideHub(LEVEL_H2_HEIGHT)
-                }
-                else{
-                    room = ChallengeRoomH2(LEVEL_H2_HEIGHT)
-                }
-            }
-            else{
-                if(v <= BONUS_PROB){
-                    room = BonusRoomH1(LEVEL_H1_HEIGHT)
-                }
-                else if(v <= DROP_PROB){
-                    room = null
-                }
-                else{
-                    room = ChallengeRoomH1(LEVEL_H1_HEIGHT)
-                }
-            }
-            if(room!=null){
-                prevRoom.nextRooms.add(room)
-                room.prevRooms.add(room)
-            }
-            return room
-        }
-    }*/
-
-    //val chooser : RoomChooser = RoomChooser();
-
+class Level(var length: Int, var state: State, layerBuilder: LayerBuilder){
     var layers: ArrayList<Layer> = ArrayList()
+    var levelColumns: ArrayList<Column> = ArrayList()
+    var level = StringBuilder()
 
-    //val firstRoom : StartRoom = StartRoom()
-    //val lastRoom : FinishRoom = FinishRoom()
+    init{
+        // Initialize levelColumns - create an empty level
+        for(x in 0 until state.maxLength){
+            levelColumns.add(Column(StringBuilder(".".repeat(state.maxHeight))))
+        }
 
+        var startRoom: Room = RandomRoomGenerator.generateStartRoom()
+        var highestY = startRoom.room.lines().size
+        var highestX = startRoom.room.lines()[0].length
+        emplaceRoom(startRoom, Coords(0,0))
+        var exitCoords = findLowestExit(this)
+
+        println("exit: ${findLowestExit(this)}")
+
+        for(i in 0 until state.sectionCount){
+            println("iteration $i")
+            printLevel()
+            if(exitCoords == null) break
+            //var exitCoords = findLowestExit(this)
+            var sectionTemplate = SharedData.SectionTemplates.random()
+            println("chosen ${sectionTemplate.roomSpaces.size}")
+            //println("\t exit coords: $exitCoords")
+            var rs = calculateFreeRoomSpace(this, exitCoords)
+            if(rs == null) break
+            //println("\t roomspace dl =  ${rs.DL_Corner()}")
+            //var room = RandomRoomGenerator.generateToFitRoomspace(rs)
+            //println("\t ${room.tags}")
+            //emplaceRoom(room, rs.DL_Corner())
+            var section = sectionTemplate.generate(rs.DL_Corner())
+            if(section.sectionSpace.UR_Corner().y > highestY) highestY = section.sectionSpace.UR_Corner().y
+            if(section.sectionSpace.UR_Corner().x > highestX) highestX = section.sectionSpace.UR_Corner().x
+            emplaceSection(section, rs.DL_Corner())
+            // Remove exit from generated map
+            levelColumns[exitCoords.x][exitCoords.y] = '-'
+            exitCoords = findLowestExit(this)
+        }
+
+        for(y in highestY downTo 0){
+            for(x in 0 until highestX + 1){
+                when(levelColumns[x][y]){
+                    '.' -> level.append('-')
+                    else -> level.append(levelColumns[x][y])
+                }
+            }
+            level.append('\n')
+        }
+        println("out level = ")
+        print(level)
+
+    }
 
     init {
         println("starting initialization")
-
-        /*var layer1: ArrayList<Room> = ArrayList()
-        var layer2: ArrayList<Room> = ArrayList()
-        var current = layer1
-        var other = layer2
-        current.add(firstRoom)
-        //var room : Room = firstRoom
-        //var divided: Boolean = false
-        for (i in 0 until length){
-            print(current.size)
-            print(" round ")
-            println(i)
-            for(r in current){
-                val new_room: Room? = chooser.nextRoom(r)
-                if(new_room != null) other.add(new_room)
-            }
-            if(current == layer1){
-                current = layer2
-                layer1.clear()
-                other = layer1
-            }
-            else{
-                current = layer1
-                layer2.clear()
-                other = layer2
-            }
-        }
-        for(r in current){
-            r.nextRooms.add(lastRoom)
-            lastRoom.prevRooms.add(r)
-        }
-
-        // Making the final string
-        var levelStr : StringBuilder = StringBuilder()
-        for(row in level){
-            levelStr.append(row)
-            levelStr.append("\n")
-        }
-        return levelStr.toString()
-        */
 
         layers.add(Layer(arrayListOf(layerBuilder.createStart())))
 
@@ -138,43 +102,6 @@ class Level(length: Int, state: State, layerBuilder: LayerBuilder){
     fun generateMap() : String{
         //println("starting generation")
         var level : Array<StringBuilder> = Array<StringBuilder>(size = LEVEL_H2_HEIGHT, init =  {StringBuilder()})
-        /*for(i in 0 until LEVEL_HEIGHT){
-            var room : Room = firstRoom
-            var j = 0
-            while(room != lastRoom){
-                level[i].append(room.file.readLine())
-                room = rooms[++j][0]
-            }
-            level[i].append(lastRoom.file.readLine())
-        }*/
-        //var room : Room = firstRoom
-
-        /*
-        Odstranene pri zmene generacie levelov - branching
-        var current = ArrayList<Room>()
-        current.add(firstRoom)
-        var next = ArrayList<Room>()
-        while(current.isNotEmpty() || next.isNotEmpty()){
-            var it = 0
-            var roomCounter = 0
-            //Adding current layer to level
-            while(roomCounter<current.size){
-                //Adding neighbors to next
-                for(it in 0 until current[roomCounter].nextRooms.size){
-                    next.add(current[roomCounter].nextRooms[it])
-                }
-                //Adding room to level
-                val old_it = it
-                while(it-old_it < current[roomCounter].height){
-                    level[it].append(current[roomCounter].file.readLine())
-                    it++
-                }
-                roomCounter++
-            }
-            current.clear()
-            current.addAll(next)
-            next.clear()
-        }*/
 
         var maxHeight = 0
         for(layer in layers){
@@ -221,5 +148,47 @@ class Level(length: Int, state: State, layerBuilder: LayerBuilder){
         }
         print(levelStringBuilder.toString())
         return levelStringBuilder.toString()
+    }
+
+    fun emplaceRoom(room: Room, dl_corner: Coords){
+        var xCounter = 0
+        var yCounter = 0
+        for(line in room.room.lines().reversed()){
+            for(char in line){
+                when (char) {
+                    '.' -> {}
+                    else -> levelColumns[xCounter + dl_corner.x][yCounter + dl_corner.y] = char
+                }
+                xCounter++
+            }
+            xCounter = 0
+            yCounter++
+        }
+    }
+
+    fun emplaceSection(section: Section, dl_corner: Coords){
+        var xCounter = 0
+        var yCounter = 0
+        println("empl sec dl corner = $dl_corner")
+        for(line in section.section.lines().reversed()){
+            for(char in line){
+                when (char) {
+                    '.' -> {}
+                    else -> levelColumns[xCounter + dl_corner.x][yCounter + dl_corner.y-1] = char
+                }
+                xCounter++
+            }
+            xCounter = 0
+            yCounter++
+        }
+    }
+
+    fun printLevel(): Unit{
+        for(y in state.maxHeight-1 downTo 0){
+            for(x in 0 until state.maxLength){
+                print(levelColumns[x][y])
+            }
+            println()
+        }
     }
 }

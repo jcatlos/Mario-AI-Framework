@@ -10,23 +10,23 @@ object RandomRoomGenerator: RoomGenerator{
     var roomTemplates: MutableMap<ROOM_TYPE, ArrayList<RoomTemplate>> = mutableMapOf()
 
     init {
-        println("initialising Random Room Generator")
+        //println("initialising Random Room Generator")
         for((dir, type) in fileToType){
-            println("Reading room directory: $dir")
+            //println("Reading room directory: $dir")
             roomTemplates[type] = arrayListOf()
             var templateArray: ArrayList<RoomTemplate> = arrayListOf()
             for(file in dir.listFiles()){
-                println("    Reading file: ${file.name}")
-                println("macros: ${RoomParser.fileToTemplate(file).macros.toString()}")
+                //println("    Reading file: ${file.name}")
+                //println("macros: ${RoomParser.fileToTemplate(file).macros.toString()}")
                 roomTemplates[type]?.add(RoomParser.fileToTemplate(file))
                 //templateArray.add(RoomParser.fileToTemplate(file))
             }
             //println("adding [$type] = ${templateArray}")
             //this.roomTemplates.put(type, templateArray.clone() as ArrayList<RoomTemplate>)
-            println(this.roomTemplates.toString())
+            //println(this.roomTemplates.toString())
             templateArray.clear()
         }
-        println(this.roomTemplates.toString())
+        //println(this.roomTemplates.toString())
     }
 
     private fun getRandomTemplate(type:ROOM_TYPE): RoomTemplate{
@@ -72,5 +72,44 @@ object RandomRoomGenerator: RoomGenerator{
         return getRandomTemplate(type).generate()
     }
 
+    fun generateToFitRoomspace(roomSpace: RoomSpace): Room{
+        var candidates: ArrayList<RoomTemplate> = ArrayList()
+        //println("Roomspace start anchor: ${roomSpace.startAnchor}")
+        //println("Roomspace width: ${roomSpace.width}")
+        //println("Roomspace height: ${roomSpace.height}")
+        for(template in SharedData.RoomTemplates){
+            //println(template.width)
+            if(template.width <= roomSpace.width){
+                //println("passed width")
+                if(template.height <= roomSpace.height){
+                    //println("passed height")
+                    if(roomSpace.anchorsFit(template.start, template.finish)){
+                        println("passed anchors")
+                        candidates.add(template)
+                    }
+                }
+            }
+        }
+        /*for(c in candidates){
+            println("candidate:")
+            println(c.room)
+        }*/
+        return candidates.random().generate()
+    }
+
+    fun generateStartRoom(): Room{
+        var candidates: ArrayList<RoomTemplate> = ArrayList()
+        for(template in SharedData.RoomTemplates){
+            if("start" in template.tags){
+                candidates.add(template)
+            }
+        }
+        var start = candidates.random()
+        var generated = start.generate()
+        for(f in start.finish){
+            generated.room[f.x + (start.height - f.y - 1) * (start.width + 1)] = 'f'
+        }
+        return generated
+    }
 
 }

@@ -17,8 +17,7 @@ class LevelGenerator : MarioLevelGenerator{
     }
 
     override fun getGeneratedLevel(model: MarioLevelModel?, timer: MarioTimer?): String {
-
         var level: Level = Level(10, state, layerBuilder)
-        return(level.generateMap())
+        return(level.level.toString())
     }
 }

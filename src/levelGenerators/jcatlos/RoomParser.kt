@@ -78,11 +78,11 @@ object RoomParser{
         var levelReader: BufferedReader = BufferedReader(levelFile.reader())
 
         var diff = levelReader.readLine().toInt()
-        var safety = when(levelReader.readLine().toInt()){
-            0 -> SAFETY.UNSAFE
-            1 -> SAFETY.CHOOSE
-            else -> SAFETY.SAFE
-        }
+        var tags: ArrayList<String> = ArrayList(levelReader.readLine().split(',').map {tag -> tag.trim()})
+
+        var start: Coords = Coords(-1, -1)
+        var finish: ArrayList<Coords> = ArrayList()
+
         var macroMap: MutableMap<Coords, Macro> = mutableMapOf()
 
         var width = 0
@@ -90,32 +90,70 @@ object RoomParser{
 
         var count = 0
         var character = levelReader.read()
+
+        //var sb = StringBuilder()
+
         while(character >= 0){
             //print(character.toChar())
-            count++
-            if(character == '\n'.toInt()) firstLine = false
+            //count++
+            if(character == 13 || character == 10 || character == '\n'.toInt()){
+                firstLine = false
+                count--
+            }
             if(firstLine){
+                //sb.append(character.toChar())
+                //sb.append(width.toString())
                 width++
             }
 
-            if(character == '{'.toInt()){
-                //println("macro started")
-                //levelBuilder.append('-')
-                var macro = Macro()
-                var token = getNextToken(levelReader)
-                while(token != ""){
-                    //println(token)
-                    var pair = token.split('=')
-                    macro.addPair(MacroPair(pair[0], pair[1].toInt()))
-                    token = getNextToken(levelReader)
+            when (character) {
+                '{'.toInt() -> {
+                    //println("macro started")
+                    //levelBuilder.append('-')
+                    var macro = Macro()
+                    var token = getNextToken(levelReader)
+                    while(token != ""){
+                        //println(token)
+                        var pair = token.split('=')
+                        macro.addPair(MacroPair(pair[0], pair[1].toInt()))
+                        token = getNextToken(levelReader)
+                    }
+                    macroMap[Coords(count%width, count/width)] = macro
+                    //println("macro finished")
                 }
-                macroMap[Coords(count%width, count/width)] = macro
-                //println("macro finished")
-            }
-            else{
-                levelBuilder.append(character.toChar())
+                'm'.toInt() -> {
+                    start = Coords(count%width, count/width)
+                    //println("start $start")
+                    //println("count = $count width = $width")
+                    levelBuilder.append('-')
+                }
+                'f'.toInt() -> {
+                    finish.add(Coords(count%width, count/width))
+                    levelBuilder.append('-')
+                }
+                else -> {
+                    levelBuilder.append(character.toChar())
+                }
             }
             character = levelReader.read()
+            count++
+        }
+
+        /*println("first line:")
+        for(c in sb){
+            print(c.toInt())
+        }
+        println()*/
+
+        // Inverting height (when reading Coords(0,0) is top-left corner and we need it to be bottom-left corner)
+        var height = levelBuilder.lines().size
+        if(start != Coords(-1,-1)){
+            start.y = height - 1 - start.y
+        }
+        //Ak by nefungovalo to dole finish.map { f -> Coords(f.x, height - 1 -f.y) }
+        for(f in finish){
+            f.y = height - 1 -f.y
+            //println("finish modified to $f")
         }
 
         var type = fileToType[File(levelFile.parent)]
@@ -123,7 +161,7 @@ object RoomParser{
             type = ROOM_TYPE.EMPTY_H2
         }
         println()
-        return RoomTemplate(levelBuilder, width, type, diff, safety, macroMap.toMutableMap())
+        return RoomTemplate(levelBuilder, width, type, diff, tags, macroMap.toMutableMap(), start, finish)
     }
 
 }
