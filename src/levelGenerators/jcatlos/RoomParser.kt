@@ -13,7 +13,7 @@ import kotlin.random.Random
 
 object RoomParser{
 
-    fun getNextToken(reader: BufferedReader): String{
+    private fun getNextToken(reader: BufferedReader): String{
         var tokenBuilder: StringBuilder = StringBuilder()
         var character: Int = reader.read()
         while(character >=0 && character != '}'.toInt() && character != ';'.toInt()){
@@ -51,24 +51,6 @@ object RoomParser{
             if(currentProb >= 100) return "-"
         }
         return "-"
-    }
-
-    fun parseRoom(levelFile: File): StringBuilder{
-        var levelBuilder: StringBuilder = StringBuilder()
-        var levelReader: BufferedReader = BufferedReader(levelFile.reader())
-
-        var character = levelReader.read()
-        while(character >= 0){
-            if(character == '{'.toInt()){
-                levelBuilder.append(parseMacro(levelReader))
-            }
-            else{
-                levelBuilder.append(character.toChar())
-            }
-            character = levelReader.read()
-        }
-
-        return levelBuilder
     }
 
     fun fileToTemplate(levelFile: File): RoomTemplate{
