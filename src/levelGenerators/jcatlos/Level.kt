@@ -9,7 +9,6 @@ import kotlin.random.Random
 import kotlin.reflect.typeOf
 
 class Level(var length: Int, var state: State){
-    var layers: ArrayList<Layer> = ArrayList()
     var levelColumns: ArrayList<Column> = ArrayList()
     var level = StringBuilder()
 

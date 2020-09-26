@@ -10,7 +10,6 @@ data class State(
         val levelDifficulty: Int = 100,
         var targetLength: Int = 10
 ){
-    var lastLayer: Layer = Layer()
     var expectedDifficulty: Int = 10
     var layerCount: Int = 1
     var maxHeight: Int = 100
@@ -29,14 +28,14 @@ data class State(
         println("level length = $targetLength")
     }
 
-    fun updateByLayer(layer: Layer){
+    /*fun updateByLayer(layer: Layer){
         var sum: Float = 0F
         //currentDifficulty += layer.difficulty
         lastLayer = layer
         layerCount ++
         expectedDifficulty += difficultyIncrease
         //println("lenghth = $layerCount")
-    }
+    }*/
 
     fun shouldEnd(): Boolean{
         /*var rnd = sqrt(java.util.Random().nextGaussian().absoluteValue)
@@ -45,8 +44,8 @@ data class State(
         return layerCount > targetLength
     }
 
-    fun layerSafety(): Boolean{
+    /*fun layerSafety(): Boolean{
         println("expected diff = $expectedDifficulty, layer diff = ${lastLayer.difficulty}")
         return lastLayer.difficulty > expectedDifficulty
-    }
+    }*/
 }
