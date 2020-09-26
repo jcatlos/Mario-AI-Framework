@@ -22,7 +22,7 @@ const val LEVEL_H2_HEIGHT = 16
 const val LEVEL_H1_HEIGHT = 8
 
 
-class Level(var length: Int, var state: State, layerBuilder: LayerBuilder){
+class Level(var length: Int, var state: State){
     var layers: ArrayList<Layer> = ArrayList()
     var levelColumns: ArrayList<Column> = ArrayList()
     var level = StringBuilder()
@@ -76,78 +76,6 @@ class Level(var length: Int, var state: State, layerBuilder: LayerBuilder){
         println("out level = ")
         print(level)
 
-    }
-
-    init {
-        println("starting initialization")
-
-        layers.add(Layer(arrayListOf(layerBuilder.createStart())))
-
-        while(!state.shouldEnd()){
-            //println("add layer")
-            //println("lenghth = ${state.layerCount}")
-            layers.add(layerBuilder.next())
-        }
-        /*for (i in 0 until length){
-            layers.add(layerBuilder.next())
-        }*/
-
-        var lastRoom = Layer(arrayListOf(layerBuilder.createFinish()))
-        layers.add(lastRoom)
-        state.updateByLayer(lastRoom)
-        println("finishing initialization")
-    }
-
-
-    fun generateMap() : String{
-        //println("starting generation")
-        var level : Array<StringBuilder> = Array<StringBuilder>(size = LEVEL_H2_HEIGHT, init =  {StringBuilder()})
-
-        var maxHeight = 0
-        for(layer in layers){
-            maxHeight = max(maxHeight, layer.height)
-        }
-
-        //var emptyRoomString = EmptyRoomH1().file.toString()
-
-        var layersRows: ArrayList<ArrayList<String>> = ArrayList()
-        for(layer in layers){
-            var layerRows: ArrayList<String> = ArrayList()
-            /*for(i in 0 until maxHeight - layer.height){
-                layerStringBuilder.append(emptyRoomString)
-            }*/
-            for(room in layer.getRooms().reversed()){
-                for(row in room.room.lines().reversed()){
-                    layerRows.add(row)
-                }
-            }
-            layersRows.add(layerRows)
-        }
-
-        // Pospajat Vrstvy
-        var allFinished = false
-        var iterator: Int = 0
-        var levelStringBuilder = StringBuilder()
-        while(!allFinished){
-            var row = StringBuilder()
-            allFinished = true
-            for(i in 0 until layersRows.size){
-                if(iterator < layersRows[i].size){
-                    row.append(layersRows[i][iterator])
-                    allFinished = false
-                }
-                else{
-                    row.append("CCCCCCCCCCCCCCCCCCCCCCCCC") //for debugging
-                    //row.append("-------------------------")
-                }
-            }
-            if(!allFinished){
-                levelStringBuilder.insert(0, "$row\n")
-            }
-            iterator++
-        }
-        print(levelStringBuilder.toString())
-        return levelStringBuilder.toString()
     }
 
     fun emplaceRoom(room: Room, dl_corner: Coords){
