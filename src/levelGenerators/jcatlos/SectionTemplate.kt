@@ -1,7 +1,7 @@
 package levelGenerators.jcatlos
 
 class SectionTemplate(var sectionRoomSpace: RoomSpace,
-                      var roomSpaces: ArrayList<RoomSpace>,
+                      var roomSpaces: MutableMap<Char, RoomSpace>,
                       var sectionTags: MutableMap<Char, ArrayList<String>>)
 {
 
@@ -9,12 +9,13 @@ class SectionTemplate(var sectionRoomSpace: RoomSpace,
         var out: StringBuilder = StringBuilder((".".repeat(sectionRoomSpace.width) + '\n').repeat(sectionRoomSpace.height))
         println(out.toString())
         for(roomSpace in roomSpaces){
-            var room = RandomRoomGenerator.generateToFitRoomspace(roomSpace)
+            var rs = roomSpace.value
+            var room = RandomRoomGenerator.generateToFitRoomspace(rs)
             println("section width = ${sectionRoomSpace.width}, section height = ${sectionRoomSpace.height}")
-            println("placing room at coords: ${roomSpace.DL_Corner()}")
+            println("placing room at coords: ${rs.DL_Corner()}")
             //println(out.toString())
 
-            emplaceRoom(out, room, roomSpace.DL_Corner())
+            emplaceRoom(out, room, rs.DL_Corner())
         }
 
         //adding finish-es to the output

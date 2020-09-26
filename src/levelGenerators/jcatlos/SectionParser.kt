@@ -5,7 +5,7 @@ import java.io.File
 object SectionParser {
     fun fileToSectionTemplate(sectionFile: File): SectionTemplate{
         var sectionString: StringBuilder = StringBuilder()
-        var roomSpaces: ArrayList<RoomSpace> = ArrayList()
+        var roomSpaces: MutableMap<Char, RoomSpace> = mutableMapOf()
         var sectionTags: MutableMap<Char, ArrayList<String>> = mutableMapOf()
 
         var characters: MutableSet<Char> = mutableSetOf()
@@ -14,16 +14,18 @@ object SectionParser {
 
         for(line in sectionFile.readText().lines()){
         //while(line != "---".trim()){
-            if(line.trim() == "---".trim()) parsingHead = false
-            else if(parsingHead){
-                var tokens = line.split(':').map {token -> token.trim()}
-                var char = tokens[0][0]
-                characters.add(char)
-                var tags = tokens[1].split(',').map {tag -> tag.trim()}
-                sectionTags[char] = ArrayList(tags)
-            }
-            else{
-                sectionString.appendln(line)
+            when {
+                line.trim() == "---".trim() -> parsingHead = false
+                parsingHead -> {
+                    var tokens = line.split(':').map {token -> token.trim()}
+                    var char = tokens[0][0]
+                    characters.add(char)
+                    var tags = tokens[1].split(',').map {tag -> tag.trim()}
+                    sectionTags[char] = ArrayList(tags)
+                }
+                else -> {
+                    sectionString.appendln(line)
+                }
             }
         }
 
@@ -65,7 +67,7 @@ object SectionParser {
 
             }
             println("roomSpace start = $start")
-            roomSpaces.add(RoomSpace(space.width, space.height, space.DL_Corner(), start, finish))
+            roomSpaces[char] = RoomSpace(space.width, space.height, space.DL_Corner(), start, finish)
         }
 
         return SectionTemplate(
