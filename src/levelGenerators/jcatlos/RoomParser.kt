@@ -1,6 +1,5 @@
 package levelGenerators.jcatlos
 
-import engine.sprites.Mario
 import java.io.BufferedReader
 import java.io.File
 import kotlin.random.Random
@@ -62,7 +61,7 @@ object RoomParser{
         var diff = levelReader.readLine().toInt()
         var tags: ArrayList<String> = ArrayList(levelReader.readLine().split(',').map {tag -> tag.trim()})
 
-        var start: Coords = Coords(-1, -1)
+        var start = Coords(-1, -1)
         var finish: ArrayList<Coords> = ArrayList()
 
         var macroMap: MutableMap<Coords, Macro> = mutableMapOf()
@@ -73,18 +72,12 @@ object RoomParser{
         var count = 0
         var character = levelReader.read()
 
-        //var sb = StringBuilder()
-
         while(character >= 0){
-            //print(character.toChar())
-            //count++
             if(character == 13 || character == 10 || character == '\n'.toInt()){
                 firstLine = false
                 count--
             }
             if(firstLine){
-                //sb.append(character.toChar())
-                //sb.append(width.toString())
                 width++
             }
 
@@ -121,18 +114,12 @@ object RoomParser{
             count++
         }
 
-        /*println("first line:")
-        for(c in sb){
-            print(c.toInt())
-        }
-        println()*/
-
         // Inverting height (when reading Coords(0,0) is top-left corner and we need it to be bottom-left corner)
         var height = levelBuilder.lines().size
         if(start != Coords(-1,-1)){
             start.y = height - 1 - start.y
         }
-        //Ak by nefungovalo to dole finish.map { f -> Coords(f.x, height - 1 -f.y) }
+        // Inverting finish
         for(f in finish){
             f.y = height - 1 -f.y
             //println("finish modified to $f")
