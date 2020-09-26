@@ -1,14 +1,5 @@
 package levelGenerators.jcatlos
 
-/* Level creation follows these steps:
-    1.) Create starting and finishing rooms
-    2.) Use LayerBuilder class to create specified amount of layers of rooms
-    3.) Connect created layers using information:
-        // (Not true anymore) I.)     LayerBuilder returns rooms in layers in reverse order (from bottom to top) -
-        II.)    Rooms at the lowest layer create a ground level - no "underground" rooms (yet)
-        III.)   RoomH2.height = 2 * RoomH1.height (Pridat nakres ako funguju susedne miestnosti)
- */
-
 import com.sun.jdi.ArrayReference
 import java.nio.channels.NotYetConnectedException
 import java.util.*
@@ -16,11 +7,6 @@ import kotlin.collections.ArrayList
 import kotlin.math.max
 import kotlin.random.Random
 import kotlin.reflect.typeOf
-
-
-const val LEVEL_H2_HEIGHT = 16
-const val LEVEL_H1_HEIGHT = 8
-
 
 class Level(var length: Int, var state: State){
     var layers: ArrayList<Layer> = ArrayList()
