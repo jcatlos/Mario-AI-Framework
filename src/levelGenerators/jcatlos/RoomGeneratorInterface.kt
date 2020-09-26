@@ -1,6 +1,5 @@
 package levelGenerators.jcatlos
 
 interface RoomGenerator {
-    fun generate(size: Int): Room
-    fun generate(type: ROOM_TYPE): Room
+    fun generateToFitRoomspace(roomSpace: RoomSpace): Room
 }
