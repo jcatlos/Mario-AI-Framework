@@ -10,7 +10,7 @@ class SectionTemplate(var sectionRoomSpace: RoomSpace,
         println(out.toString())
         for(roomSpace in roomSpaces){
             var rs = roomSpace.value
-            var room = RandomRoomGenerator.generateToFitRoomspace(rs)
+            var room = RandomRoomGenerator.generateToFitRoomspace(rs, sectionTags[roomSpace.key]!!)
             println("section width = ${sectionRoomSpace.width}, section height = ${sectionRoomSpace.height}")
             println("placing room at coords: ${rs.DL_Corner()}")
             //println(out.toString())
