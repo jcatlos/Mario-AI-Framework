@@ -7,13 +7,16 @@ object SharedData {
 
     init{ println("Initializing shared data") }
 
-    var SectionFiles: ArrayList<File> = ArrayList()
+
     var SectionTemplates: ArrayList<SectionTemplate> = ArrayList()
 
-    var RoomFiles: ArrayList<File> = ArrayList()
+
     var RoomTemplates: ArrayList<RoomTemplate> = ArrayList()
 
     init{
+        // Loading rooms
+
+        var RoomFiles: ArrayList<File> = ArrayList()
         println("Loading room files:")
         for(dir in File("src/levelGenerators/jcatlos/blocks").listFiles()){
             println("\tDirectory ${dir.name}:")
@@ -29,13 +32,13 @@ object SharedData {
             RoomTemplates.add(RoomParser.fileToTemplate(file))
         }
 
+        // Loading sections
+
+        var SectionFiles: ArrayList<File> = ArrayList()
         println("Loading section files:")
         for(file in File("src/levelGenerators/jcatlos/sections").listFiles()){
-            //println("\tDirectory ${dir.name}:")
-            //for(file in dir.listFiles()){
-                println("\tFile ${file.name}")
-                SectionFiles.add(file)
-            //}
+            println("\tFile ${file.name}")
+            SectionFiles.add(file)
         }
 
         println("Parsing section files:")
@@ -43,7 +46,7 @@ object SharedData {
             println("\tParsing ${file.name}")
             SectionTemplates.add(SectionParser.fileToSectionTemplate(file))
         }
-        println("loaded ${SectionTemplates.size} files")
+        //println("loaded ${SectionTemplates.size} files")
     }
 
 
