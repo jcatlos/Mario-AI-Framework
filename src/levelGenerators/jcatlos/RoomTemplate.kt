@@ -5,8 +5,6 @@ import java.lang.Integer.max
 import kotlin.random.Random
 import kotlin.text.StringBuilder
 
-val emptyRoomTemplate = RoomTemplate(StringBuilder(), 0, ROOM_TYPE.NULL, 0, arrayListOf("safe", "empty"), mutableMapOf(), Coords(0, 0), arrayListOf())
-
 data class Coords(var x: Int, var y:Int) : Comparable<Coords> {
     override fun compareTo(other: Coords): Int{
         return when{
@@ -55,7 +53,6 @@ class Macro(var macros: ArrayList<MacroPair> = arrayListOf()){
 class RoomTemplate(
         var room: StringBuilder,
         var width: Int = room.split('\n')[0].length,
-        var type: ROOM_TYPE,
         var diff: Int,
         var tags: ArrayList<String>,
         var macros: Map<Coords, Macro>,
@@ -87,7 +84,7 @@ class RoomTemplate(
         //println("After")
         //println(newRoom.toString())
 
-        return Room(newRoom, newDiff, tags, type, start, finish)
+        return Room(newRoom, newDiff, tags, start, finish)
     }
 }
 

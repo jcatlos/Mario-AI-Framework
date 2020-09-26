@@ -156,12 +156,7 @@ object RoomParser{
             //println("finish modified to $f")
         }
 
-        var type = fileToType[File(levelFile.parent)]
-        if(type == null){
-            type = ROOM_TYPE.EMPTY_H2
-        }
-        println()
-        return RoomTemplate(levelBuilder, width, type, diff, tags, macroMap.toMutableMap(), start, finish)
+        return RoomTemplate(levelBuilder, width, diff, tags, macroMap.toMutableMap(), start, finish)
     }
 
 }
