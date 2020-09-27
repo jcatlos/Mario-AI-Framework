@@ -36,9 +36,12 @@ object SharedData {
 
         var SectionFiles: ArrayList<File> = ArrayList()
         println("Loading section files:")
-        for(file in File("src/levelGenerators/jcatlos/sections").listFiles()){
-            println("\tFile ${file.name}")
-            SectionFiles.add(file)
+        for(dir in File("src/levelGenerators/jcatlos/sections").listFiles()){
+            println("\tDirectory ${dir.name}:")
+            for(file in dir.listFiles()){
+                println("\tFile ${file.name}")
+                SectionFiles.add(file)
+            }
         }
 
         println("Parsing section files:")
