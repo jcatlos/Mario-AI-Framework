@@ -18,8 +18,6 @@ data class State(
     var expectedDifficulty: Int = 0
     var sectionCount = 0
 
-    var roomGenerator: RoomGenerator = RandomRoomGenerator
-
     fun updateByCoords(coords:Coords){
         if(coords.y > highestY) highestY = coords.y
         if(coords.x > highestX) highestX = coords.x

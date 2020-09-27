@@ -10,6 +10,8 @@ object SharedData {
     var SectionTemplates: ArrayList<SectionTemplate> = ArrayList()
     var RoomTemplates: ArrayList<RoomTemplate> = ArrayList()
 
+    var roomGenerator: RoomGenerator = RandomRoomGenerator
+
     init{
         // Loading rooms
 
