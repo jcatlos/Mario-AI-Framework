@@ -44,19 +44,19 @@ object SectionParser {
                 }
             }
         }
-        println("section start = $sectionStart")
+        //println("section start = $sectionStart")
 
         // Find starting and finishing points of each room (using the same sectionList)
         for(char in characters){
-            println("parsing for $char")
+            //println("parsing for $char")
             var space = findTemplateSpace(sectionString, char)
-            println("found ${space.DL_Corner()}, ${space.width}, ${space.height}")
+            //println("found ${space.DL_Corner()}, ${space.width}, ${space.height}")
             var start = Coords(-1, -1)
             var finish: ArrayList<Coords> = ArrayList()
             for(x in 0 until space.width){
                 for(y in 0 until space.height){
                     var currentChar: Char = sectionList[y+space.DL_Corner().y][x+space.DL_Corner().x]
-                    print(currentChar)
+                    //print(currentChar)
                     if(currentChar == 'm' || currentChar == 'M'){
                         start = Coords(x, y)
                     }
@@ -66,7 +66,7 @@ object SectionParser {
                 }
 
             }
-            println("roomSpace start = $start")
+            //println("roomSpace start = $start")
             roomSpaces[char] = RoomSpace(space.width, space.height, space.DL_Corner(), start, finish)
         }
 

@@ -7,10 +7,7 @@ object SharedData {
 
     init{ println("Initializing shared data") }
 
-
     var SectionTemplates: ArrayList<SectionTemplate> = ArrayList()
-
-
     var RoomTemplates: ArrayList<RoomTemplate> = ArrayList()
 
     init{

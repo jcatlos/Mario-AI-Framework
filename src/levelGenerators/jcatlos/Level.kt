@@ -9,24 +9,24 @@ import kotlin.random.Random
 import kotlin.reflect.typeOf
 
 class Level(var length: Int, var state: State){
-    var levelColumns: ArrayList<Column> = ArrayList()
+    var levelColumns: ArrayList<Array<Char>> = ArrayList()
     var level = StringBuilder()
 
     init{
         // Initialize levelColumns - create an empty level
         for(x in 0 until state.maxLength){
-            levelColumns.add(Column(StringBuilder(".".repeat(state.maxHeight))))
+            levelColumns.add(Array(state.maxHeight) { _ -> '.'})
         }
 
         var startRoom: Room = RandomRoomGenerator.generateStartRoom()
-        var highestY = startRoom.room.lines().size
-        var highestX = startRoom.room.lines()[0].length
+        state.updateByCoords(Coords(startRoom.room.lines()[0].length, startRoom.room.lines().size))
+
         emplaceRoom(startRoom, Coords(0,0))
         var exitCoords = findLowestExit(this)
 
-        println("exit: ${findLowestExit(this)}")
+        //println("exit: ${findLowestExit(this)}")
 
-        for(i in 0 until state.sectionCount){
+        for(i in 0 until state.levelLength){
             println("iteration $i")
             printLevel()
             if(exitCoords == null) break
@@ -36,21 +36,18 @@ class Level(var length: Int, var state: State){
             //println("\t exit coords: $exitCoords")
             var rs = calculateFreeRoomSpace(this, exitCoords)
             if(rs == null) break
-            //println("\t roomspace dl =  ${rs.DL_Corner()}")
-            //var room = RandomRoomGenerator.generateToFitRoomspace(rs)
-            //println("\t ${room.tags}")
-            //emplaceRoom(room, rs.DL_Corner())
+
             var section = sectionTemplate.generate(rs.DL_Corner())
-            if(section.sectionSpace.UR_Corner().y > highestY) highestY = section.sectionSpace.UR_Corner().y
-            if(section.sectionSpace.UR_Corner().x > highestX) highestX = section.sectionSpace.UR_Corner().x
+            state.updateBySection(section)
+
             emplaceSection(section, rs.DL_Corner())
             // Remove exit from generated map
             levelColumns[exitCoords.x][exitCoords.y] = '-'
             exitCoords = findLowestExit(this)
         }
 
-        for(y in highestY downTo 0){
-            for(x in 0 until highestX + 1){
+        for(y in state.highestY downTo 0){
+            for(x in 0 until state.highestX + 1){
                 when(levelColumns[x][y]){
                     '.' -> level.append('-')
                     else -> level.append(levelColumns[x][y])

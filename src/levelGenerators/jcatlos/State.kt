@@ -8,40 +8,44 @@ import kotlin.random.Random
 data class State(
         val difficultyIncrease: Int = 10,
         val levelDifficulty: Int = 100,
-        var targetLength: Int = 10
+        var levelLength: Int = 7
 ){
-    var expectedDifficulty: Int = 10
-    var layerCount: Int = 1
+    var highestX = 0
+    var highestY = 0
     var maxHeight: Int = 100
     var maxLength: Int = 1000
 
-    var sectionCount = 5
+    var expectedDifficulty: Int = 0
+    var sectionCount = 0
 
-    var roomGenerator: RoomGenerator = RandomRoomGenerator
+    //var roomGenerator: RoomGenerator = RandomRoomGenerator
 
-    init {
+    /*init {
         // Here we are modifying the length so it's little bit varied (little bit of magic involved)
         val deviation = floor(java.util.Random().nextGaussian() * targetLength / 4).toInt()
         if(deviation.absoluteValue <= targetLength/3){
             targetLength += deviation
         }
         println("level length = $targetLength")
+    }*/
+
+    fun updateByCoords(coords:Coords){
+        if(coords.y > highestY) highestY = coords.y
+        if(coords.x > highestX) highestX = coords.x
     }
 
-    /*fun updateByLayer(layer: Layer){
-        var sum: Float = 0F
-        //currentDifficulty += layer.difficulty
-        lastLayer = layer
-        layerCount ++
+    fun updateBySection(section: Section){
+        sectionCount ++
         expectedDifficulty += difficultyIncrease
-        //println("lenghth = $layerCount")
-    }*/
+        if(section.sectionSpace.UR_Corner().y > highestY) highestY = section.sectionSpace.UR_Corner().y
+        if(section.sectionSpace.UR_Corner().x > highestX) highestX = section.sectionSpace.UR_Corner().x
+    }
 
     fun shouldEnd(): Boolean{
         /*var rnd = sqrt(java.util.Random().nextGaussian().absoluteValue)
         println("$rnd <= ${(layerCount).toFloat() / (avgLength*2)}")
         return rnd <= (layerCount).toFloat() / (avgLength*2)*/
-        return layerCount > targetLength
+        return sectionCount > levelLength
     }
 
     /*fun layerSafety(): Boolean{

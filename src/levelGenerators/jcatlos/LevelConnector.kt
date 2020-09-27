@@ -36,7 +36,9 @@ fun calculateFreeRoomSpace(level: Level, entryCoords: Coords): RoomSpace?{
     var xIt = x
     while(xIt < level.state.maxLength){
         var col = level.levelColumns[xIt]
-        var substr = col.getBuilder().substring(entryCoords.y - downHeight, entryCoords.y + upHeight + 1)
+
+        var substr = String(chars = col.copyOfRange(entryCoords.y - downHeight, entryCoords.y + upHeight + 1).toCharArray())
+        //var substr = col.getBuilder().substring(entryCoords.y - downHeight, entryCoords.y + upHeight + 1)
         if(substr != ".".repeat(substr.length)) break
         width ++
         xIt++
