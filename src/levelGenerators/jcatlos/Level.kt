@@ -18,7 +18,7 @@ class Level(var state: State){
             levelColumns.add(Array(state.maxHeight) { _ -> '.'})
         }
 
-        var startRoom: Room = RandomRoomGenerator.generateToFitRoomspace(calculateFreeRoomSpace(this, Coords(0,0))!!, arrayListOf("start"))
+        var startRoom: Room = state.roomGenerator.generateToFitRoomspace(calculateFreeRoomSpace(this, Coords(0,0))!!, arrayListOf("start"))
         state.updateByCoords(Coords(startRoom.room.lines()[0].length, startRoom.room.lines().size))
 
         emplaceRoom(startRoom, Coords(0,0))
@@ -50,7 +50,7 @@ class Level(var state: State){
         }
 
         var finishSpace = calculateFreeRoomSpace(this, exitCoords)!!
-        var finishRoom: Room = RandomRoomGenerator.generateToFitRoomspace(finishSpace, arrayListOf("finish"))
+        var finishRoom: Room = state.roomGenerator.generateToFitRoomspace(finishSpace, arrayListOf("finish"))
         state.updateByCoords(
                 Coords(
                         finishSpace.DL_Corner().x + finishRoom.room.lines()[0].length,

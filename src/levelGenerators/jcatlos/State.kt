@@ -18,16 +18,7 @@ data class State(
     var expectedDifficulty: Int = 0
     var sectionCount = 0
 
-    //var roomGenerator: RoomGenerator = RandomRoomGenerator
-
-    /*init {
-        // Here we are modifying the length so it's little bit varied (little bit of magic involved)
-        val deviation = floor(java.util.Random().nextGaussian() * targetLength / 4).toInt()
-        if(deviation.absoluteValue <= targetLength/3){
-            targetLength += deviation
-        }
-        println("level length = $targetLength")
-    }*/
+    var roomGenerator: RoomGenerator = RandomRoomGenerator
 
     fun updateByCoords(coords:Coords){
         if(coords.y > highestY) highestY = coords.y
