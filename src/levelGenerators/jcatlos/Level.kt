@@ -8,7 +8,7 @@ import kotlin.math.max
 import kotlin.random.Random
 import kotlin.reflect.typeOf
 
-class Level(var length: Int, var state: State){
+class Level(var state: State){
     var levelColumns: ArrayList<Array<Char>> = ArrayList()
     var level = StringBuilder()
 
