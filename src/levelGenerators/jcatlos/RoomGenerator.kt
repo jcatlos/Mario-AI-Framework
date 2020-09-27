@@ -51,7 +51,7 @@ object RandomRoomGenerator: RoomGenerator{
         return generated
     }
 
-    fun checkTags(roomTags: ArrayList<String>, sectionTags: ArrayList<String>): Boolean{
+    private fun checkTags(roomTags: ArrayList<String>, sectionTags: ArrayList<String>): Boolean{
         var satisfy = true
         for(tag in sectionTags){
             if(tag.isEmpty()) continue

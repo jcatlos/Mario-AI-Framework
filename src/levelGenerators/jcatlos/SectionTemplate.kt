@@ -7,7 +7,7 @@ class SectionTemplate(var sectionRoomSpace: RoomSpace,
 
     fun generate(dl_corner: Coords): Section{
         var out: StringBuilder = StringBuilder((".".repeat(sectionRoomSpace.width) + '\n').repeat(sectionRoomSpace.height))
-        println(out.toString())
+        //println(out.toString())
         for(roomSpace in roomSpaces){
             var rs = roomSpace.value
             var room = RandomRoomGenerator.generateToFitRoomspace(rs, sectionTags[roomSpace.key]!!)

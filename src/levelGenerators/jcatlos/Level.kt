@@ -18,16 +18,16 @@ class Level(var state: State){
             levelColumns.add(Array(state.maxHeight) { _ -> '.'})
         }
 
-        var startRoom: Room = RandomRoomGenerator.generateStartRoom()
+        var startRoom: Room = RandomRoomGenerator.generateToFitRoomspace(calculateFreeRoomSpace(this, Coords(0,0))!!, arrayListOf("start"))
         state.updateByCoords(Coords(startRoom.room.lines()[0].length, startRoom.room.lines().size))
 
         emplaceRoom(startRoom, Coords(0,0))
-        var exitCoords = findLowestExit(this)
+        var exitCoords:Coords = startRoom.finish.first()
 
         //println("exit: ${findLowestExit(this)}")
 
-        for(i in 0 until state.levelLength){
-            println("iteration $i")
+        while(!state.shouldEnd()){
+            //println("iteration $i")
             printLevel()
             if(exitCoords == null) break
             //var exitCoords = findLowestExit(this)
@@ -43,8 +43,23 @@ class Level(var state: State){
             emplaceSection(section, rs.DL_Corner())
             // Remove exit from generated map
             levelColumns[exitCoords.x][exitCoords.y] = '-'
-            exitCoords = findLowestExit(this)
+
+            var newExit = findLowestExit(this)
+            if(newExit == null) break
+            exitCoords = newExit
         }
+
+        var finishSpace = calculateFreeRoomSpace(this, exitCoords)!!
+        var finishRoom: Room = RandomRoomGenerator.generateToFitRoomspace(finishSpace, arrayListOf("finish"))
+        state.updateByCoords(
+                Coords(
+                        finishSpace.DL_Corner().x + finishRoom.room.lines()[0].length,
+                        finishSpace.DL_Corner().y +finishRoom.room.lines().size
+                )
+        )
+        emplaceRoom(finishRoom, finishSpace.DL_Corner())
+
+        printLevel()
 
         for(y in state.highestY downTo 0){
             for(x in 0 until state.highestX + 1){
