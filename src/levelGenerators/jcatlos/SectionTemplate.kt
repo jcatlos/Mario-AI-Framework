@@ -7,14 +7,9 @@ class SectionTemplate(var sectionRoomSpace: RoomSpace,
 
     fun generate(dl_corner: Coords): Section{
         var out: StringBuilder = StringBuilder((".".repeat(sectionRoomSpace.width) + '\n').repeat(sectionRoomSpace.height))
-        //println(out.toString())
         for(roomSpace in roomSpaces){
             var rs = roomSpace.value
             var room = SharedData.roomGenerator.generateToFitRoomspace(rs, sectionTags[roomSpace.key]!!)
-            println("section width = ${sectionRoomSpace.width}, section height = ${sectionRoomSpace.height}")
-            println("placing room at coords: ${rs.DL_Corner()}")
-            //println(out.toString())
-
             emplaceRoom(out, room, rs.DL_Corner())
         }
 

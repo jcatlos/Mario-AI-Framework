@@ -8,7 +8,7 @@ class RoomSpace(
         var finishAnchors: ArrayList<Coords>
 ): Space(width, height, DL_Corner)
 {
-    var anchorDiffs: ArrayList<Coords> = ArrayList()
+    private var anchorDiffs: ArrayList<Coords> = ArrayList()
 
     init{
         for(finishAnchor in finishAnchors){
