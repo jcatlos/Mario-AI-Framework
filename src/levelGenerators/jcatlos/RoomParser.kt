@@ -24,33 +24,6 @@ object RoomParser{
         return tokenBuilder.toString()
     }
 
-    private fun parseMacro(reader: BufferedReader): String{
-
-        fun addTokenToOptions(tokenPair: List<String>, options: MutableMap<String, Int>): Unit{
-            require(tokenPair.size == 2 &&
-                    tokenPair[1].toIntOrNull() != null) {"Invalid Macro"}
-            options[tokenPair[0]] = tokenPair[1].toInt()
-            //println(tokenPair[1])
-        }
-
-        var options: MutableMap<String, Int> = mutableMapOf()
-
-        var token: String = getNextToken(reader)
-        while(token != ""){
-            var tokenPair = token.split('=')
-            addTokenToOptions(tokenPair, options)
-            token = getNextToken(reader)
-        }
-
-        val prob = Random.nextFloat() * 100
-        var currentProb = 0
-        for(entry in options.entries){
-            currentProb += entry.value
-            if(prob < currentProb) return entry.key
-            if(currentProb >= 100) return "-"
-        }
-        return "-"
-    }
 
     fun fileToTemplate(levelFile: File): RoomTemplate{
         println("      Parsing initialized")
