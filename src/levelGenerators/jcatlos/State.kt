@@ -15,7 +15,6 @@ data class State(
     var maxHeight: Int = 100
     var maxLength: Int = 1000
 
-    var expectedDifficulty: Int = 0
     var sectionCount = 0
 
     fun updateByCoords(coords:Coords){
@@ -25,7 +24,6 @@ data class State(
 
     fun updateBySection(section: Section){
         sectionCount ++
-        expectedDifficulty += difficultyIncrease
         if(section.sectionSpace.UR_Corner().y > highestY) highestY = section.sectionSpace.UR_Corner().y
         if(section.sectionSpace.UR_Corner().x > highestX) highestX = section.sectionSpace.UR_Corner().x
     }
