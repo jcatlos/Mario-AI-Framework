@@ -8,7 +8,7 @@ class Room(
     var finish: ArrayList<Coords>)
 {
 
-    fun applySafety(safe: Boolean): Unit{
+    /*fun applySafety(safe: Boolean): Unit{
         if("safe" in tags || (safe && "unsafe" !in tags)){
             room.append("\n${"X".repeat(room.lines().last().length)}")
         }
@@ -16,6 +16,6 @@ class Room(
             room.append("\n${room.lines().last()}")
             difficulty += 30 // UNSAFE DIFFICULTY INCREASE
         }
-    }
+    }*/
 
 }
