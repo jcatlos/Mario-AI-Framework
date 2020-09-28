@@ -3,7 +3,6 @@ package levelGenerators.jcatlos
 object LevelConnector {
     fun findLowestExit(level: Level): Coords?{
         // If none found, returns null
-        var out: ArrayList<Coords> = ArrayList()
         for (y in 0 until level.state.maxHeight){
             for(x in 0 until level.state.maxLength){
                 if(level.levelColumns[x][y] == 'f'){
