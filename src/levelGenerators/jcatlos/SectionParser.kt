@@ -46,7 +46,7 @@ object SectionParser {
 
         // Find starting and finishing points of each room (using the same sectionList)
         for(char in characters){
-            var space = findTemplateSpace(sectionString, char)
+            var space = LevelConnector.findTemplateSpace(sectionString, char)
             var start = Coords(-1, -1)
             var finish: ArrayList<Coords> = ArrayList()
             for(x in 0 until space.width){

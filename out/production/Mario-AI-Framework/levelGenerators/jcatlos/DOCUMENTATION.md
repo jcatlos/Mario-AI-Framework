@@ -72,10 +72,70 @@ At initialization, it calls the `RoomParser` and `SectionParser` to parse every 
  - `roomGenerator: RoomGenerator` - RoomGenerator used to generate rooms
 
 ## Parsers
-Parsers are objects used to create templates from files.
+Parsers are objects used to create templates from files. Each file must comply to the format desribed in *Customization* section.
 ### RoomParser
-### SectionParser
+#### fileToTemplate()
+This is the only public method of the object. It takes an input file as the only parameter and returns a `RoomTempate` in these steps:
+1. It reads the first line of the file, converts it to `Int` and saves it as the difficulty of the room.
+2. It reads the second line, splits it by `','`, trims each tag of whitespace and saves the whole list as an `ArrayList<String>` of the tags of the room.
+3. Now it begins to read the room itself:
+    1. It reads the characters one-by-one and each time it increments the `count` variable.
+    2. If it's on the first line, the variable `width` is incemented
+    3. Then it looks at the character. 
+        * If it is an `m`, the coordinates are saved as the strating point of the room (therefore if more starting points are provided, only the last one is accepted) and appends a `-`. 
+        * If it is an `f`, the coordinates are saved as a finishing point and added to a list of finishing points and appends a `-`.
+        * If it is a `{`, It starts to parse a macro. While the function `getNextToken()` returns a non-empty string it extracts the data (token comes in the form of `option=probability`) and adds the option to the macro. After all oprions are loaded, it adds a string of `-` with the same length as the macro's length.
+        * Otherwise it just appends the read character to the room (including the line endings)
+    4. After the roomis read, the coordinates of the starting and finishing rooms are 'inverted' - They are oriented that (0,0) is in the top-left corner and we want it in the bottom-left corner.
+    5. Now that it has all the required information a `RoomTemplate` is returned.
+#### getNextToken()
+It takes a `BufferedReader` as a paramter. It starts to read characters if a character is read and it is not `;` or `}` it is appended to an output string. Otherwise the output string is retrned (without the ending character)
 
+### SectionParser
+#### fileToSectionTemplate()
+Takes a file as a parameter and returns a `SectionTemplate` in these steps:
+1. It reads the file line-by-line. While it does not encounter a line with `'---'`, it parses heading of the file. That means:
+    1. It firstly splits the line by `:` And takes the first character of the first returned element as a character defining the room later on. 
+    2. Then it splits the next element and splits it by `,` to get the tags of the room.
+2. After the `---` line, it loads the rest of the file into a `sectionString: StringBuilder`.
+3. In a list of reversed lines from `sectionString` starting and finishing points of the whole section are found
+4. Then for each defining character a `findTemplateSpace()` method is called o find the `Space` of the room in the section. For each space, starting and finishing points are found and a `RoomSpace` is added to a `Map<Char, Roomspace>` of the section.
+5. Now that the parser has all the requred data, it retuns a `SectionTemplate`
+
+ ## Room
+Is a class meant to hold data about a certain generated room.
+### Attributes:
+ * `room : StringBuilder` - Contains the actual room as a string
+ * `difficulty: Int` - The difficulty of the room
+ * `tags: ArrayList<String>` - The tags of the room
+ * `start: Coords` - The entry point to the room (relative to the room)
+ * `finish: ArrayList<Coords>` - The exit points from the room (relative to the room)
+
+ ## Section
+Is a class maent to hold data about a certain generated section.
+### Attributes
+Given though initialization are these attributes:
+ * `section: StringBuilder` - Is the whole section as a string
+ * `var sectionSpace: RoomSpace` - Is the `RoomSpace` inside which the whole section lies
+
+Then attributes `startPoint: Coords` and `finishPoints: ArrayList<Coords>` are extracted. They contain starting and finishing points of the section as a whole.
+
+## State
+Is a class meant to hold data about the current state of the generation during the generation. It isinitialized by 3 parameters (all of which are saved as attributes):
+ * `difficultyIncrease: Int` - How much the difficulty increases with each added section
+ * `levelDifficulty: Int` - What is the maximum difficulty for the finishing room
+ * `levelLength: Int` - How many sections must the level contain
+### Attributes
+ * `highestX: Int` - x-coordinate of the right-most point in the currently generated level
+ * `highestY: Int` -  y-coordinate of the highest point in the currently generated level
+ * `maxHeight: Int` - Maximum height of the level
+ * `maxLength: Int` - Maximum width of the level
+ * `sectionCount: Int` - Current number of sections in the level
+
+### Methods
+ * `shouldEnd(): Boolean` - Return whether the level generation should end or not (currently checks whether the right amount of sections has been generated)
+ * `updateBySection()` - Takes a `section` as a parameter and according to its data it updates its internal data (currently only `sectionCount`, `highestX` and `highestY`).
+ * `updateByCoords()` - Updates `highestX` and `highestY` according to the point (used when adding a non-setion to a level - such as start or finish)
 
  ## Space
 Is a class used to store information about space. It is initialized by width, height and the coordinates of the down-left corner.

@@ -114,7 +114,28 @@ Is a class meant to hold data about a certain generated room.
  ## Section
 Is a class maent to hold data about a certain generated section.
 ### Attributes
+Given though initialization are these attributes:
+ * `section: StringBuilder` - Is the whole section as a string
+ * `var sectionSpace: RoomSpace` - Is the `RoomSpace` inside which the whole section lies
 
+Then attributes `startPoint: Coords` and `finishPoints: ArrayList<Coords>` are extracted. They contain starting and finishing points of the section as a whole.
+
+## State
+Is a class meant to hold data about the current state of the generation during the generation. It isinitialized by 3 parameters (all of which are saved as attributes):
+ * `difficultyIncrease: Int` - How much the difficulty increases with each added section
+ * `levelDifficulty: Int` - What is the maximum difficulty for the finishing room
+ * `levelLength: Int` - How many sections must the level contain
+### Attributes
+ * `highestX: Int` - x-coordinate of the right-most point in the currently generated level
+ * `highestY: Int` -  y-coordinate of the highest point in the currently generated level
+ * `maxHeight: Int` - Maximum height of the level
+ * `maxLength: Int` - Maximum width of the level
+ * `sectionCount: Int` - Current number of sections in the level
+
+### Methods
+ * `shouldEnd(): Boolean` - Return whether the level generation should end or not (currently checks whether the right amount of sections has been generated)
+ * `updateBySection()` - Takes a `section` as a parameter and according to its data it updates its internal data (currently only `sectionCount`, `highestX` and `highestY`).
+ * `updateByCoords()` - Updates `highestX` and `highestY` according to the point (used when adding a non-setion to a level - such as start or finish)
 
  ## Space
 Is a class used to store information about space. It is initialized by width, height and the coordinates of the down-left corner.
