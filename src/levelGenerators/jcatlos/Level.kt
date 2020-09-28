@@ -27,12 +27,12 @@ class Level(var state: State){
         //println("exit: ${findLowestExit(this)}")
 
         while(!state.shouldEnd()){
-            //println("iteration $i")
+            println("next iteration ")
             printLevel()
             if(exitCoords == null) break
             //var exitCoords = findLowestExit(this)
             var sectionTemplate = SharedData.SectionTemplates.random()
-            println("chosen ${sectionTemplate.roomSpaces.size}")
+            //println("chosen ${sectionTemplate.roomSpaces.size}")
             //println("\t exit coords: $exitCoords")
             var rs = LevelConnector.calculateFreeRoomSpace(this, exitCoords)
             if(rs == null) break
@@ -59,7 +59,7 @@ class Level(var state: State){
         )
         emplaceRoom(finishRoom, finishSpace.DL_Corner())
 
-        printLevel()
+        //printLevel()
 
         for(y in state.highestY downTo 0){
             for(x in 0 until state.highestX + 1){

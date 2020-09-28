@@ -158,4 +158,29 @@ Is a class used to store information about space. It is initialized by width, he
  ### anchorsFit() method
  This method takes a start point and exit points of a `RoomTemplate` (in the same way as the class itself). It then calculates `inputAnchorDiffs` (in the same way it calculates `anchordiffs`) and checks whether every `anchorDiff` is in the `inputAnchorDiffs` - All the exits from the `RoomSpace` mus be in the `RoomTemplate` with the same position relative to starting point.
 
- 
+ ## LevelConnector object
+ Is only holding helping methods used for connecting pats of a level
+ ### findLowestExit()
+ Takes a `Level` as an argument and returns the coordinates of the lowest 'f' in its `levelColumns`
+ ### calculateFreeRoomSpace()
+ Takes a `Level` and `Coords` as arguments and returns a `RoomSpace` with entry point of the coordinates with `Coords.x + 1`. It serves to find the free space following a section or room, so an appropriate section can be connected. It follows these steps:
+ 1. Finds the free space over and under the entry point (marked as 1 in example)
+ 2. Finds the longest space where the space under and over the entry point is unoccupied. (marked as * in the example)
+ 3. Returns the found space as `RoomSpace` 
+
+ ```
+ Schematic example:
+
+|XXXXXXXXXXXXXXXX
+|X..........X....
+|1**********XXXXX
+|1**********.....
+fm**********.....
+|1**********.....
+|XXXX....XXXXXXXX
+ ```
+ ### findtemplateSpace()
+ Takes a room as a `StringBuilder` and a `Char` and finds the highest, lowest, left-most and right-most point where the character appears. Then it returns the space defined by these points.
+
+This ensures that even if some corners are obstructed by starting or finishing characters, the dimensions of the space are perserved.
+

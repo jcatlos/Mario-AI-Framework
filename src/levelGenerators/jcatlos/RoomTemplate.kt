@@ -49,12 +49,12 @@ class RoomTemplate(
 {
     var height: Int = room.lines().size
 
-    init{
+    /*init{
         println("Room Template start = $start")
         for(f in finish){
             println("Room Template finish = $f")
         }
-    }
+    }*/
 
     fun generate(): Room{
         //println("Before")
