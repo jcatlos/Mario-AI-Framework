@@ -71,12 +71,6 @@ At initialization, it calls the `RoomParser` and `SectionParser` to parse every 
  - `SectionTemplates: ArrayList<SectionTemplate>` - A list containing templates of all the found sections.
  - `roomGenerator: RoomGenerator` - RoomGenerator used to generate rooms
 
-## Parsers
-Parsers are objects used to create templates from files.
-### RoomParser
-### SectionParser
-
-
  ## Space
 Is a class used to store information about space. It is initialized by width, height and the coordinates of the down-left corner.
  ### Attributes
