@@ -1,5 +1,9 @@
 package levelGenerators.jcatlos
 
+/*
+    Class containing information of an instance of a room (returned by RoomTemplate.generate() and RoomGenerator.generateToFitRoomspace)
+ */
+
 class Room(
     val room : StringBuilder,
     var difficulty: Int,

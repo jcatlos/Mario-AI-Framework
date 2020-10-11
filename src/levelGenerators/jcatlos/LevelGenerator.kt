@@ -7,6 +7,12 @@ import engine.core.MarioLevelModel
 import engine.core.MarioTimer
 
 
+/*
+    Overload of the MarioLevelGenerator
+        * getGeneratedLevel() is responsible for creating the string containing the level
+            - Creates an instance of Level class with a state (used to modify properties of the level)
+ */
+
 class LevelGenerator : MarioLevelGenerator{
     var state = State(15, 100, 1)
     //var layerBuilder = LayerBuilder(BasicLayerDesigner, RandomRoomGenerator, state)

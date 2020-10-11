@@ -5,7 +5,15 @@ import java.lang.Integer.max
 import kotlin.random.Random
 import kotlin.text.StringBuilder
 
+/*
+    Data class allowing more elegant way of passing macros from RoomParser to RoomTemplate
+        - Macros are executed at the time of a generation of an instance of Room
+ */
 data class MacroPair(var string: String, var prob: Int) {}
+
+/*
+    Class used to store information about a macro to be executed at Room generation
+ */
 
 class Macro(var macros: ArrayList<MacroPair> = arrayListOf()){
     var length = 0
@@ -37,6 +45,13 @@ class Macro(var macros: ArrayList<MacroPair> = arrayListOf()){
     }
 }
 
+
+/*
+    Class used to store information about a Room prototype from a file
+        - Prevents mutliple file reads at runtime
+        - generate() function generates a Room based on the prototype
+        - Allows querying the templates in SharedData on properties of the template
+ */
 
 class RoomTemplate(
         var room: StringBuilder,

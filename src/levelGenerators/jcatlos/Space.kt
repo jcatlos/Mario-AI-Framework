@@ -1,5 +1,9 @@
 package levelGenerators.jcatlos
 
+/*
+    Class containing data about a space (rectangle) in a Level
+ */
+
 open class Space(
         var width: Int = 0,
         var height: Int = 0,

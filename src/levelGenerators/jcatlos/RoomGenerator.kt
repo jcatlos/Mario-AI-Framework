@@ -1,5 +1,9 @@
 package levelGenerators.jcatlos
 
+/*
+    Object generating rooms fitting inside a provided RoomSpaces (with/without tags)
+        - Chooses a random RoomTemplate from SharedData (which satisfies criteria - size/tags)
+ */
 
 object RandomRoomGenerator: RoomGenerator{
 

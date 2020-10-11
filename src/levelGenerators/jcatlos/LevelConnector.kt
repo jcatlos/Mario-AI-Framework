@@ -1,5 +1,9 @@
 package levelGenerators.jcatlos
 
+/*
+    Object containing all globalfunctions used to connect sections or rooms
+ */
+
 object LevelConnector {
     fun findLowestExit(level: Level): Coords?{
         // If none found, returns null

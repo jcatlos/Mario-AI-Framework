@@ -8,6 +8,12 @@ import kotlin.math.max
 import kotlin.random.Random
 import kotlin.reflect.typeOf
 
+/*
+*   Level class is responsible for the creation of the level
+*       - Takes a State as a parameter - That's the only information provided by LevelGenerator
+*
+*/
+
 class Level(var state: State){
     var levelColumns: ArrayList<Array<Char>> = ArrayList()
     var level = StringBuilder()

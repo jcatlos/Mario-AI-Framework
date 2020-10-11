@@ -1,5 +1,10 @@
 package levelGenerators.jcatlos
 
+/*
+    A descendant of class Space
+        - Specifies a Space which is to be occupied by a room/section
+ */
+
 class RoomSpace(
         width: Int = 0,
         height: Int = 0,

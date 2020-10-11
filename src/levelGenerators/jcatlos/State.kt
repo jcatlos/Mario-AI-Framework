@@ -5,6 +5,10 @@ import kotlin.math.absoluteValue
 import kotlin.math.floor
 import kotlin.random.Random
 
+/*
+    Class containing all data accesible for an instance of a level
+ */
+
 data class State(
         val difficultyIncrease: Int = 10,
         val levelDifficulty: Int = 100,

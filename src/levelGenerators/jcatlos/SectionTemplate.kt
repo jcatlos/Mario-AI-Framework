@@ -1,5 +1,12 @@
 package levelGenerators.jcatlos
 
+/*
+    Class used to store information about a section from a prototype file
+        - The section itself is constructed at generation of the Section (generate() function)
+        - Prevents multiple file reads during generation
+        - Allows querying templates on properties (they are all stored in SharedData)
+ */
+
 class SectionTemplate(var sectionRoomSpace: RoomSpace,
                       var roomSpaces: MutableMap<Char, RoomSpace>,
                       var sectionTags: MutableMap<Char, ArrayList<String>>)
