@@ -67,7 +67,8 @@ object RoomParser{
                         token = getNextToken(levelReader)
                     }
                     macroMap[Coords(count%width, count/width)] = macro
-                    levelBuilder.append("-".repeat(macro.length))
+                    // Trying to fix buggy generation
+                        //levelBuilder.append("-".repeat(macro.length))
                     //println("macro finished")
                 }
                 'm'.toInt() -> {

@@ -79,13 +79,14 @@ class RoomTemplate(
         var newDiff = diff
         for((coords, macro) in macros){
             var macroResult = macro.execute()
-            newRoom.insert(coords.y * width + coords.x, macroResult)
+            newRoom.insert(coords.y * (width+1) + coords.x, macroResult)
             //newRoom[coords.y * width + coords.x] = macro.execute()
             var enemyCount = macroResult.count { c -> c == 'k' || c == 'g'}
             newDiff += enemyCount * 10
         }
-        //println("After")
-        //println(newRoom.toString())
+        println("After")
+        println(newRoom.toString())
+        println("***")
 
         return Room(newRoom, newDiff, tags, start, finish)
     }

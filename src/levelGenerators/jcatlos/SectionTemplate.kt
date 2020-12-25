@@ -17,6 +17,7 @@ class SectionTemplate(var sectionRoomSpace: RoomSpace,
         for(roomSpace in roomSpaces){
             var rs = roomSpace.value
             var room = SharedData.roomGenerator.generateToFitRoomspace(rs, sectionTags[roomSpace.key]!!)
+            println("Emplacing room into section- DL corner x: ${rs.DL_Corner().x} y: ${rs.DL_Corner().y}")
             emplaceRoom(out, room, rs.DL_Corner())
         }
 
@@ -52,8 +53,8 @@ class SectionTemplate(var sectionRoomSpace: RoomSpace,
                         //println("x: $xCounter")
                         var index = xCounter + dl_corner.x + (sectionRoomSpace.height - yCounter - dl_corner.y) * (sectionRoomSpace.width+1)
                         if(out[index] == '\n') println("rewriting end line at $index")
-                        //println("inserting $char at ${xCounter + dl_corner.x + (yCounter + dl_corner.y) * (sectionRoomSpace.width+1)}")
-                        out[xCounter + dl_corner.x + (sectionRoomSpace.height - yCounter - dl_corner.y) * (sectionRoomSpace.width+1)] = char
+                        //println("inserting $char at $index")
+                        out[index] = char
                         //out.append(char)
                     }
                 }
