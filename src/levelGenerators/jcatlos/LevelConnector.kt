@@ -1,10 +1,17 @@
 package levelGenerators.jcatlos
 
-/*
-    Object containing all globalfunctions used to connect sections or rooms
+/**
+    Object containing all global functions used to connect [Section]s or [Room]s
  */
 
 object LevelConnector {
+
+    /**
+     * Finds the [Coords] of the lowest exit anchor of the level
+     *
+     * @param level the [Level] on which we want to find the lowest exit
+     * @return [Coords] opf the lowest exit anchor of the [Level]. If none found, returns null
+     */
     fun findLowestExit(level: Level): Coords?{
         // If none found, returns null
         for (y in 0 until level.state.maxHeight){
@@ -16,6 +23,14 @@ object LevelConnector {
         }
         return null
     }
+
+    /**
+     * Constructs the largest possible rectangular space available for a room to be connected to an exit anchor
+     *
+     * @param level on which we want to perform the calculation
+     * @param entryCoords the coordinates of the block where the start anchor would be connected
+     * @return a [RoomSpace] where a [Room] can be placed. If the [entryCoords] are out of bounds, returns null
+     */
 
     fun calculateFreeRoomSpace(level: Level, entryCoords: Coords): RoomSpace?{
         if(entryCoords.x >= level.state.maxLength) return null
@@ -48,7 +63,8 @@ object LevelConnector {
             xIt++
         }
         println("width: $width")
-        println("height: ${upHeight + downHeight + 1}")
+        //println("height: ${upHeight + downHeight + 1}")
+        println("downheight: $downHeight")
 
         return RoomSpace(width,
                 upHeight + downHeight + 1,
@@ -58,6 +74,13 @@ object LevelConnector {
         )
 
     }
+
+    /**
+     * Constructs the smallest possible rectangular [Space] containing all occurences of the provided character
+     *
+     * @param room a room [StringBuilder] on which we want to perform the calculation
+     * @param char the character to be looked for
+     */
 
     fun findTemplateSpace(room: StringBuilder, char: Char): Space{
         var upperBound: Int = -1

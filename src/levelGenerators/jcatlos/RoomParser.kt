@@ -4,8 +4,8 @@ import java.io.BufferedReader
 import java.io.File
 import kotlin.random.Random
 
-/*
-    RoomParser's job is to read a file with room design and return a room template instance
+/**
+ * [RoomParser]'s job is to read a file with room design and return a room template instance
     with the data from the file. If it encounters a macro, it parses it and adds it
     to the template
  */
@@ -24,7 +24,14 @@ object RoomParser{
         return tokenBuilder.toString()
     }
 
-
+    /**
+     * Converts a [File] containing a valid room template to an instance of [RoomTemplate]
+     *
+     * The rules for creating a valid room template file are specified in the README
+     *
+     * @param levelFile [File] to be converted
+     * @return [RoomTemplate] corresponding to the provided [levelFile]
+     */
     fun fileToTemplate(levelFile: File): RoomTemplate{
         println("      Parsing initialized")
 

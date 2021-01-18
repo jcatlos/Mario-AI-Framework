@@ -1,11 +1,19 @@
 package levelGenerators.jcatlos
 
-/*
-    Object generating rooms fitting inside a provided RoomSpaces (with/without tags)
-        - Chooses a random RoomTemplate from SharedData (which satisfies criteria - size/tags)
+/**
+ *  Object generating rooms fitting inside a provided [RoomSpace]s (with/without tags)
+ *  - Chooses a random [RoomTemplate] from [SharedData] (which satisfies criteria - size/tags)
  */
 
 object RandomRoomGenerator: RoomGenerator{
+
+    /**
+     * Chooses a random [RoomTemplate] that satisfies all the required conditions and generates a [Room] from it
+     *
+     *  @param roomSpace the [RoomSpace] to be used by the output [Room]
+     *  @param sectionTags the tags of a [Section] to be satisfied
+     *  @return [Room] that satisfies all the conditions
+     */
 
     override fun generateToFitRoomspace(roomSpace: RoomSpace, sectionTags: ArrayList<String>): Room{
         var candidates: ArrayList<RoomTemplate> = ArrayList()
@@ -23,6 +31,12 @@ object RandomRoomGenerator: RoomGenerator{
         return candidates.random().generate()
     }
 
+    /**
+     * checks, whether the tags required/forbidden by the [Section] are satisfied
+     *
+     * @param roomTags tags of the checked [Room]
+     * @param sectionTags tags of the [Section]
+     */
 
     private fun checkTags(roomTags: ArrayList<String>, sectionTags: ArrayList<String>): Boolean{
         var satisfy = true

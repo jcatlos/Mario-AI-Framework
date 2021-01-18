@@ -2,12 +2,18 @@ package levelGenerators.jcatlos
 
 import java.io.File
 
-/*
-    RoomParser's job is to read a section with section design and return a section template instance
-    with the data from the file - More in documentation
+/**
+ * RoomParser's job is to read a section with section design and return a section template instance with the data from the file
+ *
+ * More in documentation
  */
 
 object SectionParser {
+    /**
+     * Parses the provided file to a [SectionTemplate]
+     *
+     * @param sectionFile the file to be parsed
+     */
     fun fileToSectionTemplate(sectionFile: File): SectionTemplate{
         var sectionString: StringBuilder = StringBuilder()
         var roomSpaces: MutableMap<Char, RoomSpace> = mutableMapOf()

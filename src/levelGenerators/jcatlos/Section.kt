@@ -1,9 +1,15 @@
 package levelGenerators.jcatlos
 
-/*
-    Class representing an instance of a Section
-        - Start/Finish points are the ones of the whole section (used to connect sections)
-            - The ones of the rooms are irrelevant
+/**
+ * a Section
+ *
+ * Start/Finish points are the ones of the whole section (used to connect sections)
+ * The ones of the rooms are irrelevant
+ *
+ * @param section a string representation of the [Section] (As provided in the input file)
+ * @param sectionSpace a [RoomSppace] of the [Section] - All addresses inside [Section] are relative to the [Section]
+ * @property startPoint the entry point to the [Section]
+ * @property finishPoints the exit points from the [Section]
  */
 
 class Section(var section: StringBuilder, var sectionSpace: RoomSpace){

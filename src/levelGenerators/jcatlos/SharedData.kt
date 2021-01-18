@@ -3,9 +3,10 @@ package levelGenerators.jcatlos
 import java.io.File
 import java.lang.StringBuilder
 
-/*
-    Object responsible for loading all the assets for the LevelGenerator
-        - Contained data are accesible to all classes
+/**
+ * Object responsible for loading all the assets for the LevelGenerator
+ *
+ * Contained data are accesible to all classes
  */
 
 object SharedData {

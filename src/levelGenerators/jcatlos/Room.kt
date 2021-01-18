@@ -1,7 +1,11 @@
 package levelGenerators.jcatlos
 
-/*
-    Class containing information of an instance of a room (returned by RoomTemplate.generate() and RoomGenerator.generateToFitRoomspace)
+/**
+ *  Class containing information of an instance of a room (returned by RoomTemplate.generate() and RoomGenerator.generateToFitRoomspace)
+ *
+ *  @param room the [StringBuilder] representation of the room
+ *  @param difficulty the arbitray difficulty off the room
+ *  @param tags the list of tags of the room
  */
 
 class Room(

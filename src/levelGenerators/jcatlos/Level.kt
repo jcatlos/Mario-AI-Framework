@@ -8,9 +8,11 @@ import kotlin.math.max
 import kotlin.random.Random
 import kotlin.reflect.typeOf
 
-/*
+/**
 *   Level class is responsible for the creation of the level
-*       - Takes a State as a parameter - That's the only information provided by LevelGenerator
+*
+ *
+ * @param state [State] the only information provided by LevelGenerator
 *
 */
 
@@ -34,26 +36,33 @@ class Level(var state: State){
 
         while(!state.shouldEnd()){
             println("next iteration ")
+            println("exit coords = $exitCoords")
             printLevel()
             if(exitCoords == null) break
+            println("removing exit at $exitCoords")
+            levelColumns[exitCoords.x][exitCoords.y] = '-'
             //var exitCoords = findLowestExit(this)
             var sectionTemplate = SharedData.SectionTemplates.random()
             //println("chosen ${sectionTemplate.roomSpaces.size}")
-            //println("\t exit coords: $exitCoords")
+            println("\t exit coords: $exitCoords")
             var rs = LevelConnector.calculateFreeRoomSpace(this, exitCoords)
             if(rs == null) break
 
             var section = sectionTemplate.generate(rs.DL_Corner())
             state.updateBySection(section)
 
-            emplaceSection(section, rs.DL_Corner())
+            var entryPoint = exitCoords;
+            entryPoint.x++;
+            emplaceSection(section, exitCoords)
             // Remove exit from generated map
-            levelColumns[exitCoords.x][exitCoords.y] = '-'
 
             var newExit = LevelConnector.findLowestExit(this)
             if(newExit == null) break
             exitCoords = newExit
         }
+
+        println("removing exit at $exitCoords")
+        levelColumns[exitCoords.x][exitCoords.y] = '-'
 
         var finishSpace = LevelConnector.calculateFreeRoomSpace(this, exitCoords)!!
         var finishRoom: Room = SharedData.roomGenerator.generateToFitRoomspace(finishSpace, arrayListOf("finish"))
@@ -63,7 +72,9 @@ class Level(var state: State){
                         finishSpace.DL_Corner().y +finishRoom.room.lines().size
                 )
         )
-        emplaceRoom(finishRoom, finishSpace.DL_Corner())
+        exitCoords.x++;
+        exitCoords.y--;
+        emplaceRoom(finishRoom, exitCoords)
 
         //printLevel()
 
@@ -81,6 +92,13 @@ class Level(var state: State){
 
     }
 
+    /**
+     * Emplaces a [Room] at the provided place
+     *
+     * @param room to be emplaced
+     * @param dl_corner coordinates, where the down-left corner of the room is placed
+     */
+
     fun emplaceRoom(room: Room, dl_corner: Coords){
         var xCounter = 0
         var yCounter = 0
@@ -97,7 +115,16 @@ class Level(var state: State){
         }
     }
 
-    fun emplaceSection(section: Section, dl_corner: Coords){
+    /**
+     * Emplaces a [Section] at the provided place
+     *
+     * @param section to be emplaced
+     * @param dl_corner coordinates, where the down-left corner of the section is placed
+     */
+
+    fun emplaceSection(section: Section, start: Coords){
+        var dl_corner = start;
+        dl_corner.y -= section.sectionSpace.startAnchor.y - section.sectionSpace.DL_Corner().y;
         var xCounter = 0
         var yCounter = 0
         println("empl sec dl corner = $dl_corner")
@@ -105,7 +132,7 @@ class Level(var state: State){
             for(char in line){
                 when (char) {
                     '.' -> {}
-                    else -> levelColumns[xCounter + dl_corner.x][yCounter + dl_corner.y-1] = char
+                    else -> levelColumns[xCounter + dl_corner.x][yCounter + dl_corner.y] = char
                 }
                 xCounter++
             }
@@ -114,6 +141,9 @@ class Level(var state: State){
         }
     }
 
+    /**
+     * Prints the [Level] in the representation accepted by the MarioSI Framework
+     */
     fun printLevel(): Unit{
         for(y in state.maxHeight-1 downTo 0){
             for(x in 0 until state.maxLength){
