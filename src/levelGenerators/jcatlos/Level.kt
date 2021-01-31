@@ -27,7 +27,6 @@ class Level(var state: State){
                 levelChunk.append('.')
             }
             levelChunk.append('\n')
-            //levelColumns.add(Array(state.maxHeight) { _ -> '.'})
         }
 
         var startRoom: Room = SharedData.getRoomTemplatesByTags(arrayListOf("start")).random().generate()

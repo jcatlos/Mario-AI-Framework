@@ -27,6 +27,8 @@ class SectionTemplate(var sectionChunk: Chunk,
             //println("looking for room for ${roomSpace.key} with anchor at ${rs.startAnchor}")
             var room = SharedData.roomGenerator.generateToFitRoomspace(rs, sectionTags[roomSpace.key]!!)
             //println("Emplacing room into section- DL corner x: ${rs.DL_Corner().x} y: ${rs.DL_Corner().y-1}")
+            var ul = rs.UL_Corner()
+            ul.y += rs.startAnchor.y - room.start.y
             sectionChunk.emplaceChunk(room.room, rs.UL_Corner())
         }
 
