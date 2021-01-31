@@ -15,7 +15,7 @@ object SectionParser {
      * @param sectionFile the file to be parsed
      */
     fun fileToSectionTemplate(sectionFile: File): SectionTemplate{
-        var sectionString: StringBuilder = StringBuilder()
+        var sectionChunk = Chunk()
         var roomSpaces: MutableMap<Char, RoomSpace> = mutableMapOf()
         var sectionTags: MutableMap<Char, ArrayList<String>> = mutableMapOf()
 
@@ -34,17 +34,24 @@ object SectionParser {
                     sectionTags[char] = ArrayList(tags)
                 }
                 else -> {
-                    sectionString.appendln(line)
+                    // Escaping endline chars and adding an endline manually prevents naughty CRLF/LF situations
+                    for(char in line){
+                        if(char == '\n' || char == '\r') continue;
+                        sectionChunk.append(char)
+                    }
+                    sectionChunk.append('\n')
                 }
             }
         }
 
         //Find starting and finishing points of the whole section
-        var sectionList = sectionString.lines().reversed()
+        //var sectionList = sectionString.lines().reversed()
         var sectionStart = Coords(-1, -1)
-        var sectionFinish: ArrayList<Coords> = ArrayList()
+        var foundStarts = sectionChunk.findChar('M')
+        if(foundStarts.isNotEmpty()) sectionStart = foundStarts.first()
+        var sectionFinish = sectionChunk.findChar('F')
 
-        for(y in sectionList.indices){
+        /*for(y in sectionList.indices){
             for(x in sectionList[y].indices){
                 if(sectionList[y][x] == 'M'){
                     sectionStart = Coords(x, y)
@@ -53,16 +60,26 @@ object SectionParser {
                     sectionFinish.add(Coords(x,y))
                 }
             }
-        }
+        }*/
 
-        // Find starting and finishing points of each room (using the same sectionList)
+        // Find starting and finishing points of each room
+            // Cant use the Chunk.findChar() function because we are looking at parts of the sectionChunk
+
         for(char in characters){
-            var space = LevelConnector.findTemplateSpace(sectionString, char)
+            var space = LevelConnector.findTemplateSpace(sectionChunk, char)
             var start = Coords(-1, -1)
+            //var foundStart = sectionChunk.findChar('m') + sectionChunk.findChar('M')
+            //if(foundStart.isNotEmpty()) start = foundStart.first()
             var finish: ArrayList<Coords> = ArrayList()
+            //finish.addAll(sectionChunk.findChar('f'))
+            //finish.addAll(sectionChunk.findChar('F'))
             for(x in 0 until space.width){
                 for(y in 0 until space.height){
-                    var currentChar: Char = sectionList[y+space.DL_Corner().y][x+space.DL_Corner().x]
+                    println("UL is ${space.UL_Corner()}")
+                    println("DL is ${space.DL_Corner()}")
+                    println("looking at x=${x+space.UL_Corner().x} y=${y+space.UL_Corner().y}")
+                    println("length is ${sectionChunk.content[x+space.UL_Corner().x].size}")
+                    var currentChar: Char = sectionChunk.content[x+space.UL_Corner().x][y+space.UL_Corner().y]
                     if(currentChar == 'm' || currentChar == 'M'){
                         start = Coords(x, y)
                     }
@@ -72,12 +89,16 @@ object SectionParser {
                 }
 
             }
-            roomSpaces[char] = RoomSpace(space.width, space.height, space.DL_Corner(), start, finish)
+            roomSpaces[char] = RoomSpace(space.width, space.height, space.UL_Corner(), start, finish)
         }
 
+
+
         return SectionTemplate(
-                RoomSpace(sectionString.lines().first().length,
-                        sectionString.lines().size,
+                sectionChunk,
+                RoomSpace(
+                        sectionChunk.width,
+                        sectionChunk.height,
                         Coords(0,0),
                         sectionStart,
                         sectionFinish),

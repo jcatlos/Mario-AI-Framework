@@ -9,7 +9,7 @@ package levelGenerators.jcatlos
  */
 
 class Room(
-    val room : StringBuilder,
+    val room : Chunk,
     var difficulty: Int,
     val tags: ArrayList<String>,
     var start: Coords,

@@ -12,7 +12,7 @@ package levelGenerators.jcatlos
  * @property finishPoints the exit points from the [Section]
  */
 
-class Section(var section: StringBuilder, var sectionSpace: RoomSpace){
+class Section(var section: Chunk, var sectionSpace: RoomSpace){
     var startPoint: Coords = sectionSpace.startAnchor
     var finishPoints: ArrayList<Coords> = sectionSpace.finishAnchors
 }

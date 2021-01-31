@@ -15,10 +15,10 @@ package levelGenerators.jcatlos
 class RoomSpace(
         width: Int = 0,
         height: Int = 0,
-        DL_Corner: Coords,
+        UL_Corner: Coords,
         var startAnchor: Coords,
         var finishAnchors: ArrayList<Coords>
-): Space(width, height, DL_Corner)
+): Space(width, height, UL_Corner)
 {
     private var anchorDiffs: ArrayList<Coords> = ArrayList()
 
@@ -40,9 +40,12 @@ class RoomSpace(
 
     fun anchorsFit(start: Coords, finish: ArrayList<Coords>): Boolean{
         // If starts are not alignable return false
-        if(start.x != startAnchor.x && start.y > startAnchor.y) return false
+        //println("\nNext Room:")
+        //println("rs start: $startAnchor room start: $start")
+        if(start.x != startAnchor.x || start.y > startAnchor.y) return false
         var inputAnchorDiffs: ArrayList<Coords> = ArrayList()
         for(f in finish){
+            //println(Coords(f.x - start.x, f.y - start.y))
             inputAnchorDiffs.add(Coords(f.x - start.x, f.y - start.y))
         }
 
@@ -52,6 +55,19 @@ class RoomSpace(
         }
 
         return true
+    }
+
+    /**
+     * Missing annotation
+      */
+    fun ULByEntryPoint(entryPoint: Coords): Coords{
+        //println("entry point is $entryPoint")
+        //println("section ul = ${sectionSpace.UL_Corner()}")
+        //println("section start point = ${sectionSpace.startAnchor}")
+        var outPoint = entryPoint
+        outPoint.y -= startAnchor.y - UL_Corner().y
+        println("outpoint is $outPoint")
+        return outPoint
     }
 
 }

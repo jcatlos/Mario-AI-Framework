@@ -7,39 +7,43 @@ package levelGenerators.jcatlos
  * - Prevents multiple file reads during generation
  * - Allows querying templates on properties (they are all stored in [SharedData])
  *
+ * @param sectionChunk a [Chunk] containing the section
  * @param sectionRoomSpace of the [SectionTemplate] - All addresses inside [Section] are relative to the [Section]
  * @param roomSpaces a Map of the [RoomSpace]s to be filled by [Room]s in the generated [Section]
  * @param sectionTags tags of the section - all [Rooms in the generated [Section] must satisfy these
  */
 
-class SectionTemplate(var sectionRoomSpace: RoomSpace,
+class SectionTemplate(var sectionChunk: Chunk,
+                      var sectionRoomSpace: RoomSpace,
                       var roomSpaces: MutableMap<Char, RoomSpace>,
                       var sectionTags: MutableMap<Char, ArrayList<String>>)
 {
 
-    fun generate(dl_corner: Coords): Section{
-        var out: StringBuilder = StringBuilder((".".repeat(sectionRoomSpace.width) + '\n').repeat(sectionRoomSpace.height))
+    fun generate(ul_corner: Coords): Section{
+        println("sectionchunk = \n${sectionChunk.getAsStringBuilder().toString()}")
+        //var sectionString: StringBuilder = StringBuilder((".".repeat(sectionRoomSpace.width) + '\n').repeat(sectionRoomSpace.height))
         for(roomSpace in roomSpaces){
             var rs = roomSpace.value
+            //println("looking for room for ${roomSpace.key} with anchor at ${rs.startAnchor}")
             var room = SharedData.roomGenerator.generateToFitRoomspace(rs, sectionTags[roomSpace.key]!!)
-            println("Emplacing room into section- DL corner x: ${rs.DL_Corner().x} y: ${rs.DL_Corner().y}")
-            emplaceRoom(out, room, rs)
+            //println("Emplacing room into section- DL corner x: ${rs.DL_Corner().x} y: ${rs.DL_Corner().y-1}")
+            sectionChunk.emplaceChunk(room.room, rs.UL_Corner())
         }
 
         //adding finish-es to the output
         for(f in sectionRoomSpace.finishAnchors){
-            out[f.x + (sectionRoomSpace.height - f.y) * (sectionRoomSpace.width +1)] = 'f'
+            sectionChunk.content[f.x][f.y] = 'f'
         }
 
         println("generated section:")
-        println(out)
+        println(sectionChunk.getAsStringBuilder())
 
         return Section(
-                out,
+                sectionChunk,
                 RoomSpace(
                         sectionRoomSpace.width,
                         sectionRoomSpace.height,
-                        dl_corner,
+                        ul_corner,
                         sectionRoomSpace.startAnchor,
                         sectionRoomSpace.finishAnchors
                 )
@@ -55,23 +59,37 @@ class SectionTemplate(var sectionRoomSpace: RoomSpace,
      * 
      */
 
-    fun emplaceRoom(out: StringBuilder, room: Room, rs: RoomSpace){
-        var dl_corner = rs.DL_Corner();
-        dl_corner.y = rs.startAnchor.y
-        var xCounter = 0
-        var yCounter = 0
-        for(line in room.room.lines().reversed()){
+    fun emplaceRoom(room: Room, rs: RoomSpace){
+        var ul_corner = rs.UL_Corner();
+        //dl_corner.y = rs.UL_Corner().y
+        //var xCounter = 0
+        //var yCounter = 0
+
+        for(xCounter in 0 until room.room.width){
+            for(yCounter in 0 until room.room.height){
+                when(room.room.content[xCounter][yCounter]){
+                    '.' -> {}
+                    else -> {
+                        sectionChunk.content[ul_corner.x + xCounter][ul_corner.y + yCounter] = room.room.content[xCounter][yCounter]
+                    }
+                }
+            }
+        }
+
+        /*for(line in room.room.lines().reversed()){
             for(char in line){
+                println("line")
                 when (char) {
                     '.' -> {}
+                    '\n' -> {}
                     else -> {
                         //println(out.toString())
                         //println("x: $xCounter")
-                        var index = xCounter + dl_corner.x + (sectionRoomSpace.height - yCounter - dl_corner.y) * (sectionRoomSpace.width+1)
-                        if(out[index] == '\n') println("rewriting end line at $index")
+                        var index = xCounter + dl_corner.x + (sectionRoomSpace.height - yCounter - dl_corner.y) * (sectionRoomSpace.width)
+                        println("index = $index")
+                        if(sectionString[index] == '\n') println("rewriting end line at $index")
                         //println("inserting $char at $index")
-                        out[index] = char
-                        //out.append(char)
+                        else sectionString[index] = char
                     }
                 }
                 xCounter++
@@ -79,7 +97,8 @@ class SectionTemplate(var sectionRoomSpace: RoomSpace,
             xCounter = 0
             yCounter++
             //out.append('\n')
-        }
+        }*/
+        println("emplaced \n$sectionChunk");
     }
 
 

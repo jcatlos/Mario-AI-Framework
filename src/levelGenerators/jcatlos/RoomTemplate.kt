@@ -84,15 +84,13 @@ class Macro(var macros: ArrayList<MacroPair> = arrayListOf()){
  */
 
 class RoomTemplate(
-        var room: StringBuilder,
-        var width: Int = room.split('\n')[0].length,
+        var room: Chunk,
         var diff: Int,
         var tags: ArrayList<String>,
         var macros: Map<Coords, Macro>,
         var start: Coords,
         var finish: ArrayList<Coords>)
 {
-    var height: Int = room.lines().size
 
     /*init{
         println("Room Template start = $start")
@@ -106,20 +104,52 @@ class RoomTemplate(
      */
 
     fun generate(): Room{
-        //println("Before")
-        var newRoom = StringBuilder(room)
+        //println
+        //println("old room: ")
+        //println(room.getAsStringBuilder());
+        var newRoom = Chunk(room.getAsStringBuilder());
         //println(newRoom.toString())
         //println(macros.toString())
         var newDiff = diff
+
+        /*var xCounter: Int = 0
+        var yCounter:Int = 0
+        while(xCounter < room.width && yCounter < room.height){
+            var currentCoords = newRoom.currentPos()
+            if(macros.contains(currentCoords)){
+                // Since it was checked in the condition, should not be null (can use !!)
+                var macroResult = macros[currentCoords]!!.execute()
+                for(char in macroResult){
+                    newRoom.append(char)
+                }
+            }
+            else{
+                var character = room.at(currentCoords)
+                newRoom.append(character)
+                if(character == '\n' || character =='\r'){
+                    yCounter++
+                    xCounter = 0
+                }
+                else{
+                    xCounter++
+                }
+            }
+        }*/
+
+
         for((coords, macro) in macros){
             var macroResult = macro.execute()
-            newRoom.insert(coords.y * (width+1) + coords.x, macroResult)
+            for(i in 0 until macroResult.length){
+                newRoom.content[coords.x + i][coords.y] = macroResult[i]
+            }
+            //newRoom.insert(coords.y * (room.width+1) + coords.x, macroResult)
             //newRoom[coords.y * width + coords.x] = macro.execute()
-            var enemyCount = macroResult.count { c -> c == 'k' || c == 'g'}
-            newDiff += enemyCount * 10
+            //var enemyCount = macroResult.count { c -> c == 'k' || c == 'g'}
+            //newDiff += enemyCount * 10
         }
+
         println("After")
-        println(newRoom.toString())
+        println(newRoom.getAsStringBuilder())
         println("***")
 
         return Room(newRoom, newDiff, tags, start, finish)

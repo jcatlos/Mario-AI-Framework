@@ -57,6 +57,28 @@ object SharedData {
         //println("loaded ${SectionTemplates.size} files")
     }
 
+    fun getRoomTemplatesByTags(tags: ArrayList<String>): ArrayList<RoomTemplate>{
+        var out = ArrayList<RoomTemplate>()
+        for(template in RoomTemplates){
+            if(checkTags(template.tags, tags)){
+                out.add(template)
+            }
+        }
+        println(out.size)
+        return out
+    }
 
+    // Refactor - IT IS ALREADY IN ROOM GENERATOR
+    private fun checkTags(roomTags: ArrayList<String>, sectionTags: ArrayList<String>): Boolean{
+        var satisfy = true
+        for(tag in sectionTags){
+            if(tag.isEmpty()) continue
+            else if(tag[0] == '!'){
+                if(tag.substring(1) in roomTags) return false
+            }
+            else if(tag !in roomTags) return false
+        }
+        return true
+    }
 
 }

@@ -17,30 +17,38 @@ import kotlin.reflect.typeOf
 */
 
 class Level(var state: State){
-    var levelColumns: ArrayList<Array<Char>> = ArrayList()
+    var levelChunk = Chunk()
     var level = StringBuilder()
 
     init{
         // Initialize levelColumns - create an empty level
-        for(x in 0 until state.maxLength){
-            levelColumns.add(Array(state.maxHeight) { _ -> '.'})
+        for(y in 0 until state.maxHeight){
+            for(x in 0 until state.maxLength){
+                levelChunk.append('.')
+            }
+            levelChunk.append('\n')
+            //levelColumns.add(Array(state.maxHeight) { _ -> '.'})
         }
 
-        var startRoom: Room = SharedData.roomGenerator.generateToFitRoomspace(LevelConnector.calculateFreeRoomSpace(this, Coords(0,0))!!, arrayListOf("start"))
-        state.updateByCoords(Coords(startRoom.room.lines()[0].length, startRoom.room.lines().size))
+        var startRoom: Room = SharedData.getRoomTemplatesByTags(arrayListOf("start")).random().generate()
+        //var startRoom: Room = SharedData.roomGenerator.generateToFitRoomspace(LevelConnector.calculateFreeRoomSpace(this, Coords(0,5))!!, arrayListOf("start"))
+        println("startroom = ${startRoom.room.getAsStringBuilder()}")
+        state.updateByCoords(Coords(startRoom.room.width, startRoom.room.height))
 
-        emplaceRoom(startRoom, Coords(0,0))
+        levelChunk.emplaceChunk(startRoom.room, Coords(0,30))
         var exitCoords:Coords = startRoom.finish.first()
+        exitCoords.y += 30
+        println("start finish coords = ${startRoom.finish.first()}");
 
         //println("exit: ${findLowestExit(this)}")
 
         while(!state.shouldEnd()){
             println("next iteration ")
             println("exit coords = $exitCoords")
-            printLevel()
+            print(levelChunk.getAsStringBuilder())
             if(exitCoords == null) break
             println("removing exit at $exitCoords")
-            levelColumns[exitCoords.x][exitCoords.y] = '-'
+            levelChunk.content[exitCoords.x][exitCoords.y] = '-'
             //var exitCoords = findLowestExit(this)
             var sectionTemplate = SharedData.SectionTemplates.random()
             //println("chosen ${sectionTemplate.roomSpaces.size}")
@@ -48,12 +56,14 @@ class Level(var state: State){
             var rs = LevelConnector.calculateFreeRoomSpace(this, exitCoords)
             if(rs == null) break
 
-            var section = sectionTemplate.generate(rs.DL_Corner())
+            println("rs entry point: ${rs.startAnchor}")
+            var section = sectionTemplate.generate(rs.UL_Corner())
             state.updateBySection(section)
 
             var entryPoint = exitCoords;
             entryPoint.x++;
-            emplaceSection(section, exitCoords)
+            //entryPoint.y -= section.startPoint.y - section.sectionSpace.UL_Corner().y
+            levelChunk.emplaceChunk(section.section, section.sectionSpace.ULByEntryPoint(entryPoint))
             // Remove exit from generated map
 
             var newExit = LevelConnector.findLowestExit(this)
@@ -62,23 +72,22 @@ class Level(var state: State){
         }
 
         println("removing exit at $exitCoords")
-        levelColumns[exitCoords.x][exitCoords.y] = '-'
+        levelChunk.content[exitCoords.x][exitCoords.y] = '-'
 
         var finishSpace = LevelConnector.calculateFreeRoomSpace(this, exitCoords)!!
-        var finishRoom: Room = SharedData.roomGenerator.generateToFitRoomspace(finishSpace, arrayListOf("finish"))
+        var finishRoom: Room = SharedData.getRoomTemplatesByTags(arrayListOf("finish")).random().generate()
         state.updateByCoords(
                 Coords(
-                        finishSpace.DL_Corner().x + finishRoom.room.lines()[0].length,
-                        finishSpace.DL_Corner().y +finishRoom.room.lines().size
+                        finishSpace.DL_Corner().x + finishRoom.room.width,
+                        finishSpace.DL_Corner().y +finishRoom.room.height
                 )
         )
         exitCoords.x++;
-        exitCoords.y--;
-        emplaceRoom(finishRoom, exitCoords)
+        levelChunk.emplaceChunk(finishRoom.room, finishSpace.ULByEntryPoint(exitCoords))
 
         //printLevel()
 
-        for(y in state.highestY downTo 0){
+        /*for(y in state.highestY downTo 0){
             for(x in 0 until state.highestX + 1){
                 when(levelColumns[x][y]){
                     '.' -> level.append('-')
@@ -86,7 +95,10 @@ class Level(var state: State){
                 }
             }
             level.append('\n')
-        }
+        }         */
+
+
+        level = levelChunk.getAsMarioAILevel()
         println("out level = ")
         print(level)
 
@@ -99,21 +111,21 @@ class Level(var state: State){
      * @param dl_corner coordinates, where the down-left corner of the room is placed
      */
 
-    fun emplaceRoom(room: Room, dl_corner: Coords){
+    /*fun emplaceRoom(room: Room, dl_corner: Coords){
         var xCounter = 0
         var yCounter = 0
-        for(line in room.room.lines().reversed()){
+        for(line in room.room.getAsStringBuilder().lines()){
             for(char in line){
                 when (char) {
                     '.' -> {}
-                    else -> levelColumns[xCounter + dl_corner.x][yCounter + dl_corner.y] = char
+                    else -> levelColumns[dl_corner.x + xCounter][dl_corner.y - yCounter] = char
                 }
                 xCounter++
             }
             xCounter = 0
             yCounter++
         }
-    }
+    }*/
 
     /**
      * Emplaces a [Section] at the provided place
@@ -122,34 +134,34 @@ class Level(var state: State){
      * @param dl_corner coordinates, where the down-left corner of the section is placed
      */
 
-    fun emplaceSection(section: Section, start: Coords){
+    /*fun emplaceSection(section: Section, start: Coords){
         var dl_corner = start;
-        dl_corner.y -= section.sectionSpace.startAnchor.y - section.sectionSpace.DL_Corner().y;
+        dl_corner.y += section.sectionSpace.startAnchor.y - section.sectionSpace.DL_Corner().y;
         var xCounter = 0
         var yCounter = 0
         println("empl sec dl corner = $dl_corner")
-        for(line in section.section.lines().reversed()){
+        for(line in section.section.getAsStringBuilder().lines()){
             for(char in line){
                 when (char) {
                     '.' -> {}
-                    else -> levelColumns[xCounter + dl_corner.x][yCounter + dl_corner.y] = char
+                    else -> levelColumns[dl_corner.x + xCounter][dl_corner.y - yCounter] = char
                 }
                 xCounter++
             }
             xCounter = 0
             yCounter++
         }
-    }
+    }*/
 
     /**
-     * Prints the [Level] in the representation accepted by the MarioSI Framework
+     * Prints the [Level] in the representation accepted by the MarioAI Framework
      */
-    fun printLevel(): Unit{
+    /*fun printLevel(): Unit{
         for(y in state.maxHeight-1 downTo 0){
             for(x in 0 until state.maxLength){
                 print(levelColumns[x][y])
             }
             println()
         }
-    }
+    }*/
 }

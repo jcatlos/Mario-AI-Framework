@@ -35,7 +35,7 @@ object RoomParser{
     fun fileToTemplate(levelFile: File): RoomTemplate{
         println("      Parsing initialized")
 
-        var levelBuilder: StringBuilder = StringBuilder()
+        var roomChunk = Chunk()
         var levelReader: BufferedReader = BufferedReader(levelFile.reader())
 
         var diff = levelReader.readLine().toInt()
@@ -46,21 +46,10 @@ object RoomParser{
 
         var macroMap: MutableMap<Coords, Macro> = mutableMapOf()
 
-        var width = 0
-        var firstLine = true
-
         var count = 0
         var character = levelReader.read()
 
         while(character >= 0){
-            if(character == 13 || character == 10 || character == '\n'.toInt()){
-                firstLine = false
-                count--
-            }
-            if(firstLine){
-                width++
-            }
-
             when (character) {
                 '{'.toInt() -> {
                     //println("macro started")
@@ -73,31 +62,38 @@ object RoomParser{
                         macro.addPair(MacroPair(pair[0], pair[1].toInt()))
                         token = getNextToken(levelReader)
                     }
-                    macroMap[Coords(count%width, count/width)] = macro
+                    macroMap[roomChunk.currentPos()] = macro
                     // Trying to fix buggy generation
-                        //levelBuilder.append("-".repeat(macro.length))
+                    for(m in 0 until macro.length){
+                        roomChunk.append('-')
+                    }
                     //println("macro finished")
                 }
                 'm'.toInt() -> {
-                    start = Coords(count%width, count/width)
+                    start = roomChunk.currentPos()
                     //println("start $start")
                     //println("count = $count width = $width")
-                    levelBuilder.append('-')
+                    roomChunk.append('-')
                 }
                 'f'.toInt() -> {
-                    finish.add(Coords(count%width, count/width))
-                    levelBuilder.append('-')
+                    finish.add(roomChunk.currentPos())
+                    roomChunk.append('-')
                 }
                 else -> {
-                    levelBuilder.append(character.toChar())
+                    roomChunk.append(character.toChar())
                 }
             }
+            print(character.toChar())
             character = levelReader.read()
             count++
         }
 
-        // Inverting height (when reading Coords(0,0) is top-left corner and we need it to be bottom-left corner)
-        var height = levelBuilder.lines().size
+        // To make sure that the last row is finished
+            // Doesn't affect anything if the last row of the file is empty
+        roomChunk.append('\n')
+
+        /*// Inverting height (when reading Coords(0,0) is top-left corner and we need it to be bottom-left corner)
+        var height = roomChunk.height
         if(start != Coords(-1,-1)){
             start.y = height - 1 - start.y
         }
@@ -105,9 +101,13 @@ object RoomParser{
         for(f in finish){
             f.y = height - 1 -f.y
             //println("finish modified to $f")
-        }
+        }*/
 
-        return RoomTemplate(levelBuilder, width, diff, tags, macroMap.toMutableMap(), start, finish)
+        println("parsed room: \n${roomChunk.getAsStringBuilder()}")
+        println(start)
+        println(finish)
+
+        return RoomTemplate(roomChunk, diff, tags, macroMap.toMutableMap(), start, finish)
     }
 
 }
