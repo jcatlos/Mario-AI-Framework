@@ -148,9 +148,9 @@ class RoomTemplate(
             //newDiff += enemyCount * 10
         }
 
-        println("After")
-        println(newRoom.getAsStringBuilder())
-        println("***")
+        //println("After")
+        //println(newRoom.getAsStringBuilder())
+        //println("***")
 
         return Room(newRoom, newDiff, tags, start, finish)
     }

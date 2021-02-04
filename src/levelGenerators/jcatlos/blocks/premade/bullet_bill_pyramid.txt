@@ -1,0 +1,10 @@
+30
+bullet, safe
+------------?------------
+-------------------------
+-------------------------
+-------------------------
+-------oooBXXXBooo-------
+----oooBXXXXXXXXXBooo----
+m---BXXXXXXXXXXXXXXXB---f
+XXXXXXXXXXXXXXXXXXXXXXXXX

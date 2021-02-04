@@ -47,7 +47,7 @@ class Chunk()
      * @return [StringBuilder] Containing the whole Chunk
      */
     fun getAsStringBuilder(): StringBuilder{
-        println(" getAsStringBuilder() start w = $width h = $height")
+        //println(" getAsStringBuilder() start w = $width h = $height")
         var out = StringBuilder()
         for(y in 0 until height){
             for(x in 0 until width){
@@ -64,9 +64,9 @@ class Chunk()
      *
      * @return [StringBuilder] Containing the whole Chunk
      */
-    fun getAsMarioAILevel(): StringBuilder{
+    fun getAsMarioAILevel(from_y: Int = 0, to_y: Int = height): StringBuilder{
         var out = StringBuilder()
-        for(y in 0 until height){
+        for(y in from_y until to_y){
             for(x in 0 until width){
                 if(content.size > x && content[x].size > y){
                     if(content[x][y] == '.') out.append('-')
@@ -96,6 +96,14 @@ class Chunk()
             }
         }
         return found
+    }
+
+    fun maskChar(char: Char) {
+        for(x in 0 until width){
+            for(y in 0 until height){
+                if(content[x][y] == char) content[x][y] = '.'
+            }
+        }
     }
 
     /**
@@ -157,6 +165,6 @@ class Chunk()
                 }
             }
         }
-        println("emplaced \n${this.getAsStringBuilder()}");
+        //println("emplaced \n${this.getAsStringBuilder()}");
     }
 }

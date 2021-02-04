@@ -47,8 +47,11 @@ data class State(
      */
     fun updateBySection(section: Section){
         sectionCount ++
-        if(section.sectionSpace.UR_Corner().y > highestY) highestY = section.sectionSpace.UR_Corner().y
-        if(section.sectionSpace.UR_Corner().x > highestX) highestX = section.sectionSpace.UR_Corner().x
+        if(section.sectionSpace.DR_Corner().y > highestY) {
+            highestY = section.sectionSpace.DR_Corner().y
+            println("\n\n\n HIGHEST Y UPDATED TO $highestY\n\n\n")
+        }
+        if(section.sectionSpace.DR_Corner().x > highestX) highestX = section.sectionSpace.DR_Corner().x
     }
 
 

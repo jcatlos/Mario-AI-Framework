@@ -67,6 +67,7 @@ object SectionParser {
 
         for(char in characters){
             var space = LevelConnector.findTemplateSpace(sectionChunk, char)
+            sectionChunk.maskChar(char);
             var start = Coords(-1, -1)
             //var foundStart = sectionChunk.findChar('m') + sectionChunk.findChar('M')
             //if(foundStart.isNotEmpty()) start = foundStart.first()
@@ -75,33 +76,35 @@ object SectionParser {
             //finish.addAll(sectionChunk.findChar('F'))
             for(x in 0 until space.width){
                 for(y in 0 until space.height){
-                    println("UL is ${space.UL_Corner()}")
-                    println("DL is ${space.DL_Corner()}")
-                    println("looking at x=${x+space.UL_Corner().x} y=${y+space.UL_Corner().y}")
-                    println("length is ${sectionChunk.content[x+space.UL_Corner().x].size}")
+                    //println("UL is ${space.UL_Corner()}")
+                    //println("DL is ${space.DL_Corner()}")
+                    //println("looking at x=${x+space.UL_Corner().x} y=${y+space.UL_Corner().y}")
+                    //println("length is ${sectionChunk.content[x+space.UL_Corner().x].size}")
                     var currentChar: Char = sectionChunk.content[x+space.UL_Corner().x][y+space.UL_Corner().y]
                     if(currentChar == 'm' || currentChar == 'M'){
                         start = Coords(x, y)
+                        sectionChunk.content[x+space.UL_Corner().x][y+space.UL_Corner().y] = '.'
                     }
                     else if(currentChar == 'f' || currentChar == 'F'){
                         finish.add(Coords(x, y))
+                        sectionChunk.content[x+space.UL_Corner().x][y+space.UL_Corner().y] = '.'
                     }
                 }
-
             }
             roomSpaces[char] = RoomSpace(space.width, space.height, space.UL_Corner(), start, finish)
+        }
+
+        sectionChunk.content[sectionStart.x][sectionStart.y] = '.'
+        for(finish in sectionFinish){
+            sectionChunk.content[finish.x][finish.y] = '.'
         }
 
 
 
         return SectionTemplate(
                 sectionChunk,
-                RoomSpace(
-                        sectionChunk.width,
-                        sectionChunk.height,
-                        Coords(0,0),
-                        sectionStart,
-                        sectionFinish),
+                sectionStart,
+                sectionFinish,
                 roomSpaces,
                 sectionTags)
     }

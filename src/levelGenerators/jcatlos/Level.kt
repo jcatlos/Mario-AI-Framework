@@ -32,7 +32,7 @@ class Level(var state: State){
         var startRoom: Room = SharedData.getRoomTemplatesByTags(arrayListOf("start")).random().generate()
         //var startRoom: Room = SharedData.roomGenerator.generateToFitRoomspace(LevelConnector.calculateFreeRoomSpace(this, Coords(0,5))!!, arrayListOf("start"))
         println("startroom = ${startRoom.room.getAsStringBuilder()}")
-        state.updateByCoords(Coords(startRoom.room.width, startRoom.room.height))
+        state.updateByCoords(Coords(startRoom.room.width, startRoom.room.height + 30))
 
         levelChunk.emplaceChunk(startRoom.room, Coords(0,30))
         var exitCoords:Coords = startRoom.finish.first()
@@ -46,17 +46,13 @@ class Level(var state: State){
             println("exit coords = $exitCoords")
             print(levelChunk.getAsStringBuilder())
             if(exitCoords == null) break
-            println("removing exit at $exitCoords")
-            levelChunk.content[exitCoords.x][exitCoords.y] = '-'
-            //var exitCoords = findLowestExit(this)
             var sectionTemplate = SharedData.SectionTemplates.random()
-            //println("chosen ${sectionTemplate.roomSpaces.size}")
-            println("\t exit coords: $exitCoords")
             var rs = LevelConnector.calculateFreeRoomSpace(this, exitCoords)
             if(rs == null) break
 
             println("rs entry point: ${rs.startAnchor}")
-            var section = sectionTemplate.generate(rs.UL_Corner())
+            var section = sectionTemplate.generate(rs)
+            println("section ul = ${section.sectionSpace.UL_Corner()}")
             state.updateBySection(section)
 
             var entryPoint = exitCoords;
@@ -65,22 +61,26 @@ class Level(var state: State){
             levelChunk.emplaceChunk(section.section, section.sectionSpace.ULByEntryPoint(entryPoint))
             // Remove exit from generated map
 
-            var newExit = LevelConnector.findLowestExit(this)
-            if(newExit == null) break
-            exitCoords = newExit
+            //var newExit = LevelConnector.findLowestExit(this)
+            //if(newExit == null) break
+            exitCoords = section.finishPoints.first()
+            println("exitCoords from section are ${exitCoords}")
+            exitCoords.x += section.sectionSpace.UL_Corner().x
+            exitCoords.y += section.sectionSpace.UL_Corner().y
+            if(exitCoords == null) break
         }
 
-        println("removing exit at $exitCoords")
-        levelChunk.content[exitCoords.x][exitCoords.y] = '-'
+        //println("removing exit at $exitCoords")
+        //levelChunk.content[exitCoords.x][exitCoords.y] = '-'
 
         var finishSpace = LevelConnector.calculateFreeRoomSpace(this, exitCoords)!!
         var finishRoom: Room = SharedData.getRoomTemplatesByTags(arrayListOf("finish")).random().generate()
-        state.updateByCoords(
+        /*state.updateByCoords(
                 Coords(
                         finishSpace.DL_Corner().x + finishRoom.room.width,
                         finishSpace.DL_Corner().y +finishRoom.room.height
                 )
-        )
+        )*/
         exitCoords.x++;
         levelChunk.emplaceChunk(finishRoom.room, finishSpace.ULByEntryPoint(exitCoords))
 
@@ -96,9 +96,9 @@ class Level(var state: State){
             level.append('\n')
         }         */
 
-
-        level = levelChunk.getAsMarioAILevel()
-        println("out level = ")
+        println("state max coords = ${state.highestX}, ${state.highestY}")
+        level = levelChunk.getAsMarioAILevel(0, state.highestY)
+        //println("out level = ")
         print(level)
 
     }

@@ -65,9 +65,14 @@ class RoomSpace(
         //println("section ul = ${sectionSpace.UL_Corner()}")
         //println("section start point = ${sectionSpace.startAnchor}")
         var outPoint = entryPoint
-        outPoint.y -= startAnchor.y - UL_Corner().y
+        outPoint.x -= startAnchor.x
+        outPoint.y -= startAnchor.y
         println("outpoint is $outPoint")
         return outPoint
+    }
+
+    fun moveTo(ul: Coords){
+        UL_Corner = ul
     }
 
 }

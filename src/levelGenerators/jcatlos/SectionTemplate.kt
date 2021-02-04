@@ -14,40 +14,49 @@ package levelGenerators.jcatlos
  */
 
 class SectionTemplate(var sectionChunk: Chunk,
-                      var sectionRoomSpace: RoomSpace,
+                      var startAnchor: Coords,
+                      var finishAnchors: ArrayList<Coords>,
+                      //var sectionRoomSpace: RoomSpace,
                       var roomSpaces: MutableMap<Char, RoomSpace>,
                       var sectionTags: MutableMap<Char, ArrayList<String>>)
 {
 
-    fun generate(ul_corner: Coords): Section{
-        println("sectionchunk = \n${sectionChunk.getAsStringBuilder().toString()}")
-        //var sectionString: StringBuilder = StringBuilder((".".repeat(sectionRoomSpace.width) + '\n').repeat(sectionRoomSpace.height))
+    fun generate(input_rs: RoomSpace): Section{
+        //println("sectionchunk = \n${sectionChunk.getAsStringBuilder().toString()}")
         for(roomSpace in roomSpaces){
             var rs = roomSpace.value
             //println("looking for room for ${roomSpace.key} with anchor at ${rs.startAnchor}")
             var room = SharedData.roomGenerator.generateToFitRoomspace(rs, sectionTags[roomSpace.key]!!)
+            println("emplacing room \n${room.room.getAsStringBuilder()}")
             //println("Emplacing room into section- DL corner x: ${rs.DL_Corner().x} y: ${rs.DL_Corner().y-1}")
             var ul = rs.UL_Corner()
             ul.y += rs.startAnchor.y - room.start.y
             sectionChunk.emplaceChunk(room.room, rs.UL_Corner())
+            println("emplaced \n${sectionChunk.getAsStringBuilder()}")
         }
 
         //adding finish-es to the output
-        for(f in sectionRoomSpace.finishAnchors){
+        /*for(f in sectionRoomSpace.finishAnchors){
             sectionChunk.content[f.x][f.y] = 'f'
-        }
+        }*/
 
         println("generated section:")
         println(sectionChunk.getAsStringBuilder())
 
+        var ul = input_rs.startAnchor
+        ul.x += input_rs.UL_Corner().x
+        ul.y += input_rs.UL_Corner().y
+        ul.x -= startAnchor.x
+        ul.y -= startAnchor.y
+
         return Section(
                 sectionChunk,
                 RoomSpace(
-                        sectionRoomSpace.width,
-                        sectionRoomSpace.height,
-                        ul_corner,
-                        sectionRoomSpace.startAnchor,
-                        sectionRoomSpace.finishAnchors
+                        sectionChunk.width,
+                        sectionChunk.height,
+                        ul,
+                        startAnchor,
+                        finishAnchors
                 )
         )
     }
