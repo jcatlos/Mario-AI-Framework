@@ -8,8 +8,6 @@ import kotlin.random.Random
 /**
  * contains all data accesible for an instance of a level
  *
- * @param difficultyIncrease the increase in difficulty by adding a [Section]  *OUTDATED*
- * @param levelDifficulty the maximum difficulty of a section in the level *OUTDATED*
  * @param levelLength how many sections should be in the level
  * @property highestX the highest point of the generated level so far
  * @property highestY the right-most point of the generated level so far
@@ -19,8 +17,6 @@ import kotlin.random.Random
  */
 
 data class State(
-        val difficultyIncrease: Int = 10,
-        val levelDifficulty: Int = 100,
         var levelLength: Int = 7
 ){
     var highestX = 0
@@ -66,9 +62,4 @@ data class State(
         return rnd <= (layerCount).toFloat() / (avgLength*2)*/
         return sectionCount > levelLength
     }
-
-    /*fun layerSafety(): Boolean{
-        println("expected diff = $expectedDifficulty, layer diff = ${lastLayer.difficulty}")
-        return lastLayer.difficulty > expectedDifficulty
-    }*/
 }
