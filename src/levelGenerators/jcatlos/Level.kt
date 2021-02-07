@@ -67,18 +67,21 @@ class Level(var state: State){
         // Emplace a finish room at the end of the level
         var finishSpace = LevelConnector.calculateFreeRoomSpace(this, exitCoords)!!
         var finishRoom: Room = SharedData.getRoomTemplatesByTags(arrayListOf("finish")).random().generate()
-        /*state.updateByCoords(
-                Coords(
-                        finishSpace.DL_Corner().x + finishRoom.room.width,
-                        finishSpace.DL_Corner().y +finishRoom.room.height
-                )
-        )*/
+
         var finishCoords = exitCoords
         finishCoords.x++
         finishCoords.x -= finishRoom.start.x
         finishCoords.y -= finishRoom.start.y
-        //exitCoords.x++;
+        //exitCoords.x++
+        println("Emplacing finish at $finishCoords")
         levelChunk.emplaceChunk(finishRoom.room, finishCoords)
+
+        state.updateByCoords(
+                Coords(
+                        finishCoords.x + finishRoom.room.width,
+                        finishCoords.y +finishRoom.room.height
+                )
+        )
 
 
         // Print out the level to the console
