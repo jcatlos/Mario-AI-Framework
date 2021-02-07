@@ -35,7 +35,7 @@ object LevelConnector {
     fun calculateFreeRoomSpace(level: Level, entryCoords: Coords): RoomSpace?{
         if(entryCoords.x >= level.state.maxLength) return null
 
-        var x = entryCoords.x+1
+        var x = entryCoords.x
         var dl: Coords = Coords(-1,-1)
         var width = 0
         var downIndex =  entryCoords.y

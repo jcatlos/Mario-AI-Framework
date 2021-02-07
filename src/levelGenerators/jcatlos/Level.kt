@@ -25,8 +25,8 @@ class Level(var state: State){
         state.updateByCoords(Coords(startRoom.room.width, startRoom.room.height + startingCoords.y))
 
         levelChunk.emplaceChunk(startRoom.room, startingCoords)
-        var exitCoords:Coords = startRoom.finish.first().copy()
-        exitCoords.y += startingCoords.y
+        var entryCoords:Coords = startRoom.finish.first().copy()
+        entryCoords.y += startingCoords.y
         println("start finish coords = ${startRoom.finish.first()}");
 
 
@@ -34,40 +34,34 @@ class Level(var state: State){
         // Fill in the level
         while(!state.shouldEnd()){
             println("next iteration ")
-            println("exit coords = $exitCoords")
-            print(levelChunk.getAsStringBuilder())
-            var sectionTemplate = SharedData.SectionTemplates.random()
-            var rs = LevelConnector.calculateFreeRoomSpace(this, exitCoords)
+
+            // Allocate RoomSpace for next section
+            var rs = LevelConnector.calculateFreeRoomSpace(this, entryCoords)
             if(rs == null) break
 
-            println("rs entry point: ${rs.startAnchor}")
+            // Generate the next section
+            var sectionTemplate = SharedData.SectionTemplates.random()
             var section = sectionTemplate.generate(rs)
-            println("section ul = ${section.sectionSpace.UL_Corner()}")
             state.updateBySection(section)
 
-            var entryPoint = exitCoords;
-            entryPoint.x++;
-            //entryPoint.y -= section.startPoint.y - section.sectionSpace.UL_Corner().y
-            levelChunk.emplaceChunk(section.section, section.sectionSpace.ULByEntryPoint(entryPoint))
-            // Remove exit from generated map
+            levelChunk.emplaceChunk(section.section, section.sectionSpace.ULByEntryPoint(entryCoords))
 
-            //var newExit = LevelConnector.findLowestExit(this)
-            //if(newExit == null) break
-            exitCoords = section.finishPoints.first().copy()
-            println("exitCoords from section are ${exitCoords}")
-            println("Section UL is ${section.sectionSpace.UL_Corner()}")
-            exitCoords.x += section.sectionSpace.UL_Corner().x
-            exitCoords.y += section.sectionSpace.UL_Corner().y
-            if(exitCoords == null) break
+            // Calculate the next entry coordinates
+            entryCoords = section.finishPoints.first().copy()
+            entryCoords.x += section.sectionSpace.UL_Corner().x + 1     //  +1 because an entry to the next room will be 1 to the right from the exit
+            entryCoords.y += section.sectionSpace.UL_Corner().y
+
+            println("Current state of the level:")
+            println(levelChunk.getAsStringBuilder())
         }
 
 
 
         // Emplace a finish room at the end of the level
-        var finishSpace = LevelConnector.calculateFreeRoomSpace(this, exitCoords)!!
+        var finishSpace = LevelConnector.calculateFreeRoomSpace(this, entryCoords)!!
         var finishRoom: Room = SharedData.getRoomTemplatesByTags(arrayListOf("finish")).random().generate()
 
-        var finishCoords = exitCoords
+        var finishCoords = entryCoords
         finishCoords.x++
         finishCoords.x -= finishRoom.start.x
         finishCoords.y -= finishRoom.start.y
