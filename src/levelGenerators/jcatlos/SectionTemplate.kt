@@ -29,38 +29,34 @@ class SectionTemplate(var sectionChunk: Chunk,
         println("Filling sction with ${roomSpaces.size} rooms")
         for(roomSpace in roomSpaces){
             var rs = roomSpace.value
-            //println("Roomspace ul = ${rs.UL_Corner()}")
+            println("Roomspace ${roomSpace.key} ul = ${rs.UL_Corner()}")
             //println("looking for room for ${roomSpace.key} with anchor at ${rs.startAnchor}")
             var room = SharedData.roomGenerator.generateToFitRoomspace(rs, sectionTags[roomSpace.key]!!)
             println("UL corner = ${rs.UL_Corner()}\nspace start anchor = ${rs.startAnchor}\nroom start = ${room.start}")
             var ul = rs.UL_Corner()
             ul.y += rs.startAnchor.y - room.start.y
+            println("After addition rs ul = ${rs.UL_Corner()}")
             println("emplacing room \n${room.room.getAsStringBuilder()}")
             //println("Roomspace ul = ${rs.UL_Corner()}")
-            outChunk.emplaceChunk(room.room, rs.UL_Corner())
+            outChunk.emplaceChunk(room.room, ul)
             //println("emplaced \n${sectionChunk.getAsStringBuilder()}")
         }
-
-        //adding finish-es to the output
-        /*for(f in sectionRoomSpace.finishAnchors){
-            sectionChunk.content[f.x][f.y] = 'f'
-        }*/
 
         println("generated section:")
         println(outChunk.getAsStringBuilder())
 
-        var ul = input_rs.startAnchor
-        ul.x += input_rs.UL_Corner().x
-        ul.y += input_rs.UL_Corner().y
-        ul.x -= startAnchor.x
-        ul.y -= startAnchor.y
+        var section_ul = Coords(input_rs.startAnchor.x, input_rs.startAnchor.y)
+        section_ul.x += input_rs.UL_Corner().x
+        section_ul.y += input_rs.UL_Corner().y
+        section_ul.x -= startAnchor.x
+        section_ul.y -= startAnchor.y
 
         return Section(
                 outChunk,
                 RoomSpace(
                         sectionChunk.width,
                         sectionChunk.height,
-                        ul,
+                        section_ul,
                         startAnchor,
                         finishAnchors
                 )

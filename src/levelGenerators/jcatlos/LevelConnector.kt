@@ -75,7 +75,7 @@ object LevelConnector {
                 ArrayList()
         )
 
-        println("/n/n GENERATED ROOMSPACE")
+        println("\n\n GENERATED ROOMSPACE")
         //println("width: $width")
         //println("height: ${downIndex - upIndex}")
         println("downindex: $downIndex")

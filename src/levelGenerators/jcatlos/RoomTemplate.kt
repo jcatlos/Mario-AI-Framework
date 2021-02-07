@@ -36,12 +36,10 @@ class Macro(var macros: ArrayList<MacroPair> = arrayListOf()){
      */
 
     fun execute(): String{
-        //println("executing ${macros.toString()}")
         var rnd = Random.nextInt(100)
         var num: Int = macros[0].prob
         var index = 0
         while(rnd > num){
-            println(index)
             rnd -= num
             index++
             if(index >= macros.size){

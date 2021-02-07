@@ -57,6 +57,7 @@ class Level(var state: State){
             //if(newExit == null) break
             exitCoords = section.finishPoints.first()
             println("exitCoords from section are ${exitCoords}")
+            println("Section UL is ${section.sectionSpace.UL_Corner()}")
             exitCoords.x += section.sectionSpace.UL_Corner().x
             exitCoords.y += section.sectionSpace.UL_Corner().y
             if(exitCoords == null) break

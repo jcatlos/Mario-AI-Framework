@@ -32,7 +32,7 @@ open class Space(
      * Getter for the up-left corner
      */
     fun UL_Corner(): Coords{
-        return UL_Corner
+        return UL_Corner.copy()
     }
 
     /**
