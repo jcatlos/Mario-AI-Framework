@@ -31,12 +31,13 @@ class Level(var state: State){
         exitCoords.y += startingCoords.y
         println("start finish coords = ${startRoom.finish.first()}");
 
+
+
         // Fill in the level
         while(!state.shouldEnd()){
             println("next iteration ")
             println("exit coords = $exitCoords")
             print(levelChunk.getAsStringBuilder())
-            if(exitCoords == null) break
             var sectionTemplate = SharedData.SectionTemplates.random()
             var rs = LevelConnector.calculateFreeRoomSpace(this, exitCoords)
             if(rs == null) break
@@ -61,7 +62,9 @@ class Level(var state: State){
             if(exitCoords == null) break
         }
 
-        // Emplace a finish room at th end of the level
+
+
+        // Emplace a finish room at the end of the level
         var finishSpace = LevelConnector.calculateFreeRoomSpace(this, exitCoords)!!
         var finishRoom: Room = SharedData.getRoomTemplatesByTags(arrayListOf("finish")).random().generate()
         /*state.updateByCoords(

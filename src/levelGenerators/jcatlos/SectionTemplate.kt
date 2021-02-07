@@ -22,16 +22,22 @@ class SectionTemplate(var sectionChunk: Chunk,
 {
 
     fun generate(input_rs: RoomSpace): Section{
-        //println("sectionchunk = \n${sectionChunk.getAsStringBuilder().toString()}")
+
+        var outChunk = Chunk(sectionChunk.getAsStringBuilder())
+
+        println("sectionchunk = \n${outChunk.getAsStringBuilder().toString()}")
+        println("Filling sction with ${roomSpaces.size} rooms")
         for(roomSpace in roomSpaces){
             var rs = roomSpace.value
+            //println("Roomspace ul = ${rs.UL_Corner()}")
             //println("looking for room for ${roomSpace.key} with anchor at ${rs.startAnchor}")
             var room = SharedData.roomGenerator.generateToFitRoomspace(rs, sectionTags[roomSpace.key]!!)
-            //println("emplacing room \n${room.room.getAsStringBuilder()}")
-            //println("Emplacing room into section- DL corner x: ${rs.DL_Corner().x} y: ${rs.DL_Corner().y-1}")
+            println("UL corner = ${rs.UL_Corner()}\nspace start anchor = ${rs.startAnchor}\nroom start = ${room.start}")
             var ul = rs.UL_Corner()
             ul.y += rs.startAnchor.y - room.start.y
-            sectionChunk.emplaceChunk(room.room, rs.UL_Corner())
+            println("emplacing room \n${room.room.getAsStringBuilder()}")
+            //println("Roomspace ul = ${rs.UL_Corner()}")
+            outChunk.emplaceChunk(room.room, rs.UL_Corner())
             //println("emplaced \n${sectionChunk.getAsStringBuilder()}")
         }
 
@@ -41,7 +47,7 @@ class SectionTemplate(var sectionChunk: Chunk,
         }*/
 
         println("generated section:")
-        println(sectionChunk.getAsStringBuilder())
+        println(outChunk.getAsStringBuilder())
 
         var ul = input_rs.startAnchor
         ul.x += input_rs.UL_Corner().x
@@ -50,7 +56,7 @@ class SectionTemplate(var sectionChunk: Chunk,
         ul.y -= startAnchor.y
 
         return Section(
-                sectionChunk,
+                outChunk,
                 RoomSpace(
                         sectionChunk.width,
                         sectionChunk.height,
