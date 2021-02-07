@@ -65,9 +65,4 @@ class RoomSpace(
         //println("outpoint is $outPoint")
         return outPoint
     }
-
-    fun moveTo(ul: Coords){
-        UL_Corner = ul
-    }
-
 }
