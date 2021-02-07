@@ -1,13 +1,5 @@
 package levelGenerators.jcatlos
 
-import com.sun.jdi.ArrayReference
-import java.nio.channels.NotYetConnectedException
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.math.max
-import kotlin.random.Random
-import kotlin.reflect.typeOf
-
 /**
  * Level class is responsible for the creation of the level
  *
@@ -20,6 +12,7 @@ class Level(var state: State){
     var startingCoords = Coords(0, 30)
 
     init{
+
         // Emplace Starting room into the level
         var startRoom: Room = SharedData.getRoomTemplatesByTags(arrayListOf("start")).random().generate()
         state.updateByCoords(Coords(startRoom.room.width, startRoom.room.height + startingCoords.y))
@@ -28,7 +21,6 @@ class Level(var state: State){
         var entryCoords:Coords = startRoom.finish.first().copy()
         entryCoords.y += startingCoords.y
         println("start finish coords = ${startRoom.finish.first()}");
-
 
 
         // Fill in the level
@@ -56,7 +48,6 @@ class Level(var state: State){
         }
 
 
-
         // Emplace a finish room at the end of the level
         var finishSpace = LevelConnector.calculateFreeRoomSpace(this, entryCoords)!!
         var finishRoom: Room = SharedData.getRoomTemplatesByTags(arrayListOf("finish")).random().generate()
@@ -75,16 +66,10 @@ class Level(var state: State){
                         finishCoords.y +finishRoom.room.height
                 )
         )
-
-
-        // Print out the level to the console
-        //println("state max coords = ${state.highestX}, ${state.highestY}")
-        //level = levelChunk.getAsMarioAILevel(0, state.highestY)
-        //print(level)
-
     }
 
     fun getLevel() : String{
+        print(levelChunk.getAsMarioAILevel(0, state.highestY))
         return levelChunk.getAsMarioAILevel(0, state.highestY).toString()
     }
 
