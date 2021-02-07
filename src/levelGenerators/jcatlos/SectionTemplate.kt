@@ -25,18 +25,18 @@ class SectionTemplate(var sectionChunk: Chunk,
 
         var outChunk = Chunk(sectionChunk.getAsStringBuilder())
 
-        println("sectionchunk = \n${outChunk.getAsStringBuilder().toString()}")
-        println("Filling sction with ${roomSpaces.size} rooms")
+        //println("sectionchunk = \n${outChunk.getAsStringBuilder().toString()}")
+        //println("Filling sction with ${roomSpaces.size} rooms")
         for(roomSpace in roomSpaces){
             var rs = roomSpace.value
-            println("Roomspace ${roomSpace.key} ul = ${rs.UL_Corner()}")
+            //println("Roomspace ${roomSpace.key} ul = ${rs.UL_Corner()}")
             //println("looking for room for ${roomSpace.key} with anchor at ${rs.startAnchor}")
             var room = SharedData.roomGenerator.generateToFitRoomspace(rs, sectionTags[roomSpace.key]!!)
-            println("UL corner = ${rs.UL_Corner()}\nspace start anchor = ${rs.startAnchor}\nroom start = ${room.start}")
+            //println("UL corner = ${rs.UL_Corner()}\nspace start anchor = ${rs.startAnchor}\nroom start = ${room.start}")
             var ul = rs.UL_Corner()
             ul.y += rs.startAnchor.y - room.start.y
-            println("After addition rs ul = ${rs.UL_Corner()}")
-            println("emplacing room \n${room.room.getAsStringBuilder()}")
+            //println("After addition rs ul = ${rs.UL_Corner()}")
+            //println("emplacing room \n${room.room.getAsStringBuilder()}")
             //println("Roomspace ul = ${rs.UL_Corner()}")
             outChunk.emplaceChunk(room.room, ul)
             //println("emplaced \n${sectionChunk.getAsStringBuilder()}")

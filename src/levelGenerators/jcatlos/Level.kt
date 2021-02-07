@@ -22,12 +22,10 @@ class Level(var state: State){
     init{
         // Emplace Starting room into the level
         var startRoom: Room = SharedData.getRoomTemplatesByTags(arrayListOf("start")).random().generate()
-        //var startRoom: Room = SharedData.roomGenerator.generateToFitRoomspace(LevelConnector.calculateFreeRoomSpace(this, Coords(0,5))!!, arrayListOf("start"))
-        //println("startroom = ${startRoom.room.getAsStringBuilder()}")
         state.updateByCoords(Coords(startRoom.room.width, startRoom.room.height + startingCoords.y))
 
         levelChunk.emplaceChunk(startRoom.room, startingCoords)
-        var exitCoords:Coords = startRoom.finish.first()
+        var exitCoords:Coords = startRoom.finish.first().copy()
         exitCoords.y += startingCoords.y
         println("start finish coords = ${startRoom.finish.first()}");
 
@@ -55,7 +53,7 @@ class Level(var state: State){
 
             //var newExit = LevelConnector.findLowestExit(this)
             //if(newExit == null) break
-            exitCoords = section.finishPoints.first()
+            exitCoords = section.finishPoints.first().copy()
             println("exitCoords from section are ${exitCoords}")
             println("Section UL is ${section.sectionSpace.UL_Corner()}")
             exitCoords.x += section.sectionSpace.UL_Corner().x
