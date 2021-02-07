@@ -9,38 +9,29 @@ import kotlin.random.Random
 import kotlin.reflect.typeOf
 
 /**
-*   Level class is responsible for the creation of the level
-*
+ * Level class is responsible for the creation of the level
  *
  * @param state [State] the only information provided by LevelGenerator
-*
-*/
+ */
 
 class Level(var state: State){
-    var levelChunk = Chunk()
+    var levelChunk = Chunk(state.maxLength, state.maxHeight)
     var level = StringBuilder()
+    var startingCoords = Coords(0, 30)
 
     init{
-        // Initialize levelColumns - create an empty level
-        for(y in 0 until state.maxHeight){
-            for(x in 0 until state.maxLength){
-                levelChunk.append('.')
-            }
-            levelChunk.append('\n')
-        }
-
+        // Emplace Starting room into the level
         var startRoom: Room = SharedData.getRoomTemplatesByTags(arrayListOf("start")).random().generate()
         //var startRoom: Room = SharedData.roomGenerator.generateToFitRoomspace(LevelConnector.calculateFreeRoomSpace(this, Coords(0,5))!!, arrayListOf("start"))
-        println("startroom = ${startRoom.room.getAsStringBuilder()}")
-        state.updateByCoords(Coords(startRoom.room.width, startRoom.room.height + 30))
+        //println("startroom = ${startRoom.room.getAsStringBuilder()}")
+        state.updateByCoords(Coords(startRoom.room.width, startRoom.room.height + startingCoords.y))
 
-        levelChunk.emplaceChunk(startRoom.room, Coords(0,30))
+        levelChunk.emplaceChunk(startRoom.room, startingCoords)
         var exitCoords:Coords = startRoom.finish.first()
-        exitCoords.y += 30
+        exitCoords.y += startingCoords.y
         println("start finish coords = ${startRoom.finish.first()}");
 
-        //println("exit: ${findLowestExit(this)}")
-
+        // Fill in the level
         while(!state.shouldEnd()){
             println("next iteration ")
             println("exit coords = $exitCoords")
@@ -70,9 +61,7 @@ class Level(var state: State){
             if(exitCoords == null) break
         }
 
-        //println("removing exit at $exitCoords")
-        //levelChunk.content[exitCoords.x][exitCoords.y] = '-'
-
+        // Emplace a finish room at th end of the level
         var finishSpace = LevelConnector.calculateFreeRoomSpace(this, exitCoords)!!
         var finishRoom: Room = SharedData.getRoomTemplatesByTags(arrayListOf("finish")).random().generate()
         /*state.updateByCoords(
@@ -81,24 +70,17 @@ class Level(var state: State){
                         finishSpace.DL_Corner().y +finishRoom.room.height
                 )
         )*/
-        exitCoords.x++;
-        levelChunk.emplaceChunk(finishRoom.room, finishSpace.ULByEntryPoint(exitCoords))
+        var finishCoords = exitCoords
+        finishCoords.x++
+        finishCoords.x -= finishRoom.start.x
+        finishCoords.y -= finishRoom.start.y
+        //exitCoords.x++;
+        levelChunk.emplaceChunk(finishRoom.room, finishCoords)
 
-        //printLevel()
 
-        /*for(y in state.highestY downTo 0){
-            for(x in 0 until state.highestX + 1){
-                when(levelColumns[x][y]){
-                    '.' -> level.append('-')
-                    else -> level.append(levelColumns[x][y])
-                }
-            }
-            level.append('\n')
-        }         */
-
+        // Print out the level to the console
         println("state max coords = ${state.highestX}, ${state.highestY}")
         level = levelChunk.getAsMarioAILevel(0, state.highestY)
-        //println("out level = ")
         print(level)
 
     }

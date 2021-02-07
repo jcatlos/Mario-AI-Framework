@@ -21,6 +21,15 @@ class Chunk()
         }
     }
 
+    constructor(x: Int, y: Int) : this(){
+        for(h in 0 until y){
+            for(w in 0 until x){
+                append('.')
+            }
+            append('\n')
+        }
+    }
+
 
     /**
      * Return current position of insert
