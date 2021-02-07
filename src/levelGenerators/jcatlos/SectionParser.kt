@@ -25,7 +25,10 @@ object SectionParser {
 
         for(line in sectionFile.readText().lines()){
             when {
+                // Ending of the header part of the file
                 line.trim() == "---".trim() -> parsingHead = false
+
+                // Still parsing the header part of the part
                 parsingHead -> {
                     var tokens = line.split(':').map {token -> token.trim()}
                     var char = tokens[0][0]
@@ -33,6 +36,8 @@ object SectionParser {
                     var tags = tokens[1].split(',').map {tag -> tag.trim()}
                     sectionTags[char] = ArrayList(tags)
                 }
+
+                // Parsing the section body
                 else -> {
                     // Escaping endline chars and adding an endline manually prevents naughty CRLF/LF situations
                     for(char in line){
@@ -44,23 +49,18 @@ object SectionParser {
             }
         }
 
-        //Find starting and finishing points of the whole section
-        var sectionStart = Coords(-1, -1)
-        var foundStarts = sectionChunk.findChar('M')
-        if(foundStarts.isNotEmpty()) sectionStart = foundStarts.first()
-        var sectionFinish = sectionChunk.findChar('F')
-
-        // Find starting and finishing points of each room
-            // Cant use the Chunk.findChar() function because we are looking at parts of the sectionChunk
+        // Handle each room from the section
         for(char in characters){
+            // Find its space
             var space = LevelConnector.findTemplateSpace(sectionChunk, char)
+
+            // Remove definition characters
             sectionChunk.maskChar(char);
+
+            // Find start and finish
+                // Dont forget to remove m and f of each room
             var start = Coords(-1, -1)
-            //var foundStart = sectionChunk.findChar('m') + sectionChunk.findChar('M')
-            //if(foundStart.isNotEmpty()) start = foundStart.first()
             var finish: ArrayList<Coords> = ArrayList()
-            //finish.addAll(sectionChunk.findChar('f'))
-            //finish.addAll(sectionChunk.findChar('F'))
             for(x in 0 until space.width){
                 for(y in 0 until space.height){
                     var currentChar: Char = sectionChunk.content[x+space.UL_Corner().x][y+space.UL_Corner().y]
@@ -74,16 +74,25 @@ object SectionParser {
                     }
                 }
             }
+
+            // Add it to the roomSpaces of the whole section
             roomSpaces[char] = RoomSpace(space.width, space.height, space.UL_Corner(), start, finish)
         }
 
+
+        //Find starting and finishing points of the whole section
+            // And remove M and F
+        var sectionStart = Coords(-1, -1)
+        var foundStarts = sectionChunk.findChar('M')
+        if(foundStarts.isNotEmpty()) sectionStart = foundStarts.first()
         sectionChunk.content[sectionStart.x][sectionStart.y] = '.'
+
+        var sectionFinish = sectionChunk.findChar('F')
         for(finish in sectionFinish){
             sectionChunk.content[finish.x][finish.y] = '.'
         }
 
-
-
+        
         return SectionTemplate(
                 sectionChunk,
                 sectionStart,

@@ -2,7 +2,6 @@ package levelGenerators.jcatlos
 
 import java.io.BufferedReader
 import java.io.File
-import kotlin.random.Random
 
 /**
  * [RoomParser]'s job is to read a file with room design and return a room template instance
@@ -16,11 +15,9 @@ object RoomParser{
         var tokenBuilder: StringBuilder = StringBuilder()
         var character: Int = reader.read()
         while(character >=0 && character != '}'.toInt() && character != ';'.toInt()){
-            //println(character.toChar())
             tokenBuilder.append(character.toChar())
             character = reader.read()
         }
-        //println(tokenBuilder.toString())
         return tokenBuilder.toString()
     }
 
@@ -50,34 +47,32 @@ object RoomParser{
 
         while(character >= 0){
             when (character) {
+                // Macro
                 '{'.toInt() -> {
-                    //println("macro started")
-                    //levelBuilder.append('-')
                     var macro = Macro()
                     var token = getNextToken(levelReader)
                     while(token != ""){
-                        //println(token)
                         var pair = token.split('=')
                         macro.addPair(MacroPair(pair[0], pair[1].toInt()))
                         token = getNextToken(levelReader)
                     }
                     macroMap[roomChunk.currentPos()] = macro
-                    // Trying to fix buggy generation
+                    // Make space for the macro to be inserted during generation
                     for(m in 0 until macro.length){
                         roomChunk.append('-')
                     }
-                    //println("macro finished")
                 }
+                // Start point
                 'm'.toInt() -> {
                     start = roomChunk.currentPos()
-                    //println("start $start")
-                    //println("count = $count width = $width")
                     roomChunk.append('-')
                 }
+                // Finish point
                 'f'.toInt() -> {
                     finish.add(roomChunk.currentPos())
                     roomChunk.append('-')
                 }
+                // Default
                 else -> {
                     roomChunk.append(character.toChar())
                 }
@@ -91,10 +86,6 @@ object RoomParser{
             // Doesn't affect anything if the last row of the file is empty
         roomChunk.append('\n')
 
-
-        //println("parsed room: \n${roomChunk.getAsStringBuilder()}")
-        println(start)
-        println(finish)
 
         return RoomTemplate(roomChunk, tags, macroMap.toMutableMap(), start, finish)
     }

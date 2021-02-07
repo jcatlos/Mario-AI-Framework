@@ -13,7 +13,6 @@ object LevelConnector {
      * @return [Coords] opf the lowest exit anchor of the [Level]. If none found, returns null
      */
     fun findLowestExit(level: Level): Coords?{
-        // If none found, returns null
         for (y in 0 until level.state.maxHeight){
             for(x in 0 until level.state.maxLength){
                 if(level.levelChunk.content[x][y] == 'f'){
@@ -75,15 +74,7 @@ object LevelConnector {
                 ArrayList()
         )
 
-        println("\n\n GENERATED ROOMSPACE")
-        //println("width: $width")
-        //println("height: ${downIndex - upIndex}")
-        println("downindex: $downIndex")
-        println("upper left ${out.UL_Corner()}")
-
-
         return out
-
     }
 
     /**
@@ -99,26 +90,19 @@ object LevelConnector {
         var leftBound: Int = Int.MAX_VALUE
         var rightBound: Int = -1
 
-        //var x: Int = 0
-        //var y: Int = room.lines().size - 1
-
         for(x in 0 until chunk.width){
             for(y in 0 until chunk.height){
                 if(chunk.content[x][y] == char){
                     if (x > rightBound) {
-                        //println("set rb: $x")
                         rightBound = x
                     }
                     if (x < leftBound) {
-                        //println("set lb: $x")
                         leftBound = x
                     }
                     if (y < upperBound){
-                        //println("set ub: $y")
                         upperBound = y
                     }
                     if (y > lowerBound){
-                        //println("set db: $y")
                         lowerBound = y
                     }
                 }
@@ -127,8 +111,6 @@ object LevelConnector {
 
         lowerBound++
         rightBound++
-
-        println("found space for $char \n rb = $rightBound\n lb = $leftBound\n ub = $upperBound\n db = $lowerBound")
 
         return Space(rightBound - leftBound,
                 lowerBound - upperBound,
