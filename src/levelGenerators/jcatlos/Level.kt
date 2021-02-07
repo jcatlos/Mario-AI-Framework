@@ -84,10 +84,14 @@ class Level(var state: State){
 
 
         // Print out the level to the console
-        println("state max coords = ${state.highestX}, ${state.highestY}")
-        level = levelChunk.getAsMarioAILevel(0, state.highestY)
-        print(level)
+        //println("state max coords = ${state.highestX}, ${state.highestY}")
+        //level = levelChunk.getAsMarioAILevel(0, state.highestY)
+        //print(level)
 
+    }
+
+    fun getLevel() : String{
+        return levelChunk.getAsMarioAILevel(0, state.highestY).toString()
     }
 
 }
