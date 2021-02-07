@@ -27,12 +27,12 @@ class SectionTemplate(var sectionChunk: Chunk,
             var rs = roomSpace.value
             //println("looking for room for ${roomSpace.key} with anchor at ${rs.startAnchor}")
             var room = SharedData.roomGenerator.generateToFitRoomspace(rs, sectionTags[roomSpace.key]!!)
-            println("emplacing room \n${room.room.getAsStringBuilder()}")
+            //println("emplacing room \n${room.room.getAsStringBuilder()}")
             //println("Emplacing room into section- DL corner x: ${rs.DL_Corner().x} y: ${rs.DL_Corner().y-1}")
             var ul = rs.UL_Corner()
             ul.y += rs.startAnchor.y - room.start.y
             sectionChunk.emplaceChunk(room.room, rs.UL_Corner())
-            println("emplaced \n${sectionChunk.getAsStringBuilder()}")
+            //println("emplaced \n${sectionChunk.getAsStringBuilder()}")
         }
 
         //adding finish-es to the output
@@ -60,57 +60,5 @@ class SectionTemplate(var sectionChunk: Chunk,
                 )
         )
     }
-
-    /**
-     * Emplaces a [Room] into a section string
-     *
-     * @param out the section string a [Room] is placed into
-     * @param room to be placed
-     * @param dl_corner down-left corner of the emplaced [Room]
-     * 
-     */
-
-    fun emplaceRoom(room: Room, rs: RoomSpace){
-        var ul_corner = rs.UL_Corner();
-        //dl_corner.y = rs.UL_Corner().y
-        //var xCounter = 0
-        //var yCounter = 0
-
-        for(xCounter in 0 until room.room.width){
-            for(yCounter in 0 until room.room.height){
-                when(room.room.content[xCounter][yCounter]){
-                    '.' -> {}
-                    else -> {
-                        sectionChunk.content[ul_corner.x + xCounter][ul_corner.y + yCounter] = room.room.content[xCounter][yCounter]
-                    }
-                }
-            }
-        }
-
-        /*for(line in room.room.lines().reversed()){
-            for(char in line){
-                println("line")
-                when (char) {
-                    '.' -> {}
-                    '\n' -> {}
-                    else -> {
-                        //println(out.toString())
-                        //println("x: $xCounter")
-                        var index = xCounter + dl_corner.x + (sectionRoomSpace.height - yCounter - dl_corner.y) * (sectionRoomSpace.width)
-                        println("index = $index")
-                        if(sectionString[index] == '\n') println("rewriting end line at $index")
-                        //println("inserting $char at $index")
-                        else sectionString[index] = char
-                    }
-                }
-                xCounter++
-            }
-            xCounter = 0
-            yCounter++
-            //out.append('\n')
-        }*/
-        println("emplaced \n$sectionChunk");
-    }
-
 
 }

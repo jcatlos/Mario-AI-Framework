@@ -125,30 +125,6 @@ object LevelConnector {
             }
         }
 
-        /*for(line in room.lines()){
-            for(c in line){
-                if (c == char) {
-                    if (x < rightBound) {
-                        //println("found rb: $x")
-                        rightBound = x
-                    }
-                    if (x > leftBound) {
-                        leftBound = x
-                    }
-                    if (y > upperBound){
-                        upperBound = y
-                    }
-                    if (y < lowerBound){
-                        //println("found lb: $y")
-                        lowerBound = y
-                    }
-                }
-                x++
-            }
-            y--
-            x = 0
-        }*/
-
         lowerBound++
         rightBound++
 

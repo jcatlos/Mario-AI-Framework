@@ -92,132 +92,21 @@ class RoomTemplate(
         var finish: ArrayList<Coords>)
 {
 
-    /*init{
-        println("Room Template start = $start")
-        for(f in finish){
-            println("Room Template finish = $f")
-        }
-    }*/
-
     /**
      * Generates a [Room] based on this template
      */
 
     fun generate(): Room{
-        //println
-        //println("old room: ")
-        //println(room.getAsStringBuilder());
         var newRoom = Chunk(room.getAsStringBuilder());
-        //println(newRoom.toString())
-        //println(macros.toString())
         var newDiff = diff
-
-        /*var xCounter: Int = 0
-        var yCounter:Int = 0
-        while(xCounter < room.width && yCounter < room.height){
-            var currentCoords = newRoom.currentPos()
-            if(macros.contains(currentCoords)){
-                // Since it was checked in the condition, should not be null (can use !!)
-                var macroResult = macros[currentCoords]!!.execute()
-                for(char in macroResult){
-                    newRoom.append(char)
-                }
-            }
-            else{
-                var character = room.at(currentCoords)
-                newRoom.append(character)
-                if(character == '\n' || character =='\r'){
-                    yCounter++
-                    xCounter = 0
-                }
-                else{
-                    xCounter++
-                }
-            }
-        }*/
-
 
         for((coords, macro) in macros){
             var macroResult = macro.execute()
-            for(i in 0 until macroResult.length){
+            for(i in macroResult.indices){
                 newRoom.content[coords.x + i][coords.y] = macroResult[i]
             }
-            //newRoom.insert(coords.y * (room.width+1) + coords.x, macroResult)
-            //newRoom[coords.y * width + coords.x] = macro.execute()
-            //var enemyCount = macroResult.count { c -> c == 'k' || c == 'g'}
-            //newDiff += enemyCount * 10
         }
-
-        //println("After")
-        //println(newRoom.getAsStringBuilder())
-        //println("***")
 
         return Room(newRoom, newDiff, tags, start, finish)
     }
 }
-
-
-/*
-interface RoomTemplateH1 : RoomTemplate {}
-
-class ChallengeRoomTemplateH1(room: StringBuilder, diff: Int, macros: Map<Coords, Macro>) : RoomTemplateH1{
-    override var room = room
-    override var baseDifficulty = diff
-    override var macros = macros
-
-}
-
-class BonusRoomTemplateH1(room: StringBuilder, diff: Int, macros: Map<Coords, Macro>) : RoomTemplateH1 {
-    override var room = room
-    override var baseDifficulty = diff
-    override var macros = macros
-}
-
-class EmptyRoomTemplateH1(room: StringBuilder, diff: Int, macros: Map<Coords, Macro>) : RoomTemplateH1{
-    override var room = room
-    override var baseDifficulty = diff
-    override var macros = macros
-
-}
-
-
-
-interface RoomTemplateH2 : RoomTemplate{}
-
-
-class DivideHubTemplate(room: StringBuilder, diff: Int, macros: Map<Coords, Macro>) : RoomTemplateH2 {
-    override var room = room
-    override var baseDifficulty = diff
-    override var macros = macros
-}
-
-class StartRoomTemplate(room: StringBuilder, diff: Int, macros: Map<Coords, Macro>) : RoomTemplateH2 {
-    override var room = room
-    override var baseDifficulty = diff
-    override var macros = macros
-
-}
-
-class FinishRoomTemplate(room: StringBuilder, diff: Int, macros: Map<Coords, Macro>) : RoomTemplateH2 {
-    override var room = room
-    override var baseDifficulty = diff
-    override var macros = macros
-}
-
-class ChallengeRoomTemplateH2(room: StringBuilder, diff: Int, macros: Map<Coords, Macro>) : RoomTemplateH2 {
-    override var room = room
-    override var baseDifficulty = diff
-    override var macros = macros
-}
-
-class BonusRoomTemplateH2(room: StringBuilder, diff: Int, macros: Map<Coords, Macro>) : RoomTemplateH2 {
-    override var room = room
-    override var baseDifficulty = diff
-    override var macros = macros
-}
-
-class EmptyRoomTemplateH2(room: StringBuilder, diff: Int, macros: Map<Coords, Macro>) : RoomTemplateH2{
-    override var room = room
-    override var baseDifficulty = diff
-    override var macros = macros
-}*/

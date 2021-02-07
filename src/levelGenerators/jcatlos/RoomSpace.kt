@@ -40,8 +40,6 @@ class RoomSpace(
 
     fun anchorsFit(start: Coords, finish: ArrayList<Coords>): Boolean{
         // If starts are not alignable return false
-        //println("\nNext Room:")
-        //println("rs start: $startAnchor room start: $start")
         if(start.x != startAnchor.x || start.y > startAnchor.y) return false
         var inputAnchorDiffs: ArrayList<Coords> = ArrayList()
         for(f in finish){
@@ -61,13 +59,10 @@ class RoomSpace(
      * Missing annotation
       */
     fun ULByEntryPoint(entryPoint: Coords): Coords{
-        //println("entry point is $entryPoint")
-        //println("section ul = ${sectionSpace.UL_Corner()}")
-        //println("section start point = ${sectionSpace.startAnchor}")
         var outPoint = entryPoint
         outPoint.x -= startAnchor.x
         outPoint.y -= startAnchor.y
-        println("outpoint is $outPoint")
+        //println("outpoint is $outPoint")
         return outPoint
     }
 

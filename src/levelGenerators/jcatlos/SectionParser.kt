@@ -45,26 +45,13 @@ object SectionParser {
         }
 
         //Find starting and finishing points of the whole section
-        //var sectionList = sectionString.lines().reversed()
         var sectionStart = Coords(-1, -1)
         var foundStarts = sectionChunk.findChar('M')
         if(foundStarts.isNotEmpty()) sectionStart = foundStarts.first()
         var sectionFinish = sectionChunk.findChar('F')
 
-        /*for(y in sectionList.indices){
-            for(x in sectionList[y].indices){
-                if(sectionList[y][x] == 'M'){
-                    sectionStart = Coords(x, y)
-                }
-                if(sectionList[y][x] == 'F'){
-                    sectionFinish.add(Coords(x,y))
-                }
-            }
-        }*/
-
         // Find starting and finishing points of each room
             // Cant use the Chunk.findChar() function because we are looking at parts of the sectionChunk
-
         for(char in characters){
             var space = LevelConnector.findTemplateSpace(sectionChunk, char)
             sectionChunk.maskChar(char);
@@ -76,10 +63,6 @@ object SectionParser {
             //finish.addAll(sectionChunk.findChar('F'))
             for(x in 0 until space.width){
                 for(y in 0 until space.height){
-                    //println("UL is ${space.UL_Corner()}")
-                    //println("DL is ${space.DL_Corner()}")
-                    //println("looking at x=${x+space.UL_Corner().x} y=${y+space.UL_Corner().y}")
-                    //println("length is ${sectionChunk.content[x+space.UL_Corner().x].size}")
                     var currentChar: Char = sectionChunk.content[x+space.UL_Corner().x][y+space.UL_Corner().y]
                     if(currentChar == 'm' || currentChar == 'M'){
                         start = Coords(x, y)

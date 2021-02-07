@@ -92,18 +92,8 @@ object RoomParser{
             // Doesn't affect anything if the last row of the file is empty
         roomChunk.append('\n')
 
-        /*// Inverting height (when reading Coords(0,0) is top-left corner and we need it to be bottom-left corner)
-        var height = roomChunk.height
-        if(start != Coords(-1,-1)){
-            start.y = height - 1 - start.y
-        }
-        // Inverting finish
-        for(f in finish){
-            f.y = height - 1 -f.y
-            //println("finish modified to $f")
-        }*/
 
-        println("parsed room: \n${roomChunk.getAsStringBuilder()}")
+        //println("parsed room: \n${roomChunk.getAsStringBuilder()}")
         println(start)
         println(finish)
 
