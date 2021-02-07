@@ -83,7 +83,6 @@ class Macro(var macros: ArrayList<MacroPair> = arrayListOf()){
 
 class RoomTemplate(
         var room: Chunk,
-        var diff: Int,
         var tags: ArrayList<String>,
         var macros: Map<Coords, Macro>,
         var start: Coords,
@@ -96,7 +95,6 @@ class RoomTemplate(
 
     fun generate(): Room{
         var newRoom = Chunk(room.getAsStringBuilder());
-        var newDiff = diff
 
         for((coords, macro) in macros){
             var macroResult = macro.execute()
@@ -105,6 +103,6 @@ class RoomTemplate(
             }
         }
 
-        return Room(newRoom, newDiff, tags, start, finish)
+        return Room(newRoom, tags, start, finish)
     }
 }

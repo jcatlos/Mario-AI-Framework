@@ -38,7 +38,6 @@ object RoomParser{
         var roomChunk = Chunk()
         var levelReader: BufferedReader = BufferedReader(levelFile.reader())
 
-        var diff = levelReader.readLine().toInt()
         var tags: ArrayList<String> = ArrayList(levelReader.readLine().split(',').map {tag -> tag.trim()})
 
         var start = Coords(-1, -1)
@@ -97,7 +96,7 @@ object RoomParser{
         println(start)
         println(finish)
 
-        return RoomTemplate(roomChunk, diff, tags, macroMap.toMutableMap(), start, finish)
+        return RoomTemplate(roomChunk, tags, macroMap.toMutableMap(), start, finish)
     }
 
 }
