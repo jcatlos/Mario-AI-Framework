@@ -107,12 +107,26 @@ class Chunk()
         return found
     }
 
+    /**
+     * Missing annotation
+     */
     fun maskChar(char: Char) {
         for(x in 0 until width){
             for(y in 0 until height){
                 if(content[x][y] == char) content[x][y] = '.'
             }
         }
+    }
+
+    /**
+     * Missing annotation
+     */
+    fun getLastLine(): String{
+        var out = StringBuilder()
+        for(i in 0 until width){
+            out.append(content[height-1][i])
+        }
+        return out.toString()
     }
 
     /**
