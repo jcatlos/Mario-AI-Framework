@@ -18,17 +18,7 @@ class Level(var config: Config){
 
         // Emplace Starting room into the level
         var startRoom: Room = SharedData.getRoomTemplatesByTags(arrayListOf("start", config.challengeTag)).random().generate()
-        this.updateByCoords(
-                Coords(
-                        startRoom.room.width,
-                        startRoom.room.height + startingCoords.y
-                )
-        )
-
-        levelChunk.emplaceChunk(startRoom.room, startingCoords)
-        var entryCoords:Coords = startRoom.finish.first().copy()
-        entryCoords.y += startingCoords.y
-        println("start finish coords = ${startRoom.finish.first()}");
+        var entryCoords = this.addRoomByEntryPoint(startRoom, startingCoords)
 
 
         // Fill in the level
@@ -40,16 +30,26 @@ class Level(var config: Config){
             var rs = LevelConnector.calculateFreeRoomSpace(this, entryCoords)
             if(rs == null) break
 
-            // Add desired room type
+            // Generate section according to the section type
+            var sectionTemplate = SharedData.SectionTemplates.random()
             var tags = arrayListOf(config.challengeTag)
             when(currentType){
-                SectionType.INTRO -> tags.add("easy")
-                SectionType.HARD -> tags.add("hard")
-                SectionType.TWIST -> tags.add("twist")
+                SectionType.INTRO -> {
+                    tags.add("easy")
+                    sectionTemplate = SharedData.getSimpleSectionTemplates().random()
+                }
+                SectionType.HARD -> {
+                    tags.add("hard")
+                    //sectionTemplate = SharedData.SectionTemplates.random()
+                }
+                SectionType.TWIST -> {
+                    tags.add("twist")
+                    //sectionTemplate = SharedData.SectionTemplates.random()
+                }
             }
 
             // Generate the next section
-            var sectionTemplate = SharedData.SectionTemplates.random()
+            //var sectionTemplate = SharedData.SectionTemplates.random()
             var section = sectionTemplate.generate(rs, config.roomGenerator, tags)
             this.updateByCoords(section.sectionSpace.DR_Corner())
 
@@ -61,9 +61,6 @@ class Level(var config: Config){
                      //  +1 because an entry to the next room will be 1 to the right from the exit
                     section.finishPoints.first().y + section.sectionSpace.UL_Corner().y
             )
-                    /*section.finishPoints.first().copy()
-            entryCoords.x += section.sectionSpace.UL_Corner().x + 1
-            entryCoords.y += section.sectionSpace.UL_Corner().y*/
 
             println("Current state of the level:")
             println(levelChunk.getAsStringBuilder())
@@ -75,26 +72,35 @@ class Level(var config: Config){
 
         // Emplace a finish room at the end of the level
         var finishRoom: Room = SharedData.getRoomTemplatesByTags(arrayListOf("finish", config.challengeTag)).random().generate()
+        this.addRoomByEntryPoint(finishRoom, entryCoords)
 
-        var finishCoords = Coords(
-                entryCoords.x - finishRoom.start.x,
-                entryCoords.y - finishRoom.start.y
-        )
-
-        println("Emplacing finish at $finishCoords")
-        levelChunk.emplaceChunk(finishRoom.room, finishCoords)
-
-        this.updateByCoords(
-                Coords(
-                        finishCoords.x + finishRoom.room.width,
-                        finishCoords.y +finishRoom.room.height
-                )
-        )
     }
 
     private fun updateByCoords(coords: Coords){
         maxCoords.x = max(maxCoords.x, coords.x)
         maxCoords.y = max(maxCoords.y, coords.y)
+    }
+
+    private fun addRoomByEntryPoint(room: Room, entryPoint: Coords): Coords{
+        var ul = Coords(
+                entryPoint.x - room.start.x,
+                entryPoint.y - room.start.y
+        )
+        levelChunk.emplaceChunk(room.room, ul)
+
+        this.updateByCoords(
+                Coords(
+                        ul.x + room.room.width,
+                        ul.y + room.room.height
+                )
+        )
+
+        if(room.finish.isEmpty()) return Coords(-1, -1)
+
+        return Coords(
+                ul.x + room.finish.first().x + 1,
+                ul.y + room.finish.first().y
+        )
     }
 
     fun getLevel() : String{

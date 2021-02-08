@@ -57,6 +57,16 @@ object SharedData {
         println("loaded ${SectionTemplates.size} files")
     }
 
+    fun getSimpleSectionTemplates(): ArrayList<SectionTemplate>{
+        var out = ArrayList<SectionTemplate>()
+        for(template in SectionTemplates){
+            if(template.roomSpaces.size < 4){
+                out.add(template)
+            }
+        }
+        return out
+    }
+
     fun getRoomTemplatesByTags(tags: ArrayList<String>): ArrayList<RoomTemplate>{
         var out = ArrayList<RoomTemplate>()
         for(template in RoomTemplates){

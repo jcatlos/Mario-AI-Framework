@@ -15,15 +15,14 @@ import engine.core.MarioTimer
 
 class LevelGenerator : MarioLevelGenerator{
     var levelConfig = Config(
-            "bullet",
-            1000,
-            100,
-            RandomRoomGenerator,
-            2,
-            2,
-            1.5
+            challengeTag = "bullet",
+            maxLength = 1000,
+            maxHeight =  100,
+            roomGenerator =  RandomRoomGenerator,
+            introLength =  2,
+            hardLength =  4,
+            twistMultiplier =  1.5
     )
-    //var layerBuilder = LayerBuilder(BasicLayerDesigner, RandomRoomGenerator, state)
 
 
     override fun getGeneratorName(): String {
