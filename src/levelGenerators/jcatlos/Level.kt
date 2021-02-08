@@ -6,7 +6,7 @@ package levelGenerators.jcatlos
  * @param state [State] the only information provided by LevelGenerator
  */
 
-class Level(var state: State){
+class Level(var state: State, var challengeTag: String){
     var levelChunk = Chunk(state.maxLength, state.maxHeight)
     var level = StringBuilder()
     var startingCoords = Coords(0, 30)
@@ -14,7 +14,7 @@ class Level(var state: State){
     init{
 
         // Emplace Starting room into the level
-        var startRoom: Room = SharedData.getRoomTemplatesByTags(arrayListOf("start")).random().generate()
+        var startRoom: Room = SharedData.getRoomTemplatesByTags(arrayListOf("start", challengeTag)).random().generate()
         state.updateByCoords(Coords(startRoom.room.width, startRoom.room.height + startingCoords.y))
 
         levelChunk.emplaceChunk(startRoom.room, startingCoords)
@@ -33,7 +33,7 @@ class Level(var state: State){
 
             // Generate the next section
             var sectionTemplate = SharedData.SectionTemplates.random()
-            var section = sectionTemplate.generate(rs)
+            var section = sectionTemplate.generate(rs, challengeTag)
             state.updateBySection(section)
 
             levelChunk.emplaceChunk(section.section, section.sectionSpace.ULByEntryPoint(entryCoords))
@@ -49,8 +49,7 @@ class Level(var state: State){
 
 
         // Emplace a finish room at the end of the level
-        var finishSpace = LevelConnector.calculateFreeRoomSpace(this, entryCoords)!!
-        var finishRoom: Room = SharedData.getRoomTemplatesByTags(arrayListOf("finish")).random().generate()
+        var finishRoom: Room = SharedData.getRoomTemplatesByTags(arrayListOf("finish", challengeTag)).random().generate()
 
         var finishCoords = entryCoords
         finishCoords.x++

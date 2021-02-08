@@ -49,6 +49,14 @@ object SectionParser {
             }
         }
 
+        //Find starting and finishing points of the whole section
+        var sectionStart = Coords(-1, -1)
+        var foundStarts = sectionChunk.findChar('M')
+        if(foundStarts.isNotEmpty()) sectionStart = foundStarts.first()
+
+        var sectionFinish = sectionChunk.findChar('F')
+
+
         // Handle each room from the section
         for(char in characters){
             // Find its space
@@ -79,20 +87,15 @@ object SectionParser {
             roomSpaces[char] = RoomSpace(space.width, space.height, space.UL_Corner(), start, finish)
         }
 
+        // Remove the starting and finishing points of the whole section
+            // Might not have been done before (Section start is not a start of any room)
 
-        //Find starting and finishing points of the whole section
-            // And remove M and F
-        var sectionStart = Coords(-1, -1)
-        var foundStarts = sectionChunk.findChar('M')
-        if(foundStarts.isNotEmpty()) sectionStart = foundStarts.first()
         sectionChunk.content[sectionStart.x][sectionStart.y] = '.'
-
-        var sectionFinish = sectionChunk.findChar('F')
         for(finish in sectionFinish){
             sectionChunk.content[finish.x][finish.y] = '.'
         }
 
-        
+
         return SectionTemplate(
                 sectionChunk,
                 sectionStart,

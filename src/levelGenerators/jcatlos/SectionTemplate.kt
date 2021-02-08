@@ -21,7 +21,7 @@ class SectionTemplate(var sectionChunk: Chunk,
                       var sectionTags: MutableMap<Char, ArrayList<String>>)
 {
 
-    fun generate(input_rs: RoomSpace): Section{
+    fun generate(input_rs: RoomSpace, challengeTag: String): Section{
 
         var outChunk = Chunk(sectionChunk.getAsStringBuilder())
 
@@ -31,7 +31,19 @@ class SectionTemplate(var sectionChunk: Chunk,
             var rs = roomSpace.value
             //println("Roomspace ${roomSpace.key} ul = ${rs.UL_Corner()}")
             //println("looking for room for ${roomSpace.key} with anchor at ${rs.startAnchor}")
-            var room = SharedData.roomGenerator.generateToFitRoomspace(rs, sectionTags[roomSpace.key]!!)
+            var tags:ArrayList<String> = arrayListOf()
+                tags.addAll(sectionTags[roomSpace.key]!!)
+            if("challenge" in tags){
+                tags.remove("challenge")
+                tags.add("bullet")
+            }
+            print("og tags are: ")
+            for(str in sectionTags[roomSpace.key]!!){
+                print(" $str")
+            }
+            println()
+
+            var room = SharedData.roomGenerator.generateToFitRoomspace(rs, tags)
             //println("UL corner = ${rs.UL_Corner()}\nspace start anchor = ${rs.startAnchor}\nroom start = ${room.start}")
             var ul = rs.UL_Corner()
             ul.y += rs.startAnchor.y - room.start.y

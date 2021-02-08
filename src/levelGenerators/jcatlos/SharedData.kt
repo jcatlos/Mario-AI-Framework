@@ -54,7 +54,7 @@ object SharedData {
             println("\tParsing ${file.name}")
             SectionTemplates.add(SectionParser.fileToSectionTemplate(file))
         }
-        //println("loaded ${SectionTemplates.size} files")
+        println("loaded ${SectionTemplates.size} files")
     }
 
     fun getRoomTemplatesByTags(tags: ArrayList<String>): ArrayList<RoomTemplate>{
@@ -64,7 +64,7 @@ object SharedData {
                 out.add(template)
             }
         }
-        println(out.size)
+        //println(out.size)
         return out
     }
 
