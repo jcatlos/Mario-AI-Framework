@@ -108,7 +108,9 @@ class Chunk()
     }
 
     /**
-     * Missing annotation
+     * Removes all occurrences of the provided [Char] in its content
+     *
+     * @param char [Char] to be removed
      */
     fun maskChar(char: Char) {
         for(x in 0 until width){

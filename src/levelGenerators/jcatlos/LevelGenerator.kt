@@ -1,7 +1,5 @@
 package levelGenerators.jcatlos
 
-import levelGenerators.jcatlos.Level
-
 import engine.core.MarioLevelGenerator
 import engine.core.MarioLevelModel
 import engine.core.MarioTimer
