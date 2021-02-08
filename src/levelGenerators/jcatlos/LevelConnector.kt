@@ -12,7 +12,7 @@ object LevelConnector {
      * @param level the [Level] on which we want to find the lowest exit
      * @return [Coords] opf the lowest exit anchor of the [Level]. If none found, returns null
      */
-    fun findLowestExit(level: Level): Coords?{
+    /*fun findLowestExit(level: Level): Coords?{
         for (y in 0 until level.state.maxHeight){
             for(x in 0 until level.state.maxLength){
                 if(level.levelChunk.content[x][y] == 'f'){
@@ -21,7 +21,7 @@ object LevelConnector {
             }
         }
         return null
-    }
+    }*/
 
     /**
      * Constructs the largest possible rectangular space available for a room to be connected to an exit anchor
@@ -32,7 +32,7 @@ object LevelConnector {
      */
 
     fun calculateFreeRoomSpace(level: Level, entryCoords: Coords): RoomSpace?{
-        if(entryCoords.x >= level.state.maxLength) return null
+        if(entryCoords.x >= level.config.maxLength) return null
 
         var x = entryCoords.x
         var dl: Coords = Coords(-1,-1)
@@ -41,7 +41,7 @@ object LevelConnector {
         var upIndex =  entryCoords.y
 
         // Calculate free space under entry point
-        for(y in entryCoords.y until level.state.maxHeight){
+        for(y in entryCoords.y until level.config.maxHeight){
             downIndex = y
             if(level.levelChunk.content[x][y] != '.') break
         }
@@ -56,7 +56,7 @@ object LevelConnector {
 
         // Calculate how long is the free space (only '.' is allowed)
         var xIt = x
-        while(xIt < level.state.maxLength){
+        while(xIt < level.config.maxLength){
             var col = level.levelChunk.content[xIt]
 
             var substr = String(chars = col.subList(upIndex, downIndex).toCharArray())

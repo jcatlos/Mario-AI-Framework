@@ -21,7 +21,7 @@ class SectionTemplate(var sectionChunk: Chunk,
                       var sectionTags: MutableMap<Char, ArrayList<String>>)
 {
 
-    fun generate(input_rs: RoomSpace, challengeTag: String): Section{
+    fun generate(input_rs: RoomSpace, roomGenerator: RoomGenerator, inputTags: ArrayList<String>): Section{
 
         var outChunk = Chunk(sectionChunk.getAsStringBuilder())
 
@@ -35,7 +35,7 @@ class SectionTemplate(var sectionChunk: Chunk,
                 tags.addAll(sectionTags[roomSpace.key]!!)
             if("challenge" in tags){
                 tags.remove("challenge")
-                tags.add("bullet")
+                tags.addAll(inputTags)
             }
             print("og tags are: ")
             for(str in sectionTags[roomSpace.key]!!){
@@ -43,7 +43,7 @@ class SectionTemplate(var sectionChunk: Chunk,
             }
             println()
 
-            var room = SharedData.roomGenerator.generateToFitRoomspace(rs, tags)
+            var room = roomGenerator.generateToFitRoomspace(rs, tags)
             //println("UL corner = ${rs.UL_Corner()}\nspace start anchor = ${rs.startAnchor}\nroom start = ${room.start}")
             var ul = rs.UL_Corner()
             ul.y += rs.startAnchor.y - room.start.y
@@ -57,11 +57,14 @@ class SectionTemplate(var sectionChunk: Chunk,
         println("generated section:")
         println(outChunk.getAsStringBuilder())
 
-        var section_ul = Coords(input_rs.startAnchor.x, input_rs.startAnchor.y)
-        section_ul.x += input_rs.UL_Corner().x
+        var section_ul = Coords(
+                input_rs.startAnchor.x + input_rs.UL_Corner().x - startAnchor.x,
+                input_rs.startAnchor.y + input_rs.UL_Corner().y - startAnchor.y
+        )
+        /*section_ul.x += input_rs.UL_Corner().x
         section_ul.y += input_rs.UL_Corner().y
         section_ul.x -= startAnchor.x
-        section_ul.y -= startAnchor.y
+        section_ul.y -= startAnchor.y*/
 
         return Section(
                 outChunk,

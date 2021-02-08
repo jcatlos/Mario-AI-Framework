@@ -14,7 +14,15 @@ import engine.core.MarioTimer
  */
 
 class LevelGenerator : MarioLevelGenerator{
-    var state = State(3)
+    var levelConfig = Config(
+            "bullet",
+            1000,
+            100,
+            RandomRoomGenerator,
+            2,
+            2,
+            1.5
+    )
     //var layerBuilder = LayerBuilder(BasicLayerDesigner, RandomRoomGenerator, state)
 
 
@@ -30,7 +38,7 @@ class LevelGenerator : MarioLevelGenerator{
      */
 
     override fun getGeneratedLevel(model: MarioLevelModel?, timer: MarioTimer?): String {
-        var level: Level = Level(state, "bullet")
+        var level: Level = Level(levelConfig)
         return(level.getLevel())
     }
 }
