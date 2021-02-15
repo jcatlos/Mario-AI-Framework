@@ -15,10 +15,34 @@ object SharedData {
 
     var SectionTemplates: ArrayList<SectionTemplate> = ArrayList()
     var RoomTemplates: ArrayList<RoomTemplate> = ArrayList()
+    var Macros: MutableMap<String, Macro> = mutableMapOf()
+
 
     var roomGenerator: RoomGenerator = RandomRoomGenerator
 
     init{
+        // Loading macros
+
+        var MacroFiles: ArrayList<File> = ArrayList()
+        println("Loading section files:")
+        for(dir in File("src/levelGenerators/jcatlos/macros").listFiles()){
+            println("\tDirectory ${dir.name}:")
+            for(file in dir.listFiles()){
+                println("\tFile ${file.name}")
+                MacroFiles.add(file)
+            }
+        }
+
+        println("Parsing macro files:")
+        for(file in MacroFiles){
+            println("\tParsing ${file.name}")
+            var macro = MacroParser.parseFile(file)
+            println("adding macro ${macro.name}")
+            Macros[macro.name] = macro
+        }
+        println("loaded ${Macros.size} section files")
+
+
         // Loading rooms
 
         var RoomFiles: ArrayList<File> = ArrayList()
@@ -36,6 +60,8 @@ object SharedData {
             println("\tParsing ${file.name}")
             RoomTemplates.add(RoomParser.fileToTemplate(file))
         }
+        println("loaded ${SectionTemplates.size} room files")
+
 
         // Loading sections
 
@@ -54,7 +80,7 @@ object SharedData {
             println("\tParsing ${file.name}")
             SectionTemplates.add(SectionParser.fileToSectionTemplate(file))
         }
-        println("loaded ${SectionTemplates.size} files")
+        println("loaded ${SectionTemplates.size} section files")
     }
 
     fun getSimpleSectionTemplates(): ArrayList<SectionTemplate>{

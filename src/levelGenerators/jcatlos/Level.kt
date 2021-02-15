@@ -69,7 +69,6 @@ class Level(var config: Config){
             currentType = config.getNextSectionType()
         }
 
-
         // Emplace a finish room at the end of the level
         var finishRoom: Room = SharedData.getRoomTemplatesByTags(arrayListOf("finish", config.challengeTag)).random().generate()
         this.addRoomByEntryPoint(finishRoom, entryCoords)

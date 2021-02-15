@@ -33,35 +33,35 @@ object RoomParser{
         println("      Parsing initialized")
 
         var roomChunk = Chunk()
-        var levelReader: BufferedReader = BufferedReader(levelFile.reader())
+        var levelReader = BufferedReader(levelFile.reader())
 
         var tags: ArrayList<String> = ArrayList(levelReader.readLine().split(',').map {tag -> tag.trim()})
 
         var start = Coords(-1, -1)
         var finish: ArrayList<Coords> = ArrayList()
 
-        var macroMap: MutableMap<Coords, Macro> = mutableMapOf()
+        var macros: MutableMap<Char, Macro> = mutableMapOf()
+
+        var line = levelReader.readLine()
+        while(true){
+            // Check whether the head has ended
+            if(line.trim() == "---") break
+            // Else extract macro by its name
+            var tokens = line.split('=')
+            var macroChar = tokens[0].trim()[0]
+            var result = SharedData.Macros[tokens[1].trim()]
+            if(result != null) {
+                macros[macroChar] = result
+            }
+
+            line = levelReader.readLine()
+        }
 
         var count = 0
         var character = levelReader.read()
 
         while(character >= 0){
             when (character) {
-                // Macro
-                '{'.toInt() -> {
-                    var macro = Macro()
-                    var token = getNextToken(levelReader)
-                    while(token != ""){
-                        var pair = token.split('=')
-                        macro.addPair(MacroPair(pair[0], pair[1].toInt()))
-                        token = getNextToken(levelReader)
-                    }
-                    macroMap[roomChunk.currentPos()] = macro
-                    // Make space for the macro to be inserted during generation
-                    for(m in 0 until macro.length){
-                        roomChunk.append('-')
-                    }
-                }
                 // Start point
                 'm'.toInt() -> {
                     start = roomChunk.currentPos()
@@ -87,7 +87,8 @@ object RoomParser{
         roomChunk.append('\n')
 
 
-        return RoomTemplate(roomChunk, tags, macroMap.toMutableMap(), start, finish)
+        println("\nRoom macros are $macros")
+        return RoomTemplate(roomChunk, tags, macros, start, finish)
     }
 
 }

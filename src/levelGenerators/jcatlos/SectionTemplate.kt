@@ -25,33 +25,19 @@ class SectionTemplate(var sectionChunk: Chunk,
 
         var outChunk = Chunk(sectionChunk.getAsStringBuilder())
 
-        //println("sectionchunk = \n${outChunk.getAsStringBuilder().toString()}")
-        //println("Filling sction with ${roomSpaces.size} rooms")
         for(roomSpace in roomSpaces){
             var rs = roomSpace.value
-            //println("Roomspace ${roomSpace.key} ul = ${rs.UL_Corner()}")
-            //println("looking for room for ${roomSpace.key} with anchor at ${rs.startAnchor}")
             var tags:ArrayList<String> = arrayListOf()
-                tags.addAll(sectionTags[roomSpace.key]!!)
+            tags.addAll(sectionTags[roomSpace.key]!!)
             if("challenge" in tags){
                 tags.remove("challenge")
                 tags.addAll(inputTags)
             }
-            print("og tags are: ")
-            for(str in sectionTags[roomSpace.key]!!){
-                print(" $str")
-            }
-            println()
 
             var room = roomGenerator.generateToFitRoomspace(rs, tags)
-            //println("UL corner = ${rs.UL_Corner()}\nspace start anchor = ${rs.startAnchor}\nroom start = ${room.start}")
             var ul = rs.UL_Corner()
             ul.y += rs.startAnchor.y - room.start.y
-            //println("After addition rs ul = ${rs.UL_Corner()}")
-            //println("emplacing room \n${room.room.getAsStringBuilder()}")
-            //println("Roomspace ul = ${rs.UL_Corner()}")
             outChunk.emplaceChunk(room.room, ul)
-            //println("emplaced \n${sectionChunk.getAsStringBuilder()}")
         }
 
         println("generated section:")
