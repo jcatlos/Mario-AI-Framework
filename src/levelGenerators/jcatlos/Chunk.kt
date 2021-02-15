@@ -126,7 +126,7 @@ class Chunk()
     fun getLastLine(): String{
         var out = StringBuilder()
         for(i in 0 until width){
-            out.append(content[height-1][i])
+            out.append(content[i][height-1])
         }
         return out.toString()
     }

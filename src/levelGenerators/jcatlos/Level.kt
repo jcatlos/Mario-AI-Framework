@@ -54,6 +54,8 @@ class Level(var config: Config){
             this.updateByCoords(section.sectionSpace.DR_Corner())
 
             levelChunk.emplaceChunk(section.section, section.sectionSpace.ULByEntryPoint(entryCoords))
+            padToEnd(section.sectionSpace.DL_Corner(), section.section.getLastLine())
+
 
             // Calculate the next entry coordinates
             entryCoords = Coords(
@@ -80,12 +82,23 @@ class Level(var config: Config){
         maxCoords.y = max(maxCoords.y, coords.y)
     }
 
+    private fun padToEnd(dlCorner: Coords, lastLine: String){
+        var xIndex = dlCorner.x
+        for(char in lastLine){
+            for(y in dlCorner.y until levelChunk.height){
+                levelChunk.content[xIndex][y] = char
+            }
+            xIndex++
+        }
+    }
+
     private fun addRoomByEntryPoint(room: Room, entryPoint: Coords): Coords{
         var ul = Coords(
                 entryPoint.x - room.start.x,
                 entryPoint.y - room.start.y
         )
         levelChunk.emplaceChunk(room.room, ul)
+        padToEnd(Coords(ul.x, ul.y + room.room.height), room.room.getLastLine())
 
         this.updateByCoords(
                 Coords(
