@@ -46,7 +46,14 @@ class Macro(
             }
         }
         // If none is selected
-        return Chunk(width, height)
+        var emptyChunk = Chunk(width, height)
+        for(x in 0 until emptyChunk.width){
+            for(y in 0 until emptyChunk.height){
+                emptyChunk.content[x][y] = '-'
+            }
+        }
+
+        return emptyChunk
     }
 
     /**

@@ -33,7 +33,7 @@ class SectionTemplate(var sectionChunk: Chunk,
                 tags.remove("challenge")
                 tags.addAll(inputTags)
             }
-
+            println("looking for room with tags ${tags.toString()} for rs: $rs")
             var room = roomGenerator.generateToFitRoomspace(rs, tags)
             var ul = rs.UL_Corner()
             ul.y += rs.startAnchor.y - room.start.y

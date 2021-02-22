@@ -1,5 +1,5 @@
-bullet, easy
-s = smallObstacle
+bullet, easy, safe
+s = obstacle33
 ---
 -------------------------
 -------------------------

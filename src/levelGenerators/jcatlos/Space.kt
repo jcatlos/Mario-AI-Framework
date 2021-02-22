@@ -9,9 +9,9 @@ package levelGenerators.jcatlos
  */
 
 open class Space(
-        var width: Int = 0,
-        var height: Int = 0,
-        protected var UL_Corner: Coords)
+        open var width: Int = 0,
+        open var height: Int = 0,
+        protected open var UL_Corner: Coords)
 
 {
     /**

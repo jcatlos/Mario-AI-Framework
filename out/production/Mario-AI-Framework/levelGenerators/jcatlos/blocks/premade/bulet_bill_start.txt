@@ -1,7 +1,5 @@
 start, safe, bullet
-r = koopasOrPipe
-k = koopa40
-p = pipe
+s = obstacle33
 ---
 -------------------------
 -------------------------
@@ -15,9 +13,9 @@ p = pipe
 -------------------------
 -------------------------
 -------------------------
--------rr--ooo-----------
--------rr--SSS-----------
-M------rr---------------f
-XXXXXXXXXX--B--XXXXXXXXXX
-XXXXXXXXXX--b--XXXXXXXXXX
+---------ooo-----sss-----
+---------SSS-----sss-----
+M----------------sss----f
+XXXXXXXX--B--XXXXXXXXXXXX
+XXXXXXXX--b--XXXXXXXXXXXX
 XXXXXXXXXXXXXXXXXXXXXXXXX

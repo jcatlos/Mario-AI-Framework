@@ -1,10 +1,13 @@
 safe, bonus
+p = pipe
+m = obstacle63
+s = obstacle33
 ---
--------------------------
--------------------------
 -------------------------
 -----ooo---ooo---ooo-----
 --ooo---ooo---ooo---ooo--
 -------------------------
-m-----------------------f
+-----pp---mmmmmm---sss---
+-----pp---mmmmmm---sss---
+m----pp---mmmmmm---sss--f
 XXXXXXXXXXXXXXXXXXXXXXXXX

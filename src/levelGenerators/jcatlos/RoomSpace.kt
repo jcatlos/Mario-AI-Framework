@@ -12,10 +12,10 @@ package levelGenerators.jcatlos
  * @param finishAnchors a list of the exit points from the room
  */
 
-class RoomSpace(
-        width: Int = 0,
-        height: Int = 0,
-        UL_Corner: Coords,
+data class RoomSpace(
+        override var width: Int = 0,
+        override var height: Int = 0,
+        override var UL_Corner: Coords,
         var startAnchor: Coords,
         var finishAnchors: ArrayList<Coords>
 ): Space(width, height, UL_Corner)

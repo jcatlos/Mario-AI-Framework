@@ -1,4 +1,4 @@
-smallObstacle 3 3
+obstacle33 3 3
 0.2
 ---
 -#-

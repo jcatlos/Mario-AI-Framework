@@ -1,0 +1,25 @@
+obstacle63 6 3
+0.2
+--##--
+-####-
+######
+0.2
+X---X-
+X-X-X-
+X-X-X-
+0.2
+XX--XX
+XX--XX
+XX--XX
+0.2
+SS----
+---XXX
+---XXX
+0.2
+X-SS-X
+X----X
+X----X
+0.2
+----XX
+XX--XX
+XXXXXX

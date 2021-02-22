@@ -1,4 +1,5 @@
 challenge, safe, divide
+? = questionReward
 ---
 -------------------------
 -------------------------
