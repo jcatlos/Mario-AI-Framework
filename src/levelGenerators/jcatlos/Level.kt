@@ -40,16 +40,14 @@ class Level(var config: Config){
                 }
                 SectionType.HARD -> {
                     tags.add("hard")
-                    //sectionTemplate = SharedData.SectionTemplates.random()
                 }
                 SectionType.TWIST -> {
                     tags.add("twist")
-                    //sectionTemplate = SharedData.SectionTemplates.random()
                 }
             }
 
             // Generate the next section
-            //var sectionTemplate = SharedData.SectionTemplates.random()
+
             var section = sectionTemplate.generate(rs, config.roomGenerator, tags)
             this.updateByCoords(section.sectionSpace.DR_Corner())
 

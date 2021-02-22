@@ -39,6 +39,7 @@ data class Config(
 ) {
     var sectionCount = 0
     var twistChance = 0.1
+    var twisted = false
 
     /**
      * Gets the desirecd [SectionType] of the next section
@@ -51,7 +52,10 @@ data class Config(
         if(sectionCount >= introLength+hardLength) return SectionType.FINISH
 
         twistChance *= twistMultiplier
-        if(Random.nextFloat() > twistChance) return SectionType.TWIST
+        if(Random.nextFloat() > twistChance && !twisted){
+            twisted = true
+            return SectionType.TWIST
+        }
 
         return SectionType.HARD
     }
