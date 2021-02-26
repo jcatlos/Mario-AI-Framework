@@ -38,6 +38,8 @@ class SectionTemplate(var sectionChunk: Chunk,
             var ul = rs.UL_Corner()
             ul.y += rs.startAnchor.y - room.start.y
             outChunk.emplaceChunk(room.room, ul)
+            println("generated section:")
+            println(outChunk.getAsStringBuilder())
         }
 
         println("generated section:")

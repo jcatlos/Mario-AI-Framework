@@ -1,11 +1,12 @@
-bullet, easy, safe
+bullet, safe
 s = obstacle33
+c = pipe
 ---
 -------------------------
 -------------------------
 ------------oo-----------
 -------------------------
-----------X---------sss--
----------XX--B------sss--
-m-------XXX--b---g--sss-f
+---------cc---------sss--
+---------cc--B------sss--
+m--------cc--b---g--sss-f
 XXXXXXXXXXXXXXXXXXXXXXXXX

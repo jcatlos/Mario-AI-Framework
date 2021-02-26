@@ -35,14 +35,18 @@ class Level(var config: Config){
             var tags = arrayListOf(config.challengeTag)
             when(currentType){
                 SectionType.INTRO -> {
-                    tags.add("easy")
+                    tags.add("!hard")
+                    tags.add("!twist")
+                    tags.add("!bonus")
                     sectionTemplate = SharedData.getSimpleSectionTemplates().random()
                 }
                 SectionType.HARD -> {
                     tags.add("hard")
+                    tags.add("!twist")
                 }
                 SectionType.TWIST -> {
                     tags.add("twist")
+                    sectionTemplate = SharedData.TwistSectionTemplates.random()
                 }
             }
 

@@ -1,4 +1,4 @@
-bullet, twist
+bullet, twist, hard, jumps
 ---
 -------------------------
 -------------------------

@@ -14,9 +14,9 @@ object SharedData {
     init{ println("Initializing shared data") }
 
     var SectionTemplates: ArrayList<SectionTemplate> = ArrayList()
+    var TwistSectionTemplates: ArrayList<SectionTemplate> = ArrayList()
     var RoomTemplates: ArrayList<RoomTemplate> = ArrayList()
     var Macros: MutableMap<String, Macro> = mutableMapOf()
-
 
     var roomGenerator: RoomGenerator = RandomRoomGenerator
 
@@ -78,7 +78,12 @@ object SharedData {
         println("Parsing section files:")
         for(file in SectionFiles){
             println("\tParsing ${file.name}")
-            SectionTemplates.add(SectionParser.fileToSectionTemplate(file))
+            if("twist" in file.name){
+                TwistSectionTemplates.add(SectionParser.fileToSectionTemplate(file))
+            }
+            else{
+                SectionTemplates.add(SectionParser.fileToSectionTemplate(file))
+            }
         }
         println("loaded ${SectionTemplates.size} section files")
     }

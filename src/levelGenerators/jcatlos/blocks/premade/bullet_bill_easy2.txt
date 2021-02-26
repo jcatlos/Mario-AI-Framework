@@ -1,4 +1,5 @@
-bullet, easy, safe
+bullet, safe
+c = challenge32
 ---
 -------------------------
 -------------------------
@@ -7,6 +8,6 @@ bullet, easy, safe
 -------------------------
 ---------XXX---XXX-------
 ------B------------B-----
-------b------------b-----
-m-----b---g----g---b----f
+------b----ccc-----b-----
+m-----b--g-ccc-g---b----f
 XXXXXXXXXXXXXXXXXXXXXXXXX

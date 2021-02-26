@@ -1,0 +1,13 @@
+safe, easy, bullet
+p = pipe
+s = obstacle33
+t = obstacle33
+---
+-------------------------
+-------------------------
+----------------ttt------
+-------------o--ttt------
+-------sss---B--ttt------
+-------sss---b--###------
+m------sss---b--###-----f
+XXXXXXXXXXXXXXXXXXXXXXXXX
