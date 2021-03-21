@@ -1,9 +1,9 @@
 0: divide
 1: divide, !groundOnly
 2: challenge
-3: challenge
+3: 
 4: challenge
-5: bonus
+5: safe, bonus
 6: challenge
 ---
 000000000000000000000000011111111111111111111111113333333333333333333333333-------------------------

@@ -1,0 +1,17 @@
+coin33 3 3
+0.2
+o-o
+-o-
+o-o
+0.2
+-o-
+o-o
+-o-
+0.2
+o-o
+ooo
+-o-
+0.05
+ooo
+ooo
+ooo

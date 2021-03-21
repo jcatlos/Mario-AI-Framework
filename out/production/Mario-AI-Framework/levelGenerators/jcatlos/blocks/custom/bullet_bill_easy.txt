@@ -1,4 +1,4 @@
-bullet, safe
+bullet, safe, easy
 s = obstacle33
 c = pipe
 ---

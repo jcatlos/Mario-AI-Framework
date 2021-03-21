@@ -1,0 +1,12 @@
+safe, bullet, hard
+c = challenge75
+s = coin33
+---
+-------------------------
+-------------------------
+-----ccccccc-------------
+-----ccccccc------sss----
+-----ccccccc--B---sss----
+-----ccccccc--b---sss----
+m----ccccccc--b----k#---f
+XXXXXXXXXXXXXXXXXXXXXXXXX

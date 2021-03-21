@@ -1,12 +1,15 @@
 safe, bonus
 p = pipe
 r = obstacle63
+c = coin33
 ---
 -------------------------
--------------ooooo-------
-----------SSSSSSSSSSS----
+-----------ooooo---------
+--------SSSSSSSSSSS------
 -------------------------
-----pp------rrrrrr-------
-----pp------rrrrrr-------
-m---pp------rrrrrr------f
+-----------oooo----------
+----pp-------------------
+----pp----rrrrrr---ccc---
+----pp----rrrrrr---ccc---
+m--####---rrrrrr---ccc--f
 XXXXXXXXXXXXXXXXXXXXXXXXX
