@@ -1,4 +1,4 @@
-safe, bullet, hard
+safe, bullet
 c = challenge75
 s = coin33
 ---

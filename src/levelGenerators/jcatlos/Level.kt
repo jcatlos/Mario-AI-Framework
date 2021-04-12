@@ -32,27 +32,28 @@ class Level(var config: Config){
 
             // Generate section according to the section type
             var sectionTemplate = SharedData.SectionTemplates.random()
-            var tags = arrayListOf(config.challengeTag)
+            var challengeTags = arrayListOf(config.challengeTag)
+            var inputTags = ArrayList<String>()
             when(currentType){
                 SectionType.INTRO -> {
-                    tags.add("!hard")
-                    tags.add("!twist")
-                    tags.add("!bonus")
+                    inputTags.add("!hard")
+                    inputTags.add("!twist")
+                    //inputTags.add("!bonus")
                     sectionTemplate = SharedData.getSimpleSectionTemplates().random()
                 }
                 SectionType.HARD -> {
-                    tags.add("hard")
-                    tags.add("!twist")
+                    inputTags.add("!easy")
+                    inputTags.add("!twist")
                 }
                 SectionType.TWIST -> {
-                    tags.add("twist")
+                    //inputTags.add("twist")
                     sectionTemplate = SharedData.TwistSectionTemplates.random()
                 }
             }
 
             // Generate the next section
 
-            var section = sectionTemplate.generate(rs, config.roomGenerator, tags)
+            var section = sectionTemplate.generate(rs, config.roomGenerator, inputTags, challengeTags)
             this.updateByCoords(section.sectionSpace.DR_Corner())
 
             levelChunk.emplaceChunk(section.section, section.sectionSpace.ULByEntryPoint(entryCoords))

@@ -1,5 +1,7 @@
 package levelGenerators.jcatlos
 
+import kotlin.random.Random
+
 /**
  * Class used to store information about a section from a prototype file
  *
@@ -21,17 +23,21 @@ class SectionTemplate(var sectionChunk: Chunk,
                       var sectionTags: MutableMap<Char, ArrayList<String>>)
 {
 
-    fun generate(input_rs: RoomSpace, roomGenerator: RoomGenerator, inputTags: ArrayList<String>): Section{
+    fun generate(input_rs: RoomSpace, roomGenerator: RoomGenerator, inputTags: ArrayList<String>, challengeTags: ArrayList<String>): Section{
 
         var outChunk = Chunk(sectionChunk.getAsStringBuilder())
 
         for(roomSpace in roomSpaces){
             var rs = roomSpace.value
             var tags:ArrayList<String> = arrayListOf()
+            tags.addAll(inputTags)
             tags.addAll(sectionTags[roomSpace.key]!!)
             if("challenge" in tags){
-                tags.remove("challenge")
-                tags.addAll(inputTags)
+                // 30% chance to use a default challenge
+                if("twist" !in tags && Random.nextFloat() < 0.7){
+                    tags.remove("challenge")
+                    tags.addAll(challengeTags)
+                }
             }
             println("looking for room with tags ${tags.toString()} for rs: $rs")
             var room = roomGenerator.generateToFitRoomspace(rs, tags)

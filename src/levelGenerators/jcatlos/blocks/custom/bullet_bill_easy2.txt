@@ -1,4 +1,4 @@
-bullet, safe
+bullet, safe, easy
 c = challenge32
 ---
 -------------------------
