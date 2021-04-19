@@ -5,7 +5,7 @@ s = obstacle33
 -------------------------
 -------------------------
 ---------ooo-----sss-----
----------SSS-----sss-----
+---------?SS-----sss-----
 M----------------sss----f
 XXXXXXXX--B--XXXXXXXXXXXX
 XXXXXXXX--b--XXXXXXXXXXXX
