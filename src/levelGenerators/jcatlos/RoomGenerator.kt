@@ -1,5 +1,7 @@
 package levelGenerators.jcatlos
 
+import kotlin.random.Random
+
 /**
  *  Object generating rooms fitting inside a provided [RoomSpace]s (with/without tags)
  *  - Chooses a random [RoomTemplate] from [SharedData] (which satisfies criteria - size/tags)
@@ -28,7 +30,25 @@ object RandomRoomGenerator: RoomGenerator{
                 }
             }
         }
-        return candidates.random().generate()
+
+        var minUsed = Int.MAX_VALUE
+        var lowestCandidates: ArrayList<RoomTemplate> = arrayListOf()
+
+        for(candidate in candidates){
+            if(candidate.used == minUsed){
+                lowestCandidates.add(candidate)
+            }
+            else if(candidate.used < minUsed){
+                lowestCandidates = arrayListOf(candidate)
+                minUsed = candidate.used
+            }
+        }
+
+        var generatedCandidate = lowestCandidates.random()
+        generatedCandidate.used ++
+        return generatedCandidate.generate()
+
+        //return candidates.random().generate()
     }
 
     /**

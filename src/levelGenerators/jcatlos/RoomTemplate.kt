@@ -94,8 +94,9 @@ class RoomTemplate(
         var tags: ArrayList<String>,
         var macros: Map<Char, Macro>,
         var start: Coords,
-        var finish: ArrayList<Coords>)
-{
+        var finish: ArrayList<Coords>,
+        var used: Int = 0
+){
 
     /**
      * Generates a [Room] based on this template
