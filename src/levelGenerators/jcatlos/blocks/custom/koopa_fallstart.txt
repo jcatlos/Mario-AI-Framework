@@ -1,4 +1,4 @@
-bullet, start, safe
+koopa, start, safe
 ---
 ----------------------
 ----------------------
@@ -20,6 +20,6 @@ SSSS?----k--#---------
 ---XXXXXXXX-#---------
 ---XXXXXXXX-#---------
 ---XXXXXXXX-----------
----XXXXXXXXk-----yy--f
+---XXXXXXXXk-----gg--f
 ---XXXXXXXXXXXXXXXX--X
 ---XXXXXXXXXXXXXXXXXXX

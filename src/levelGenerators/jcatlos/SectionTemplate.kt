@@ -25,6 +25,8 @@ class SectionTemplate(var sectionChunk: Chunk,
 
     fun generate(input_rs: RoomSpace, roomGenerator: RoomGenerator, inputTags: ArrayList<String>, challengeTags: ArrayList<String>): Section{
 
+        println("genearting section with inputTags: $inputTags, challengeTags: $challengeTags")
+
         var outChunk = Chunk(sectionChunk.getAsStringBuilder())
 
         for(roomSpace in roomSpaces){
@@ -32,9 +34,10 @@ class SectionTemplate(var sectionChunk: Chunk,
             var tags:ArrayList<String> = arrayListOf()
             tags.addAll(inputTags)
             tags.addAll(sectionTags[roomSpace.key]!!)
-            if("challenge" in tags){
+            if("twist" in tags) tags.addAll(challengeTags)
+            else if("challenge" in tags){
                 // 30% chance to use a default challenge
-                if("twist" !in tags && Random.nextFloat() < 0.7){
+                if(Random.nextFloat() < 0.7){
                     tags.remove("challenge")
                     tags.addAll(challengeTags)
                 }

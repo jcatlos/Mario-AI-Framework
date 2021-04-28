@@ -1,0 +1,10 @@
+koopa, hard, safe
+s = coin33
+---
+-------------------------
+-------------------------
+-------------------------
+------k#-----------sss---
+--X-XXXX-----------sss---
+mXX--yyyyyyyyyy#---sss--f
+XXXXXXXXXXXXXXXXXXXXXXXXX
