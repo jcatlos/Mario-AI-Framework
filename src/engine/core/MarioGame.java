@@ -1,5 +1,7 @@
 package engine.core;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.VolatileImage;
 import java.util.ArrayList;
 import java.awt.*;
@@ -52,7 +54,7 @@ public class MarioGame {
     private MarioEvent[] killEvents;
 
     //visualization
-    private JFrame window = null;
+    public JFrame window = null;
     private MarioRender render = null;
     private MarioAgent agent = null;
     private MarioWorld world = null;
@@ -80,7 +82,7 @@ public class MarioGame {
         return 1000 / fps;
     }
 
-    private void setAgent(MarioAgent agent) {
+    public void setAgent(MarioAgent agent) {
         this.agent = agent;
         if (agent instanceof KeyAdapter) {
             this.render.addKeyListener((KeyAdapter) this.agent);
@@ -210,7 +212,7 @@ public class MarioGame {
             this.window.setContentPane(this.render);
             this.window.pack();
             this.window.setResizable(false);
-            this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            this.window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             this.render.init();
             this.window.setVisible(true);
         }
@@ -218,7 +220,7 @@ public class MarioGame {
         return this.gameLoop(level, timer, marioState, visuals, fps);
     }
 
-    private MarioResult gameLoop(String level, int timer, int marioState, boolean visual, int fps) {
+    public MarioResult gameLoop(String level, int timer, int marioState, boolean visual, int fps) {
         this.world = new MarioWorld(this.killEvents);
         this.world.visuals = visual;
         this.world.initializeLevel(level, 1000 * timer);

@@ -1,5 +1,7 @@
 package engine.helper;
 
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
@@ -8,6 +10,7 @@ import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.File;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -25,7 +28,7 @@ public class Assets {
     public static Image[][] font;
     public static Image[][] map;
     final static String curDir = System.getProperty("user.dir");
-    final static String img = curDir + "/img/";
+    final static String img = "img/";
 
     public static void init(GraphicsConfiguration gc) {
         try {
@@ -50,9 +53,11 @@ public class Assets {
         } catch (Exception e) {
         }
 
+        ClassLoader cl = Assets.class.getClassLoader();
+
         if (source == null) {
             imageName = img + imageName;
-            File file = new File(imageName);
+            URL file = cl.getResource(imageName);
             source = ImageIO.read(file);
         }
         if (source == null) {

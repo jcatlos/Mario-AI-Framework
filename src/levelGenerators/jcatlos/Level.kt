@@ -10,7 +10,7 @@ import kotlin.math.max
 
 class Level(var config: Config){
     var levelChunk = Chunk(config.maxLength, config.maxHeight)
-    var startingCoords = Coords(0, 30)
+    var startingCoords = Coords(-1, 30)
 
     var maxCoords = Coords(0,0)
 

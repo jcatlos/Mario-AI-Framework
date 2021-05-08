@@ -26,8 +26,6 @@ public class GenerateLevel {
         String level = generator.getGeneratedLevel(new MarioLevelModel(150, 16), new MarioTimer(5 * 60 * 60 * 1000));
         MarioGame game = new MarioGame();
 
-
-
         printResults(game.playGame(level, 200, 0, 30));
         //printResults(game.runGame(new agents.robinBaumgarten.Agent(), level, 200, 0, true, 30, 4));
     }

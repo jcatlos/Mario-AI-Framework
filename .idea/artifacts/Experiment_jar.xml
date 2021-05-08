@@ -1,0 +1,25 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Experiment:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Experiment_jar</output-path>
+    <root id="archive" name="Mario-AI-Framework.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/manifests/StudyKishoutenketsu/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-stdlib-sources.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-test.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-stdlib-jdk8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-stdlib-jdk7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-stdlib-jdk8-sources.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-reflect-sources.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-stdlib.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-reflect.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-test-sources.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-stdlib-jdk7-sources.jar" path-in-jar="/" />
+      <element id="module-output" name="Mario-AI-Framework" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/json-simple-1.1.1.jar" path-in-jar="/" />
+      <element id="directory" name="img">
+        <element id="dir-copy" path="$PROJECT_DIR$/img" />
+      </element>
+    </root>
+  </artifact>
+</component>

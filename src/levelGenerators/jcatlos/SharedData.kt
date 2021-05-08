@@ -1,7 +1,13 @@
 package levelGenerators.jcatlos
 
+import java.io.BufferedReader
 import java.io.File
 import java.lang.StringBuilder
+import java.nio.Buffer
+import java.util.*
+import java.util.jar.JarEntry
+import java.util.jar.JarFile
+import kotlin.collections.ArrayList
 
 /**
  * Object responsible for loading all the assets for the LevelGenerator
@@ -24,7 +30,7 @@ object SharedData {
         // Loading macros
 
         var MacroFiles: ArrayList<File> = ArrayList()
-        println("Loading section files:")
+        println("Loading macro files:")
         for(dir in File("src/levelGenerators/jcatlos/macros").listFiles()){
             println("\tDirectory ${dir.name}:")
             for(file in dir.listFiles()){
@@ -87,6 +93,21 @@ object SharedData {
         }
         println("loaded ${SectionTemplates.size} section files")
     }
+
+    fun getFiles(dir: String) : ArrayList<String>{
+        var files: ArrayList<String> = arrayListOf()
+        var jarFile: File = File(this.javaClass.protectionDomain.codeSource.location.path)
+        var jar: JarFile = JarFile(jarFile)
+        var entries: Enumeration<JarEntry> = jar.entries()
+        while(entries.hasMoreElements()){
+            var name = entries.nextElement().name
+            if(name.startsWith(dir)){
+                files.add(name)
+            }
+        }
+        return files
+    }
+
 
     fun getSimpleSectionTemplates(): ArrayList<SectionTemplate>{
         var out = ArrayList<SectionTemplate>()
