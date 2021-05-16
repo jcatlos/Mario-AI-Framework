@@ -16,8 +16,8 @@ object MacroParser{
         return MacroPair(Chunk(macroSB), prob)
     }
 
-    fun parseFile(macroFile: File): Macro{
-        var macroReader = macroFile.bufferedReader()
+    fun parseFile(macroReader: BufferedReader): Macro{
+        //var macroReader = macroFile.bufferedReader()
 
         // Parse first line
         var firstLine = macroReader.readLine().split(" ")

@@ -2,6 +2,7 @@ package levelGenerators.jcatlos
 
 import java.io.BufferedReader
 import java.io.File
+import java.io.InputStreamReader
 import java.lang.StringBuilder
 import java.nio.Buffer
 import java.util.*
@@ -19,6 +20,8 @@ object SharedData {
 
     init{ println("Initializing shared data") }
 
+    var cl = this.javaClass.classLoader
+
     var SectionTemplates: ArrayList<SectionTemplate> = ArrayList()
     var TwistSectionTemplates: ArrayList<SectionTemplate> = ArrayList()
     var RoomTemplates: ArrayList<RoomTemplate> = ArrayList()
@@ -29,20 +32,21 @@ object SharedData {
     init{
         // Loading macros
 
-        var MacroFiles: ArrayList<File> = ArrayList()
-        println("Loading macro files:")
+        //var MacroFiles: ArrayList<File> = ArrayList()
+        /*println("Loading macro files:")
         for(dir in File("src/levelGenerators/jcatlos/macros").listFiles()){
             println("\tDirectory ${dir.name}:")
             for(file in dir.listFiles()){
                 println("\tFile ${file.name}")
                 MacroFiles.add(file)
             }
-        }
+        }*/
 
         println("Parsing macro files:")
-        for(file in MacroFiles){
-            println("\tParsing ${file.name}")
-            var macro = MacroParser.parseFile(file)
+        for(file in getFiles("levelGenerators/jcatlos/macros/premade/")){
+            println("\tParsing $file")
+            var br = BufferedReader(InputStreamReader(cl.getResourceAsStream(file)))
+            var macro = MacroParser.parseFile(br)
             println("adding macro ${macro.name}")
             Macros[macro.name] = macro
         }
@@ -51,7 +55,7 @@ object SharedData {
 
         // Loading rooms
 
-        var RoomFiles: ArrayList<File> = ArrayList()
+        /*var RoomFiles: ArrayList<File> = ArrayList()
         println("Loading room files:")
         for(dir in File("src/levelGenerators/jcatlos/blocks").listFiles()){
             println("\tDirectory ${dir.name}:")
@@ -59,19 +63,26 @@ object SharedData {
                 println("\t\tFile ${file.name}")
                 RoomFiles.add(file)
             }
-        }
+        }*/
 
         println("Parsing room files:")
-        for(file in RoomFiles){
-            println("\tParsing ${file.name}")
-            RoomTemplates.add(RoomParser.fileToTemplate(file))
+
+        for(file in getFiles("levelGenerators/jcatlos/blocks/premade/")){
+            println("\tParsing $file")
+            var br = BufferedReader(InputStreamReader(cl.getResourceAsStream(file)))
+            RoomTemplates.add(RoomParser.fileToTemplate(br))
         }
-        println("loaded ${SectionTemplates.size} room files")
+        for(file in getFiles("levelGenerators/jcatlos/blocks/custom/")){
+            println("\tParsing $file")
+            var br = BufferedReader(InputStreamReader(cl.getResourceAsStream(file)))
+            RoomTemplates.add(RoomParser.fileToTemplate(br))
+        }
+        println("loaded ${RoomTemplates.size} room files")
 
 
         // Loading sections
 
-        var SectionFiles: ArrayList<File> = ArrayList()
+        /*var SectionFiles: ArrayList<File> = ArrayList()
         println("Loading section files:")
         for(dir in File("src/levelGenerators/jcatlos/sections").listFiles()){
             println("\tDirectory ${dir.name}:")
@@ -79,29 +90,27 @@ object SharedData {
                 println("\tFile ${file.name}")
                 SectionFiles.add(file)
             }
-        }
+        }*/
 
         println("Parsing section files:")
-        for(file in SectionFiles){
-            println("\tParsing ${file.name}")
-            if("twist" in file.name){
-                TwistSectionTemplates.add(SectionParser.fileToSectionTemplate(file))
-            }
-            else{
-                SectionTemplates.add(SectionParser.fileToSectionTemplate(file))
-            }
+        for(file in getFiles("levelGenerators/jcatlos/sections/premade/")){
+            println("\tParsing $file")
+            var br = BufferedReader(InputStreamReader(cl.getResourceAsStream(file)))
+            if("twist" in file) TwistSectionTemplates.add(SectionParser.fileToSectionTemplate(br))
+            else SectionTemplates.add(SectionParser.fileToSectionTemplate(br))
         }
         println("loaded ${SectionTemplates.size} section files")
     }
 
-    fun getFiles(dir: String) : ArrayList<String>{
+    private fun getFiles(dir: String) : ArrayList<String>{
         var files: ArrayList<String> = arrayListOf()
         var jarFile: File = File(this.javaClass.protectionDomain.codeSource.location.path)
         var jar: JarFile = JarFile(jarFile)
         var entries: Enumeration<JarEntry> = jar.entries()
         while(entries.hasMoreElements()){
             var name = entries.nextElement().name
-            if(name.startsWith(dir)){
+            if(name.startsWith(dir) && name != dir){
+                println(name)
                 files.add(name)
             }
         }

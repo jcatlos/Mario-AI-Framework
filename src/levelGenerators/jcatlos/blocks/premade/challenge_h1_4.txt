@@ -1,4 +1,4 @@
-unsafe, challenge
+default, unsafe, challenge
 ---
 -------------------------
 -------------------------

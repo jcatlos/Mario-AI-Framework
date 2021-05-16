@@ -1,4 +1,4 @@
-challenge, safe, divide, groundOnly
+challenge, safe, divide, groundOnly, default
 ? = questionReward
 ---
 -------------------------

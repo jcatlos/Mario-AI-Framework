@@ -42,6 +42,9 @@ class SectionTemplate(var sectionChunk: Chunk,
                     tags.addAll(challengeTags)
                 }
             }
+            else{
+                tags.add("default")
+            }
             println("looking for room with tags ${tags.toString()} for rs: $rs")
             var room = roomGenerator.generateToFitRoomspace(rs, tags)
             var ul = rs.UL_Corner()

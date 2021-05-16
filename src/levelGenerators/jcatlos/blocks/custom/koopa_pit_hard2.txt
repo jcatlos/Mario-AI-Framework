@@ -1,7 +1,7 @@
-koopa, safe, easy
+koopa, safe, hard
 ---
 -------------------------
-?--oo------oo-----oo-----
+----oo------oo-----oo----
 -------------------------
-m-#-k----#--k------g--#-f
+m-#-k-y-y#-k-y-y#-k-y-y#f
 XXXXXXXXXXXXXXXXXXXXXXXXX

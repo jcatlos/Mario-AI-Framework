@@ -11,15 +11,24 @@ class LevelGenerator : MarioLevelGenerator{
     var cl: ClassLoader = this.javaClass.classLoader;
 
     override fun getGeneratedLevel(model: MarioLevelModel?, timer: MarioTimer?): String {
-        val levelNum = Random.nextInt(14) + 1
+        val levelNum = Random.nextInt(13) + 2
         val levelName = "lvl-$levelNum.txt"
         var levelString = ""
         var levelReader = BufferedReader(InputStreamReader(cl.getResourceAsStream("original/$levelName")))
-        val level = levelReader.lines().forEach{
+        levelReader.lines().forEach{
             levelString += it + "\n"
         }
         return levelString
         //return File("levels/original").listFiles().random().readText()
+    }
+
+    fun getTestLevel(): String{
+        var levelString = ""
+        var levelReader = BufferedReader(InputStreamReader(cl.getResourceAsStream("original/lvl-1.txt")))
+        levelReader.lines().forEach{
+            levelString += it + "\n"
+        }
+        return levelString
     }
 
     override fun getGeneratorName(): String {

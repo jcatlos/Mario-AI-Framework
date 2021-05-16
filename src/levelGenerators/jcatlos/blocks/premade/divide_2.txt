@@ -1,4 +1,4 @@
-challenge, divide
+challenge, divide, default, !safe
 ? = questionReward
 p = pipe
 c = coin33

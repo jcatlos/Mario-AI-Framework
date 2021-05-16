@@ -29,11 +29,11 @@ object RoomParser{
      * @param levelFile [File] to be converted
      * @return [RoomTemplate] corresponding to the provided [levelFile]
      */
-    fun fileToTemplate(levelFile: File): RoomTemplate{
+    fun fileToTemplate(levelReader: BufferedReader): RoomTemplate{
         println("      Parsing initialized")
 
         var roomChunk = Chunk()
-        var levelReader = BufferedReader(levelFile.reader())
+        //var levelReader = BufferedReader(levelFile.reader())
 
         var tags: ArrayList<String> = ArrayList(levelReader.readLine().split(',').map {tag -> tag.trim()})
 

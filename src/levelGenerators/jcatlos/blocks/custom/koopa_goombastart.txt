@@ -1,0 +1,10 @@
+koopa, start
+---
+-------------------------
+-------------------------
+---------C------k----C---
+--------#CCCCCCCCCC--C---
+-------##-yyyyyyyyyyyC---
+------###-CCCCCCCCCCCC---
+M----####-yyyyyyyyyyyC--f
+XXXXXXXXXXXXXXXXXXXXXXXXX

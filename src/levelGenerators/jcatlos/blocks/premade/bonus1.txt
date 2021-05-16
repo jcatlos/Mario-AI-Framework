@@ -1,4 +1,4 @@
-safe, bonus
+default, safe, bonus
 s = obstacle33
 t = obstacle33
 ? = questionReward

@@ -13,12 +13,12 @@ import engine.core.MarioTimer
 
 class LevelGenerator : MarioLevelGenerator{
     var levelConfig = Config(
-            challengeTag = "bullet",
+            challengeTag = "koopa",
             maxLength = 1000,
             maxHeight =  100,
             roomGenerator =  RandomRoomGenerator,
-            introLength =  1,
-            hardLength =  1
+            introLength =  1,//2,
+            hardLength =  1 //3
     )
 
 

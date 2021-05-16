@@ -1,5 +1,6 @@
 package levelGenerators.jcatlos
 
+import java.io.BufferedReader
 import java.io.File
 
 /**
@@ -14,7 +15,7 @@ object SectionParser {
      *
      * @param sectionFile the file to be parsed
      */
-    fun fileToSectionTemplate(sectionFile: File): SectionTemplate{
+    fun fileToSectionTemplate(sectionReader: BufferedReader): SectionTemplate{
         var sectionChunk = Chunk()
         var roomSpaces: MutableMap<Char, RoomSpace> = mutableMapOf()
         var sectionTags: MutableMap<Char, ArrayList<String>> = mutableMapOf()
@@ -23,7 +24,7 @@ object SectionParser {
 
         var parsingHead = true;
 
-        for(line in sectionFile.readText().lines()){
+        for(line in sectionReader.lines()){
             when {
                 // Ending of the header part of the file
                 line.trim() == "---".trim() -> parsingHead = false
