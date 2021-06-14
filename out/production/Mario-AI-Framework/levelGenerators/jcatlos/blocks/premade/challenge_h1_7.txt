@@ -1,4 +1,4 @@
-challenge
+default, challenge
 c = challenge32
 s = challenge32
 ---

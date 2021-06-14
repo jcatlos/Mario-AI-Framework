@@ -10,17 +10,40 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
 
-import javafx.util.Pair;
 import levelGenerators.jcatlos.Config;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+class Pair<F, S> extends java.util.AbstractMap.SimpleImmutableEntry<F, S> {
+
+    public  Pair( F f, S s ) {
+        super( f, s );
+    }
+
+    public F getFirst() {
+        return getKey();
+    }
+
+    public S getSecond() {
+        return getValue();
+    }
+
+    public String toString() {
+        return "["+getKey()+","+getValue()+"]";
+    }
+
+}
+
 class StudyResults {
-    Map<String, LinkedList<Map>> Attempts;
+    JSONObject Attempts;
     ExecutorService executor = Executors.newSingleThreadExecutor();
     LinkedList<Future<Boolean>> futureResults = new LinkedList<>();
 
     public StudyResults(){
-        Attempts = new LinkedHashMap<>();
+        Attempts = new JSONObject();
+        for(int i=1; i<=8; i++){
+            Attempts.put("Experiment-"+i, new JSONObject());
+        }
     }
 
     public void PlayLevel(String key, String level, String generatorName, JButton button){
@@ -36,43 +59,55 @@ class StudyResults {
                         result = game.playGame(finalLevel, 100, 0, 30);
                         game.window.dispose();
                         out.add(result);
-                        if(!generatorName.equals("test")){
-                            AddAttempt(key, generatorName, result);
-                        }
                         lives --;
                     } while (result.getGameStatus().toString().equals("LOSE") && lives > 0);
+
+                    if(!generatorName.equals("test")){
+                        AddAttempt(key, generatorName, out);
+                    }
+
                     return true;
                 }
         ));
     }
 
-    public void AddAttempt(String key, String generator, MarioResult result){
-        Map attempt = new LinkedHashMap<String, String>();
+    public void AddAttempt(String key, String generator, LinkedList<MarioResult> results){
 
-        attempt.put("generator", generator);
-        attempt.put("status", result.getGameStatus().toString());
-        attempt.put("percentage", result.getCompletionPercentage());
-        attempt.put("lives", result.getCurrentLives());
-        attempt.put("coins", result.getCurrentCoins());
-        attempt.put("remaining_time", result.getRemainingTime());
-        attempt.put("state", result.getMarioMode());
-        attempt.put("mushrooms", result.getNumCollectedMushrooms());
-        attempt.put("fire_flowers", result.getNumCollectedFireflower());
-        attempt.put("total_kills", result.getKillsTotal());
-        attempt.put("stomp_kills", result.getKillsByStomp());
-        attempt.put("fireball_kills", result.getKillsByFire());
-        attempt.put("shell_kills", result.getKillsByShell());
-        attempt.put("fall_kills", result.getKillsByFall());
-        attempt.put("bricks", result.getNumDestroyedBricks());
-        attempt.put("jumps", result.getNumJumps());
-        attempt.put("max_x_ jump", result.getMaxXJump());
-        attempt.put("max_air_time", result.getMaxJumpAirTime());
+        JSONObject attempt_set = new JSONObject();
+        attempt_set.put("generator", generator);
+        JSONArray attempts = new JSONArray();
 
-        if(!Attempts.containsKey(key)){
-            Attempts.put(key, new LinkedList<Map>());
+        for (MarioResult result: results) {
+            JSONObject attempt = new JSONObject();
+
+            attempt.put("status", result.getGameStatus().toString());
+            attempt.put("percentage", result.getCompletionPercentage());
+            attempt.put("lives", result.getCurrentLives());
+            attempt.put("coins", result.getCurrentCoins());
+            attempt.put("remaining_time", result.getRemainingTime());
+            attempt.put("state", result.getMarioMode());
+            attempt.put("mushrooms", result.getNumCollectedMushrooms());
+            attempt.put("fire_flowers", result.getNumCollectedFireflower());
+            attempt.put("total_kills", result.getKillsTotal());
+            attempt.put("stomp_kills", result.getKillsByStomp());
+            attempt.put("fireball_kills", result.getKillsByFire());
+            attempt.put("shell_kills", result.getKillsByShell());
+            attempt.put("fall_kills", result.getKillsByFall());
+            attempt.put("bricks", result.getNumDestroyedBricks());
+            attempt.put("jumps", result.getNumJumps());
+            attempt.put("max_x_ jump", result.getMaxXJump());
+            attempt.put("max_air_time", result.getMaxJumpAirTime());
+
+            attempts.add(attempt);
+        }
+
+        attempt_set.put("attempts", attempts);
+
+        if(Attempts.containsKey(key)){
+            Attempts.remove(key);
         }
         
-        Attempts.get(key).add(attempt);
+        Attempts.put(key, attempt_set);
     }
 
     public Thread ExportTo(String filename){
@@ -121,7 +156,7 @@ class Study implements ActionListener {
 
     private void closeHandler() throws InterruptedException {
         //System.out.println("Closing");
-        Thread exportThread = Results.ExportTo("study_output.txt");
+        Thread exportThread = Results.ExportTo("study_output.json");
         exportThread.start();
         frame.dispose();
         exportThread.join();
@@ -145,7 +180,7 @@ class Study implements ActionListener {
             levelPairs.add(
                     new Pair<String, String>(
                         bw.getGeneratorName(),
-                        bw.getGeneratedLevel(new MarioLevelModel(300, 32), new MarioTimer(5 * 60 * 60 * 1000))
+                        bw.getGeneratedLevel(new MarioLevelModel(150, 16), new MarioTimer(5 * 60 * 60 * 1000))
                     )
             );
             levelPairs.add(
@@ -203,7 +238,7 @@ class Study implements ActionListener {
             return;
         }
 
-        if(sourceButton.getText().contains("Start")){
+        if(sourceButton.getText().contains("Start") || sourceButton.getText().contains("Ukon")){
             step ++;
         }
 
@@ -215,13 +250,10 @@ class Study implements ActionListener {
             }
         }
 
-
         current_pair = levelPairs.get(step);
-        //current_generator = generators.get(step);
-        //level = current_pair.getValue()
-                //current_generator.getGeneratedLevel(new MarioLevelModel(150, 16), new MarioTimer(5 * 60 * 60 * 1000));
+
         playButton.setText("Start test " + (step+2));
-        Results.PlayLevel("Experiment-"+(step+2), current_pair.getValue(), current_pair.getKey(), playButton);
+        Results.PlayLevel("Experiment-"+(step+1), current_pair.getValue(), current_pair.getKey(), playButton);
 
         if(step == levelPairs.size() -1){
             textArea.setText("Po dohraní aktuálnej sady stlačte tlačidlo. Prosím nezatvárajte žiadne okno. Ďakujem za účasť na experimente.");
@@ -231,43 +263,11 @@ class Study implements ActionListener {
         if(step >= 0){
             repeatButton.setEnabled(true);
         }
-        /*new Thread(new Callable<LinkedList<MarioResult>>() {
-            @Override
-            public LinkedList<MarioResult> call() {
-                int lives = 3;
-                LinkedList<MarioResult> out = new LinkedList<>();
-                MarioResult result;
-                do {
-
-                    result = game.playGame(level, 200, 0, 30);
-                    Results.AddAttempt(current_generator.getGeneratorName(), result);
-                    lives --;
-                } while (result.getGameStatus().equals("LOSE") && lives > 0);
-                return
-            }
-        }).start();*/
-
     }
 }
 
 
 public class StudyKishoutenketsu {
-
-    public static void printResults(MarioResult result) {
-        System.out.println("****************************************************************");
-        System.out.println("Game Status: " + result.getGameStatus().toString() +
-                " Percentage Completion: " + result.getCompletionPercentage());
-        System.out.println("Lives: " + result.getCurrentLives() + " Coins: " + result.getCurrentCoins() +
-                " Remaining Time: " + (int) Math.ceil(result.getRemainingTime() / 1000f));
-        System.out.println("Mario State: " + result.getMarioMode() +
-                " (Mushrooms: " + result.getNumCollectedMushrooms() + " Fire Flowers: " + result.getNumCollectedFireflower() + ")");
-        System.out.println("Total Kills: " + result.getKillsTotal() + " (Stomps: " + result.getKillsByStomp() +
-                " Fireballs: " + result.getKillsByFire() + " Shells: " + result.getKillsByShell() +
-                " Falls: " + result.getKillsByFall() + ")");
-        System.out.println("Bricks: " + result.getNumDestroyedBricks() + " Jumps: " + result.getNumJumps() +
-                " Max X Jump: " + result.getMaxXJump() + " Max Air Time: " + result.getMaxJumpAirTime());
-        System.out.println("****************************************************************");
-    }
 
     public static void main(String[] args) {
         Study study = new Study();

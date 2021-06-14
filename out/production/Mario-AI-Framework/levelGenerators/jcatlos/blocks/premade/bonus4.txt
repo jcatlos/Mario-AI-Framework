@@ -1,4 +1,4 @@
-safe, bonus
+default, safe, bonus
 p = pipe
 r = obstacle63
 c = coin33

@@ -1,4 +1,4 @@
-safe, challenge
+default, safe, challenge
 c = challenge75
 ---
 -------------------------

@@ -17,8 +17,8 @@ class LevelGenerator : MarioLevelGenerator{
             maxLength = 1000,
             maxHeight =  100,
             roomGenerator =  RandomRoomGenerator,
-            introLength =  1,//2,
-            hardLength =  1 //3
+            introLength =  2,
+            hardLength =  3
     )
 
 

@@ -1,4 +1,4 @@
-challenge, unsafe, divide, groundOnly
+challenge, unsafe, divide, groundOnly, default
 c = challenge32
 ---
 -------------------------

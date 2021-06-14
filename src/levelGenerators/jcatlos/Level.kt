@@ -42,6 +42,7 @@ class Level(var config: Config){
                     sectionTemplate = SharedData.getSimpleSectionTemplates().random()
                 }
                 SectionType.HARD -> {
+                    println("HARD")
                     inputTags.add("!easy")
                     inputTags.add("!twist")
                 }

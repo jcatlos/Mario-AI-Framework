@@ -1,0 +1,1 @@
+java -jar Mario-AI-Framework.jar

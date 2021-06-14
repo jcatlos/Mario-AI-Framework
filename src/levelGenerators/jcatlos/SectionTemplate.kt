@@ -36,14 +36,16 @@ class SectionTemplate(var sectionChunk: Chunk,
             tags.addAll(sectionTags[roomSpace.key]!!)
             if("twist" in tags) tags.addAll(challengeTags)
             else if("challenge" in tags){
-                // 30% chance to use a default challenge
-                if(Random.nextFloat() < 0.7){
+                // 20% chance to use a default challenge
+                if(Random.nextFloat() < 0.8){
                     tags.remove("challenge")
                     tags.addAll(challengeTags)
+                    tags.add("!default")
                 }
             }
-            else{
-                tags.add("default")
+            else if("bonus" !in tags && "divide" !in tags){
+                if(Random.nextFloat() < 0.5)
+                tags.add("!default")
             }
             println("looking for room with tags ${tags.toString()} for rs: $rs")
             var room = roomGenerator.generateToFitRoomspace(rs, tags)

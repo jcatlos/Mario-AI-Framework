@@ -34,6 +34,6 @@ public class PlayLevel {
     public static void main(String[] args) {
         MarioGame game = new MarioGame();
         //printResults(game.playGame(getLevel("levels/DS_8-1.txt"), 200, 0, 30, 4));
-        printResults(game.playGame(getLevel("./levels/original/lvl-2.txt"), 200, 0, 30, 4));
+        printResults(game.playGame(getLevel("./levels/original/lvl-1.txt"), 200, 0, 30, 4));
     }
 }

@@ -1,4 +1,4 @@
-0: safe, challenge
+0: safe, !twist
 1: twist
 2: bonus
 ---

@@ -1,4 +1,4 @@
-safe
+premade, safe
 ? = questionReward
 ---
 -------------------------

@@ -48,7 +48,7 @@ data class Config(
         if(sectionCount <= introLength) return SectionType.INTRO
         if(twisted) return SectionType.FINISH
 
-        if(sectionCount+1 >= introLength+hardLength){
+        if(sectionCount > introLength+hardLength){
             twisted = true
             return SectionType.TWIST
         }

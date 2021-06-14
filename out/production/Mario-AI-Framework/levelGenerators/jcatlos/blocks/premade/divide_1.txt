@@ -1,4 +1,4 @@
-challenge, divide, bonus, safe
+challenge, divide, bonus, safe, default
 ? = questionReward
 c = challenge75
 ---
